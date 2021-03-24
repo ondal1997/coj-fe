@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import JudgeState from '../../../JudgeState';
 
 const StyledState = styled.span`
   font-weight: 700;
@@ -12,17 +13,14 @@ const SolutionItem = ({ info }) => (
     <td>{info.ownerId}</td>
     <td>{info.problemKey}</td>
     <td>{info.language}</td>
-    <td>
-    {info.state === 0
-      ? <StyledState state='#265DEA'>대기 중...</StyledState>
-      : info.state !== 1
-        ? <StyledState state='#265DEA'>채점 중...</StyledState>
-        : <StyledState>Try again!</StyledState>
+    <td> {/* if 문으로 변경해서 작성 */}
+    {info.state !== 1
+      ? <StyledState state={JudgeState[info.state].color}>
+        {JudgeState[info.state].name}</StyledState>
+      : <StyledState state={JudgeState[info.state].color}>
+        {`${JudgeState[info.state].name}
+        (${Math.floor((info.testcaseHitCount / info.testcaseSize) * 100)}%)`}</StyledState>
       }
-      {/* {info.testcaseHitCount === info.testcaseSize
-        ? <StyledState state='#265DEA'>Solve!</StyledState>
-        : <StyledState>Try again!</StyledState>
-      } */}
     </td>
     <td>{info.uploadTime}</td>
   </tr>

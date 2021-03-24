@@ -14,8 +14,6 @@ const Body = () => {
 
   const fetchProblems = (page) => {
     const pos = (page - 1) * size;
-    console.log(pos);
-    console.log(size);
     fetch(`${serverAddress}/api/problems?pos=${pos}&count=${size}`, {
       // 비동기
       method: 'GET',
