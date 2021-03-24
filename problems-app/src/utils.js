@@ -7,13 +7,11 @@ const isValid = (...param) => { // name, value // 유효성 검사
   }
 
   if (param[0] === 'timeLimit') {
-    const regExp = new RegExp('[2-4][0-9][0-9][0-9]|5000');
-    res = regExp.test(param[1]);
-    if (!res) alert('2000 - 5000 의 값만 입력 가능합니다.');
+    res = param[1] >= 200 && param[1] <= 5000;
+    if (!res) alert('200 - 5000 의 값만 입력 가능합니다.');
   } else if (param[0] === 'memoryLimit') {
-    const regExp = new RegExp('[1][0-9][0-9]|500');
-    res = regExp.test(param[1]);
-    if (!res) alert('100 - 500 의 값만 입력 가능합니다.');
+    res = param[1] >= 128 && param[1] <= 512;
+    if (!res) alert('128 - 512 의 값만 입력 가능합니다.');
   }
   return res;
 };
