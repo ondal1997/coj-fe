@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import JudgeState from '../../../JudgeState';
+import JudgeState from './JudgeState';
 
 const StyledState = styled.span`
   font-weight: 700;

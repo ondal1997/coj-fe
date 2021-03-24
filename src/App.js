@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import ProblemListApp from './ProblemListApp';
-import SolutionListApp from './SolutionListApp';
-import ProblemFormApp from './ProblemFormApp';
-import SolutionFormApp from './SolutionFormApp';
-import Nav from './components/Nav';
+import ProblemListApp from './ProblemList/ProblemListApp';
+import SolutionListApp from './SolutionList/SolutionListAppWrapper';
+import ProblemFormApp from './ProblemForm/ProblemFormApp';
+import SolutionFormApp from './SolutionForm/SolutionFormApp';
+import Nav from './Nav';
 
 const Home = () => (
   <div>

@@ -10,7 +10,7 @@ const style = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App style={{fontSize: '20px'}}/>
+    <App style={style}/>
   </React.StrictMode>,
   document.getElementById('root'),
 );

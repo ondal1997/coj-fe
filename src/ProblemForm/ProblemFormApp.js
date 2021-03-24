@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import _ from 'lodash';
-import { isValid } from '../../../utils';
+import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
