@@ -7,7 +7,7 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 
-// const serverAddress = 'http://192.168.0.13:3000';
+const serverAddress = 'http://192.168.0.141:3000';
 
 const StyledForm = withStyles({
   root: {
@@ -68,7 +68,7 @@ const Form = () => {
     title: '',
     timeLimit: '',
     memoryLimit: '',
-    desc: '',
+    description: '',
   });
 
   const [examples, setExamples] = useState([
@@ -87,7 +87,7 @@ const Form = () => {
 
   const [hashtags, setHashtags] = useState([]);
 
-  const { title, timeLimit, memoryLimit, desc } = inputs;
+  const { title, timeLimit, memoryLimit, description } = inputs;
 
   const inputsRef = useRef([]);
 
@@ -106,6 +106,7 @@ const Form = () => {
 
   const submit = () => {
     let valid = true;
+    console.log(description);
     inputsRef.current.every(({ current }) => { // 유효 X가 하나라도 있으면 종료
       const { name, value } = current;
       const res = isValid(name, value);
@@ -144,7 +145,7 @@ const Form = () => {
 
     const data = {
       title,
-      description: desc,
+      description,
       categories: hashtags,
       timeLimit: Number(timeLimit),
       memoryLimit: Number(memoryLimit),
@@ -154,11 +155,11 @@ const Form = () => {
 
     alert('문제가 성공적으로 등록되었습니다.');
     console.log(data);
-    // fetch(`${serverAddress}/api/problems`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(data),
-    // }).then((res) => console.log(`server got new problem... ${res.status}`));
+    fetch(`${serverAddress}/api/problems`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then((res) => console.log(`server got new problem... ${res.status}`));
   };
 
   return (
