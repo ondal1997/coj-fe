@@ -16,9 +16,6 @@ const Nav = () => (
       <Link to="/problemsForm">
       <li>문제 제출</li>
       </Link>
-      <Link to="/solutionForm">
-      <li>솔루션 제출</li>
-      </Link>
     </ul>
   </nav>
 );
