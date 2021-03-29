@@ -4,13 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const style = {
-  fontSize: '20px',
-};
-
 ReactDOM.render(
   <React.StrictMode>
-    <App style={style}/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root'),
 );
