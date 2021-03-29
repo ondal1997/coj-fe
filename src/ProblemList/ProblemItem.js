@@ -27,7 +27,10 @@ const ProblemItem = ({ info }) => (
   <>
   <TableRow>
   <StyledTableCell align="center">{info.key}</StyledTableCell>
-    <StyledTableCell align="center">{info.title}
+    <StyledTableCell align="center">
+      <Link to={`/problemDetail/${info.key}`} style={{ textDecoration: 'none' }}>
+     {info.title}
+      </Link>
     {info.categories.map((item) => <Category name={item} />)}
     </StyledTableCell>
     <StyledTableCell align="center">
