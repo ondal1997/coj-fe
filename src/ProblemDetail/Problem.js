@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { OurLink } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.141:3000';
 
@@ -43,7 +43,7 @@ const Problem = ({ problemKey }) => {
   return (isLoaded ? (
     <StyledProblem>
   <div>
-  <Link to={`/solutionForm/${problemKey}`}>제출</Link>
+  <OurLink to={`/solutionForm/${problemKey}`}>제출</OurLink>
   <h1>
   {`NO. ${problemKey} ${problem.title}`}
   </h1>
