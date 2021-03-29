@@ -1,6 +1,15 @@
 import React from 'react';
+import { TableRow, TableCell, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
-import JudgeState from './JudgeState';
+import JudgeState from './judgeState';
+
+const StyledTableCell = withStyles({
+  root: {
+    width: '10px',
+    height: '40px',
+    fontSize: '20px',
+  },
+})(TableCell);
 
 const StyledState = styled.span`
   font-weight: 700;
@@ -8,12 +17,12 @@ const StyledState = styled.span`
 `;
 
 const SolutionItem = ({ info }) => (
-<tr style={{ textAlign: 'center', border: '1px solid gray' }}>
-    <td>{info.key}</td>
-    <td>{info.ownerId}</td>
-    <td>{info.problemKey}</td>
-    <td>{info.language}</td>
-    <td> {/* if 문으로 변경해서 작성 */}
+<TableRow style={{ textAlign: 'center', border: '1px solid gray' }}>
+    <StyledTableCell align="center">{info.key}</StyledTableCell>
+    <StyledTableCell align="center">{info.ownerId}</StyledTableCell>
+    <StyledTableCell align="center">{info.problemKey}</StyledTableCell>
+    <StyledTableCell align="center">{info.language}</StyledTableCell>
+    <StyledTableCell align="center"> {/* if 문으로 변경해서 작성 */}
     {info.state !== 1
       ? <StyledState state={JudgeState[info.state].color}>
         {JudgeState[info.state].name}</StyledState>
@@ -21,9 +30,9 @@ const SolutionItem = ({ info }) => (
         {`${JudgeState[info.state].name}
         (${Math.floor((info.testcaseHitCount / info.testcaseSize) * 100)}%)`}</StyledState>
       }
-    </td>
-    <td>{info.uploadTime}</td>
-  </tr>
+    </StyledTableCell>
+    <StyledTableCell align="center">{info.uploadTime}</StyledTableCell>
+  </TableRow>
 );
 
 export default SolutionItem;
