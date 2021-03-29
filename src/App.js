@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import ProblemListApp from './ProblemList/ProblemListApp';
-import SolutionListApp from './SolutionList/SolutionListAppWrapper';
+import SolutionListApp from './SolutionList/SolutionListApp';
+import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
 import ProblemFormApp from './ProblemForm/ProblemFormApp';
 import SolutionFormApp from './SolutionForm/SolutionFormApp';
 import Nav from './Nav';
@@ -24,7 +25,8 @@ const App = () => (
       <Nav />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/solutions/:problemNo" component={SolutionListApp} />
+        <Route path="/solutions" exact component={SolutionListApp} />
+        <Route path="/solutions/:problemNo" component={SolutionListAppWrapper} />
         <Route path="/problems" component={ProblemListApp} />
         <Route path="/problemsForm" component={ProblemFormApp} />
         <Route path="/solutionForm" component={SolutionFormApp} />

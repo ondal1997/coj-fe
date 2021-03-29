@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableRow, TableCell, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
-import JudgeState from './judgeState';
+import JudgeState from './JudgeState';
 
 const StyledTableCell = withStyles({
   root: {

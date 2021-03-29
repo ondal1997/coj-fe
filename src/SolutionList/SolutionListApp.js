@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, withStyles } from '@material-ui/core';
 import SolutionList from './SolutionList';
-import data from '../mock/solutionList'; // data
+// import data from '../mock/solutionList'; // data
 import PagenumberList from '../ProblemList/PagenumberList'; // 공통적으로 사용되니 나중에 빼기
 
-const serverAddress = 'http://192.168.0.13:3000';
+const serverAddress = 'http://192.168.0.141:3000';
 
 const StyledTypography = withStyles({
   root: {
@@ -29,48 +29,51 @@ const size = 10;
 const Body = ({ problemNo }) => {
   const [curPage, setCurpage] = useState(1);
   const [totalPage, setTotalpage] = useState(0);
-  const [solutions, setSolutions] = useState(
-    data.filter((solution) => solution.problemKey === Number(problemNo))
-      .slice((curPage - 1) * size, curPage * size),
-  ); // 해당 문제에 해당하는 거 중에 10개씩 자름.
+  const [solutions, setSolutions] = useState([]); // 해당 문제에 해당하는 거 중에 10개씩 자름.
 
-  const fetchSolutions = () => {
-    const filteredList = data.filter((solution) => solution.problemNo
-    === Number(problemNo));
-    setTotalpage(Math.floor(filteredList.length / size) + 1);
+  const fetchSolutions = async (page) => {
+    const pos = (page - 1) * size;
 
-    fetch(`${serverAddress}/api/solutions`, {
-      method: 'GET',
-    }).then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        // setTotalpage(Math.floor(res.length / 10) + 1);
-        // setSolutions(res);
-      }, (error) => console.log(error));
+    try {
+      let res;
+
+      if (problemNo !== undefined) {
+        res = await fetch(`${serverAddress}/api/problems/${problemNo}/solutions?pos=${pos}&count=${size}`, {
+          method: 'GET',
+        });
+      } else {
+        res = await fetch(`${serverAddress}/api/solutions?pos=${pos}&count=${size}`, {
+          method: 'GET',
+        });
+      }
+
+      const json = await res.json();
+
+      setSolutions(json.solutions);
+      setCurpage(page);
+      console.log(json.totalCount);
+      setTotalpage(Math.ceil(json.totalCount / size));
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  setTimeout(fetchSolutions, 1000);
-
-  useEffect(() => {
-    fetchSolutions();
-  }, []);
 
   const updatePage = (page) => {
-    // page에 따라
-    setCurpage(page);
-    const newSolutions = data.filter((solution) => solution.problemKey
-    === Number(problemNo))
-      .slice((page - 1) * size, page * size);
-    // 서버에 해당 범위만큼의 데이터 요청
-    setSolutions(newSolutions);
-    // fetch(`${serverAddress}/api/problems`, {
-    //   method: 'GET',
-    // }).then((res) => res.json())
-    //   .then((res) => setProblems(res), (error) => console.log(error));
+    fetchSolutions(page);
   };
 
+  useEffect(() => {
+    updatePage(curPage);
+  }, []);
+
   return <div>
-        <StyledTypography align='center'>NO. {problemNo}</StyledTypography>
+        {
+          problemNo !== undefined ? (
+          <StyledTypography align='center'>NO. {problemNo}</StyledTypography>
+          ) : (
+             <StyledTypography align='center'>전체 풀이 현황{problemNo}</StyledTypography>
+          )
+        }
         <div style={{ height: '950px' }}>
           <SolutionList solutions={solutions}/>
         </div>
