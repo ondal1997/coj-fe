@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, TextField, FormControl, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { ourHref } from '../OurLink';
 
 const StyledForm = withStyles({
   root: {
@@ -131,7 +132,7 @@ const Form = (props) => {
           });
 
           alert('제출 완료!');
-          history.push('/problems');
+          ourHref(`/solutions/${problemKey}`, history);
         }}>
         <a>풀이 제출하기</a></StyledButton>
       </div>

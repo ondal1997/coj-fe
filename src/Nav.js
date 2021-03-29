@@ -1,21 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { OurLink } from './OurLink';
 
 const Nav = () => (
   <nav>
     <ul>
-      <Link to="/">
+      <OurLink to="/">
       <li>Home</li>
-      </Link>
-      <Link to="/solutions">
+      </OurLink>
+      <OurLink to="/solutions">
       <li>풀이 제출 현황</li>
-      </Link>
-      <Link to="/problems">
+      </OurLink>
+      <OurLink to="/problems">
       <li>문제 리스트</li>
-      </Link>
-      <Link to="/problemsForm">
+      </OurLink>
+      <OurLink to="/problemsForm">
       <li>문제 제출</li>
-      </Link>
+      </OurLink>
     </ul>
   </nav>
 );

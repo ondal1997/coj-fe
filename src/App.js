@@ -13,19 +13,13 @@ const StyledApp = styled.div`
   max-height: 500px;
 `;
 
-const Home = () => (
-  <div>
-  홈입니당
-  </div>
-);
-
 const App = () => (
   <>
   <StyledApp>
     <Router>
       <Nav />
       <Switch>
-        <Route path="/" exact component={Home} />
+        <Route path="/" exact component={ProblemListApp} />
         <Route path="/solutions" exact component={SolutionListApp} />
         <Route path="/solutions/:problemNo" component={SolutionListAppWrapper} />
         <Route path="/problems" component={ProblemListApp} />

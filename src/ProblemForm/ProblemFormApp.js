@@ -6,6 +6,7 @@ import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
+import { ourHref } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.141:3000';
 
@@ -153,13 +154,17 @@ const Form = () => {
       testcases,
     };
 
-    alert('문제가 성공적으로 등록되었습니다.');
     console.log(data);
     fetch(`${serverAddress}/api/problems`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
-    }).then((res) => console.log(`server got new problem... ${res.status}`));
+    }).then((res) => {
+      console.log(`server got new problem... ${res.status}`);
+      // TODO: status코드 확인에 따른 분기 추가 요망
+      alert('문제가 성공적으로 등록되었습니다.');
+      ourHref('/problems');
+    });
   };
 
   return (

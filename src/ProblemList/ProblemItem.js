@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableRow, TableCell, Button, withStyles } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import Category from './Category';
+import { OurLink } from '../OurLink';
 
 const StyledButton = withStyles({
   root: {
@@ -28,15 +28,15 @@ const ProblemItem = ({ info }) => (
   <TableRow>
   <StyledTableCell align="center">{info.key}</StyledTableCell>
     <StyledTableCell align="center">
-      <Link to={`/problemDetail/${info.key}`} style={{ textDecoration: 'none' }}>
+      <OurLink to={`/problemDetail/${info.key}`} style={{ textDecoration: 'none' }}>
      {info.title}
-      </Link>
+      </OurLink>
     {info.categories.map((item) => <Category name={item} />)}
     </StyledTableCell>
     <StyledTableCell align="center">
-      <Link to={`/solutions/${info.key}`} style={{ textDecorationLine: 'none' }}>
+      <OurLink to={`/solutions/${info.key}`} style={{ textDecorationLine: 'none' }}>
         <StyledButton>GO!</StyledButton>
-      </Link>
+      </OurLink>
     </StyledTableCell>
   </TableRow>
   </>
