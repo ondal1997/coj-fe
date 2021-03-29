@@ -5,6 +5,7 @@ import ProblemListApp from './ProblemList/ProblemListApp';
 import SolutionListApp from './SolutionList/SolutionListAppWrapper';
 import ProblemFormApp from './ProblemForm/ProblemFormApp';
 import SolutionFormApp from './SolutionForm/SolutionFormApp';
+import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import Nav from './Nav';
 
 const StyledApp = styled.div`
@@ -27,7 +28,8 @@ const App = () => (
         <Route path="/solutions/:problemNo" component={SolutionListApp} />
         <Route path="/problems" component={ProblemListApp} />
         <Route path="/problemsForm" component={ProblemFormApp} />
-        <Route path="/solutionForm" component={SolutionFormApp} />
+        <Route path="/solutionForm/:problemKey" component={SolutionFormApp} />
+        <Route path="/problemDetail/:problemKey" component={ProblemDetailApp} />
       </Switch>
     </Router>
   </StyledApp>
