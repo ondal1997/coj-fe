@@ -1,11 +1,67 @@
 import React, { useRef, useState } from 'react';
+import { Container, Button, TextField, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 
-const serverAddress = 'http://192.168.0.13:3000';
+// const serverAddress = 'http://192.168.0.13:3000';
+
+const StyledForm = withStyles({
+  root: {
+    minHeight: '700px',
+    backgroundColor: 'white',
+    borderRadius: '15px',
+    margin: '0 auto',
+    padding: '2%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  maxWidthLg: {
+    width: '100%',
+  },
+})(Container);
+
+const StyledButton = withStyles({
+  root: {
+    color: 'white',
+    backgroundColor: 'black',
+    left: '94%',
+    margin: '1%',
+    padding: '1%',
+    '&:hover': {
+      backgroundColor: '#CE2727',
+    },
+  },
+  label: {
+    fontSize: '17px',
+  },
+})(Button);
+
+const StyledTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#4995F2',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#4995F2',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: '#4995F2',
+      },
+    },
+  },
+})(TextField);
+
+const StyledDivider = withStyles({
+  root: {
+    margin: '1% 0',
+  },
+})(Divider);
 
 const Form = () => {
   const [inputs, setInputs] = useState({
@@ -19,7 +75,6 @@ const Form = () => {
     {
       input: '',
       output: '',
-      readOnly: false,
     },
   ]);
 
@@ -27,7 +82,6 @@ const Form = () => {
     {
       input: '',
       output: '',
-      readOnly: false,
     },
   ]);
 
@@ -52,15 +106,14 @@ const Form = () => {
 
   const submit = () => {
     let valid = true;
-
     inputsRef.current.every(({ current }) => { // 유효 X가 하나라도 있으면 종료
-      const { name, value, style } = current;
+      const { name, value } = current;
       const res = isValid(name, value);
       if (!res) {
         valid = false;
         current.focus();
-        style.outlineColor = 'red';
-        setTimeout(() => { style.outlineColor = 'black'; }, 3000);
+        // style.borderColor = 'red';
+        // setTimeout(() => { style.borderColor = 'black'; }, 3000);
       }
       return res;
     });
@@ -73,7 +126,6 @@ const Form = () => {
         valid = false;
         return valid;
       }
-      delete example.readOnly;
       return true;
     });
 
@@ -85,7 +137,6 @@ const Form = () => {
         alert('테스트케이스의 누락된 필드를 확인해주세요.');
         return valid;
       }
-      delete testcase.readOnly;
       return true;
     });
 
@@ -101,35 +152,57 @@ const Form = () => {
       testcases,
     };
 
-    console.log('성공, 작성하신 문제 정보입니다.');
+    alert('문제가 성공적으로 등록되었습니다.');
     console.log(data);
-    fetch(`${serverAddress}/api/problems`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }).then((res) => console.log(`server got new problem... ${res.status}`));
+    // fetch(`${serverAddress}/api/problems`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(data),
+    // }).then((res) => console.log(`server got new problem... ${res.status}`));
   };
 
   return (
-    <>
+    <StyledForm>
     <div>
-      <h3>Title</h3>
-      <input name="title" onChange={(event) => onChange(event)} ref={inputsRef.current[0]}/>
-      <h3>Time Limit</h3>
-      <input name="timeLimit" onChange={(event) => onChange(event)} ref={inputsRef.current[1]}/>
-      <h3>Memory Limit</h3>
-      <input name="memoryLimit" onChange={(event) => onChange(event)} ref={inputsRef.current[2]}/>
-      <h3>Describe</h3>
-      <textarea name="desc" onChange={(event) => onChange(event)} ref={inputsRef.current[3]}/>
-      <h3>Hashtag</h3>
+    <StyledTextField
+      name='title'
+      label='문제명'
+      fullWidth
+      margin="normal"
+      variant="outlined"
+      onChange={(event) => onChange(event)} inputRef={inputsRef.current[0]} />
+      <StyledTextField
+      name='timeLimit'
+      label='시간 제한'
+      margin="normal"
+      variant="outlined"
+      style={{ marginRight: '1%' }}
+      onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
+      <StyledTextField
+      name='memoryLimit'
+      label='메모리 제한'
+      margin="normal"
+      variant="outlined"
+      onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
+      <StyledTextField
+      name='description'
+      label='설명'
+      fullWidth
+      margin="normal"
+      variant="outlined"
+      multiline
+      rows={20}
+      rowsMax={Infinity}
+      onChange={(event) => onChange(event)} inputRef={inputsRef.current[3]} />
       <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>
-      <span style={ { fontWeight: 'bolder' } }>Example</span>
       <Examples examples={examples} updateExamples={setExamples}/>
-      <span style={ { fontWeight: 'bolder' } }>Testcase</span>
       <Testcases testcases={testcases} updateTestcases={setTestcases} />
       </div>
-    <button onClick={(event) => submit(event)}>Create</button>
-    </>
+      <div>
+      <StyledDivider variant="fullWidth"/>
+      <StyledButton onClick={(event) => submit(event)}>확인</StyledButton>
+      </div>
+    </StyledForm>
   );
 };
 

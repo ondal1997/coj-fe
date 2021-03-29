@@ -1,32 +1,73 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import { Container, Button, TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-const StyledExample = styled.div`
-  width: 500px;
-  margin: 1%;
-  border-bottom: 1px solid gray;
-`;
+const StyledContainer = withStyles({
+  root: {
+    margin: '0 auto',
+    padding: '0.5% 0%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    '& .area-container': {
+      padding: '0 0',
+      width: '500px',
+    },
+  },
+  maxWidthLg: {
+    width: '100%',
+  },
+})(Container);
+
+const StyledButton = withStyles({
+  root: {
+    color: 'white',
+    backgroundColor: 'black',
+    left: '91.5%',
+    margin: '1%',
+    padding: '1%',
+    fontSize: 'medium',
+    '&:hover': {
+      backgroundColor: '#CE2727',
+    },
+  },
+})(Button);
+
+const StyledDeleteButton = withStyles({
+  root: {
+    color: 'gray',
+    padding: '0 0',
+    left: '96.5%',
+    fontSize: 'medium',
+    '&:hover': {
+      color: 'black',
+      backgroundColor: 'white',
+    },
+  },
+})(Button);
+
+const StyledTextField = withStyles({
+  root: {
+    width: '100%',
+    marginTop: '1%',
+    '& label.Mui-focused': {
+      color: '#4995F2',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#4995F2',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: '#4995F2',
+      },
+    },
+  },
+})(TextField);
 
 const Examples = ({ examples, updateExamples }) => {
-  const [focusIdx, setFocusidx] = useState(0);
-
-  const setFocusAndUpdate = (arr, target) => {
-    const newExamples = [...arr];
-    newExamples[focusIdx].readOnly = true;
-    newExamples[target].readOnly = false;
-    setFocusidx(target);
-    updateExamples(newExamples);
-  };
-
   const onChangeInput = (e, i) => {
     const newExamples = [...examples];
-    newExamples[i][e.target.className] = e.target.value;
+    newExamples[i][e.target.name] = e.target.value;
     updateExamples(newExamples);
-  };
-
-  const onClickUpdateItem = (i) => {
-    const newExamples = [...examples];
-    setFocusAndUpdate(newExamples, i);
   };
 
   const onClickDeleteItem = (i) => {
@@ -40,32 +81,35 @@ const Examples = ({ examples, updateExamples }) => {
     newExamples.push({
       input: '',
       output: '',
-      readOnly: false,
     });
-    setFocusAndUpdate(newExamples, newExamples.length - 1);
+    updateExamples(newExamples);
   };
 
   return <>
-    <button onClick={addExample}>Add Example</button>
-    {examples.map((example, number) => <StyledExample key={number + 1}>
-    <span>예제 {number + 1}</span>
-        <p>
-          입력 {number + 1}
-          <textarea className="input"
-          value={example.input}
-          readOnly={example.readOnly}
-          onChange={(e) => onChangeInput(e, number)}
-          />
-          출력 {number + 1}
-          <textarea className="output"
-          value={example.output}
-          readOnly={example.readOnly}
-          onChange={(e) => onChangeInput(e, number)}
-          />
-          <button onClick={() => onClickUpdateItem(number)}>수정</button>
-          <button onClick={() => onClickDeleteItem(number)}>삭제</button>
-        </p>
-      </StyledExample>)}
+    {examples.map((example, number) => <>
+      <StyledContainer key={number + 1} fullWidth>
+        <div className='area-container'>
+          <div>
+           예제 입력 {number + 1}
+          </div>
+          <StyledTextField name="input"
+          variant='outlined' row={5} maxRow={Infinity} multiline
+          value={example.input} onChange={(e) => onChangeInput(e, number)}/>
+        </div>
+        <div className='area-container'>
+          <div>
+           예제 출력 {number + 1}
+          </div>
+          <StyledTextField name="output"
+          variant='outlined' row={5} maxRow={Infinity} multiline
+          value={example.output} onChange={(e) => onChangeInput(e, number)}/>
+        </div>
+       </StyledContainer>
+      <StyledDeleteButton onClick={() => onClickDeleteItem(number)}>✖</StyledDeleteButton>
+      </>)}
+    <div>
+      <StyledButton onClick={addExample}>예제 추가</StyledButton>
+    </div>
     </>;
 };
 
