@@ -58,7 +58,10 @@ const fetchLanguages = async () => {
   return json;
 };
 
-const Form = () => {
+const Form = (props) => {
+  const { problemKey } = props.match.params;
+  const { history } = props;
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [languages, setLanguages] = useState([]);
 
@@ -76,6 +79,7 @@ const Form = () => {
 
   return (
     <StyledForm maxWidth='lg'>
+      <h3>{problemKey}</h3>
       <div>
       {isLoaded ? (
       <StyledTextField
@@ -108,12 +112,26 @@ const Form = () => {
       </div>
       <div>
       <StyledButton variant='contained'
-        size='medium' onClick={() => {
+        size='medium' onClick={async () => {
           if (!selectedLanguage) {
             alert('언어를 선택해주세요');
             return;
           }
-          alert(`[언어]${selectedLanguage}[소스 코드]${sourceCode}`);
+
+          await fetch(`${serverAddress}/api/solutions`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              problemKey,
+              language: selectedLanguage,
+              sourceCode,
+            }),
+          });
+
+          alert('제출 완료!');
+          history.push('/problems');
         }}>
         <a>풀이 제출하기</a></StyledButton>
       </div>
