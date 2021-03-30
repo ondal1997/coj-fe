@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const IS_DEPLOYED = false;
+const IS_DEPLOYED = true;
 const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {

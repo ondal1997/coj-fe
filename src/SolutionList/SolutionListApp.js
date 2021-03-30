@@ -4,7 +4,7 @@ import SolutionList from './SolutionList';
 // import data from '../mock/solutionList'; // data
 import PagenumberList from '../ProblemList/PagenumberList'; // 공통적으로 사용되니 나중에 빼기
 
-const serverAddress = 'http://192.168.0.141:3000';
+const serverAddress = 'http://192.168.0.100:3000';
 
 const StyledTypography = withStyles({
   root: {

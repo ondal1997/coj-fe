@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { OurLink } from '../OurLink';
 
-const serverAddress = 'http://192.168.0.141:3000';
+const serverAddress = 'http://192.168.0.100:3000';
 
 const StyledProblem = styled.div`
   width: 100%;

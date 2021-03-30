@@ -51,7 +51,7 @@ const StyledTextField = withStyles({
   },
 })(TextField);
 
-const serverAddress = 'http://192.168.0.141:3000';
+const serverAddress = 'http://192.168.0.100:3000';
 
 const fetchLanguages = async () => {
   const res = await fetch(`${serverAddress}/api/availableLanguages`);
