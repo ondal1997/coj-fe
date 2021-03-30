@@ -4,7 +4,7 @@ import ProblemList from './ProblemList';
 import PagenumberList from './PagenumberList';
 // import data from '../mock/problemList';
 
-const serverAddress = 'http://192.168.0.141:3000';
+const serverAddress = 'http://192.168.0.100:3000';
 const StyledContainer = withStyles({
   root: {
     color: 'white',
