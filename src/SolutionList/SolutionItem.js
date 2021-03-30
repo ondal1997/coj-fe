@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableRow, TableCell, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
-import JudgeState from './JudgeState';
+import judgeState from './judgeState';
 
 const StyledTableCell = withStyles({
   root: {
@@ -24,10 +24,10 @@ const SolutionItem = ({ info }) => (
     <StyledTableCell align="center">{info.language}</StyledTableCell>
     <StyledTableCell align="center"> {/* if 문으로 변경해서 작성 */}
     {info.state !== 1
-      ? <StyledState state={JudgeState[info.state].color}>
-        {JudgeState[info.state].name}</StyledState>
-      : <StyledState state={JudgeState[info.state].color}>
-        {`${JudgeState[info.state].name}
+      ? <StyledState state={judgeState[info.state].color}>
+        {judgeState[info.state].name}</StyledState>
+      : <StyledState state={judgeState[info.state].color}>
+        {`${judgeState[info.state].name}
         (${Math.floor((info.testcaseHitCount / info.testcaseSize) * 100)}%)`}</StyledState>
       }
     </StyledTableCell>

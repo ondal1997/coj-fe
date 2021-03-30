@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, TextField, FormControl, MenuItem } from '@material-ui/core';
+import { Button, Container, TextField, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ourHref } from '../OurLink';
+import CodeEditor from './CodeEditor';
 
 const StyledForm = withStyles({
   root: {
@@ -102,14 +103,7 @@ const Form = (props) => {
       }
       </div>
       <div>
-      <FormControl fullWidth>
-          <StyledTextField label='소스 코드' multiline variant='outlined'
-          borderColor='red'
-          rows={20} rowsMax={Infinity}
-              value={sourceCode} onChange={(event) => {
-                setSourceCode(event.target.value);
-              }}></StyledTextField>
-        </FormControl>
+      <CodeEditor language={selectedLanguage} updateCode={setSourceCode}/>
       </div>
       <div>
       <StyledButton variant='contained'
@@ -118,7 +112,6 @@ const Form = (props) => {
             alert('언어를 선택해주세요');
             return;
           }
-
           await fetch(`${serverAddress}/api/solutions`, {
             method: 'POST',
             headers: {
@@ -130,7 +123,6 @@ const Form = (props) => {
               sourceCode,
             }),
           });
-
           alert('제출 완료!');
           ourHref(`/solutions/${problemKey}`, history);
         }}>
