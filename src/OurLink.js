@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const IS_DEPLOYED = true;
+const IS_DEPLOYED = false;
 const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
-  const { url, children } = props;
+  const { to, children } = props;
 
   return IS_DEPLOYED ? (
-    <a href={`${codersUrl}/${url}`}>
+    <a href={`${codersUrl}${to}`}>
         {children}
     </a>
   ) : (
-    <Link to={url}>
+    <Link to={to}>
         {children}
     </Link>
   );
@@ -20,7 +20,7 @@ const OurLink = (props) => {
 
 const ourHref = (url, history) => {
   if (IS_DEPLOYED) {
-    window.location.href = `${codersUrl}/${url}`;
+    window.location.href = `${codersUrl}${url}`;
   } else {
     history.push(url);
   }

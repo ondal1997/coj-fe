@@ -16,7 +16,7 @@ const StyledApp = styled.div`
 const App = () => (
   <>
   <StyledApp>
-    <Router>
+    <Router basename="/oj">
       <Nav />
       <Switch>
         <Route path="/" exact component={ProblemListApp} />
