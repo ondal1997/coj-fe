@@ -6,7 +6,7 @@ import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
-import { ourHref } from '../OurLink';
+import { ourHref, ourFetch } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -155,7 +155,7 @@ const Form = (props) => {
     };
 
     console.log(data);
-    fetch(`${serverAddress}/api/problems`, {
+    ourFetch(`${serverAddress}/api/problems`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

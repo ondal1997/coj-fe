@@ -3,6 +3,7 @@ import { Container, Typography, withStyles } from '@material-ui/core';
 import SolutionList from './SolutionList';
 // import data from '../mock/solutionList'; // data
 import PagenumberList from '../ProblemList/PagenumberList'; // 공통적으로 사용되니 나중에 빼기
+import { ourFetch } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -38,11 +39,11 @@ const Body = ({ problemNo }) => {
       let res;
 
       if (problemNo !== undefined) {
-        res = await fetch(`${serverAddress}/api/problems/${problemNo}/solutions?pos=${pos}&count=${size}`, {
+        res = await ourFetch(`${serverAddress}/api/problems/${problemNo}/solutions?pos=${pos}&count=${size}`, {
           method: 'GET',
         });
       } else {
-        res = await fetch(`${serverAddress}/api/solutions?pos=${pos}&count=${size}`, {
+        res = await ourFetch(`${serverAddress}/api/solutions?pos=${pos}&count=${size}`, {
           method: 'GET',
         });
       }

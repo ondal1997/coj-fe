@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, TextField, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { ourHref } from '../OurLink';
+import { ourHref, ourFetch } from '../OurLink';
 import CodeEditor from './CodeEditor';
 
 const StyledForm = withStyles({
@@ -55,7 +55,7 @@ const StyledTextField = withStyles({
 const serverAddress = 'http://192.168.0.100:3000';
 
 const fetchLanguages = async () => {
-  const res = await fetch(`${serverAddress}/api/availableLanguages`);
+  const res = await ourFetch(`${serverAddress}/api/availableLanguages`);
   const json = await res.json();
   return json;
 };

@@ -26,4 +26,25 @@ const ourHref = (url, history) => {
   }
 };
 
-export { OurLink, ourHref };
+const ourFetch = async (url, meta) => {
+  if (IS_DEPLOYED) {
+    alert('fetched!');
+    meta = meta || { method: 'GET' };
+
+    const newBody = {};
+    newBody.to = url.slice(url.indexOf('api'));
+    if (meta.body) {
+      newBody.data = JSON.parse(meta.body);
+    }
+    newBody.method = meta.method;
+    meta.method = 'POST';
+
+    meta.body = JSON.stringify(newBody);
+
+    return fetch('/coders/post.php', meta);
+  }
+
+  return fetch(url, meta);
+};
+
+export { OurLink, ourHref, ourFetch };

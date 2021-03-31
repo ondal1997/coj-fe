@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { OurLink } from '../OurLink';
+import { OurLink, ourFetch } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -28,7 +28,7 @@ const Problem = ({ problemKey }) => {
 
   const fetchProblem = () => {
     console.log(problemKey);
-    fetch(`${serverAddress}/api/problems/${problemKey}`)
+    ourFetch(`${serverAddress}/api/problems/${problemKey}`)
       .then((res) => res.json())
       .then((fetchedProblem) => {
         setProblem(fetchedProblem);
