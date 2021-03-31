@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, TextField, MenuItem } from '@material-ui/core';
+import { Button, Container,
+  FormLabel, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ourHref } from '../OurLink';
 import CodeEditor from './CodeEditor';
 
 const StyledForm = withStyles({
   root: {
-    minHeight: '700px',
     backgroundColor: 'white',
     borderRadius: '15px',
     margin: '0 auto',
@@ -36,21 +36,10 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-const StyledTextField = withStyles({
-  root: {
-    '& label.Mui-focused': {
-      color: '#4995F2',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#4995F2',
-    },
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: '#4995F2',
-      },
-    },
+const StyledRadio = withStyles({
+  colorPrimary: {
   },
-})(TextField);
+})(Radio);
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -81,29 +70,23 @@ const Form = (props) => {
 
   return (
     <StyledForm maxWidth='lg'>
-      <h3>{problemKey}</h3>
-      <div>
-      {isLoaded ? (
-      <StyledTextField
-          select
-          label="언어 선택"
-          value={selectedLanguage}
-          onChange={(event) => {
-            setSelectedLanguage(event.target.value);
-          }}
-          helperText="작성하신 코드의 언어를 선택하세요"
-        >
-          {languages.map((language) => (
-            <MenuItem key={language} value={language}>
-              {language}
-            </MenuItem>
-          ))}
-        </StyledTextField>)
+      <h3 style={{ marginLeft: '2%' }}>{problemKey}</h3>
+      <div style={{ marginLeft: '2%' }}>
+      {isLoaded ? (<>
+  <FormLabel component="legend">언어 선택</FormLabel>
+  <RadioGroup aria-label="language" name="language"
+            onChange={(event) => { setSelectedLanguage(event.target.value); }}>
+  {languages.map((language) => (
+            <FormControlLabel key={language} value={language} label={language}
+            control={<StyledRadio color="default" />} />
+  ))}
+  </RadioGroup>
+   </>)
         : (<div>Loading...</div>)
       }
       </div>
       <div>
-      <CodeEditor language={selectedLanguage} updateCode={setSourceCode}/>
+      <CodeEditor language={selectedLanguage} updateCode={setSourceCode} />
       </div>
       <div>
       <StyledButton variant='contained'
