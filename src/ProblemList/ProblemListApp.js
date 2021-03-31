@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, withStyles } from '@material-ui/core';
 import ProblemList from './ProblemList';
 import PagenumberList from './PagenumberList';
+import { ourFetch } from '../OurLink';
 // import data from '../mock/problemList';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -30,7 +31,7 @@ const Body = () => {
     // setTotalpage(Math.floor(data.length / size) + 1);
 
     const pos = (page - 1) * size;
-    fetch(`${serverAddress}/api/problems?pos=${pos}&count=${size}`, {
+    ourFetch(`${serverAddress}/api/problems?pos=${pos}&count=${size}`, {
       // 비동기
       method: 'GET',
     }).then((res) => res.json())

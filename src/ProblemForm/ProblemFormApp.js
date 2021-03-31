@@ -6,9 +6,9 @@ import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
-import { ourHref } from '../OurLink';
+import { ourHref, ourFetch } from '../OurLink';
 
-const serverAddress = 'http://192.168.0.141:3000';
+const serverAddress = 'http://192.168.0.100:3000';
 
 const StyledForm = withStyles({
   root: {
@@ -64,7 +64,7 @@ const StyledDivider = withStyles({
   },
 })(Divider);
 
-const Form = () => {
+const Form = (props) => {
   const [inputs, setInputs] = useState({
     title: '',
     timeLimit: '',
@@ -155,7 +155,7 @@ const Form = () => {
     };
 
     console.log(data);
-    fetch(`${serverAddress}/api/problems`, {
+    ourFetch(`${serverAddress}/api/problems`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -163,7 +163,7 @@ const Form = () => {
       console.log(`server got new problem... ${res.status}`);
       // TODO: status코드 확인에 따른 분기 추가 요망
       alert('문제가 성공적으로 등록되었습니다.');
-      ourHref('/problems');
+      ourHref('/problems', props.history);
     });
   };
 
