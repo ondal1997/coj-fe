@@ -50,7 +50,7 @@ const fetchLanguages = async () => {
 };
 
 const Form = (props) => {
-  const { problemKey } = props.match.params;
+  const { problemKey, problemTitle } = props.match.params;
   const { history } = props;
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -70,7 +70,7 @@ const Form = (props) => {
 
   return (
     <StyledForm maxWidth='lg'>
-      <h3 style={{ marginLeft: '2%' }}>{problemKey}</h3>
+      <h3 style={{ marginLeft: '2%' }}>{`${problemKey}번 ${problemTitle}`}</h3>
       <div style={{ marginLeft: '2%' }}>
       {isLoaded ? (<>
   <FormLabel component="legend">언어 선택</FormLabel>
