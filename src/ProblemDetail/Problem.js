@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { OurLink, ourFetch } from '../OurLink';
+import { OurLink, ourFetchAndJson } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -26,14 +26,16 @@ const Problem = ({ problemKey }) => {
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const fetchProblem = () => {
+  const fetchProblem = async () => {
     console.log(problemKey);
-    ourFetch(`${serverAddress}/api/problems/${problemKey}`)
-      .then((res) => res.json())
-      .then((fetchedProblem) => {
-        setProblem(fetchedProblem);
-        setIsLoaded(true);
-      }, (error) => console.log(error));
+    try {
+      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
+
+      setProblem(fetchedProblem);
+      setIsLoaded(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
-import { ourHref, ourFetch } from '../OurLink';
+import { ourHref, ourFetchAndJson } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -105,7 +105,7 @@ const Form = (props) => {
     });
   };
 
-  const submit = () => {
+  const submit = async () => {
     let valid = true;
     console.log(description);
     inputsRef.current.every(({ current }) => { // 유효 X가 하나라도 있으면 종료
@@ -155,16 +155,14 @@ const Form = (props) => {
     };
 
     console.log(data);
-    ourFetch(`${serverAddress}/api/problems`, {
+    const json = await ourFetchAndJson(`${serverAddress}/api/problems`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
-    }).then((res) => {
-      console.log(`server got new problem... ${res.status}`);
-      // TODO: status코드 확인에 따른 분기 추가 요망
-      alert('문제가 성공적으로 등록되었습니다.');
-      ourHref('/problems', props.history);
     });
+    console.log(json);
+
+    ourHref('/problems', props.history);
   };
 
   return (

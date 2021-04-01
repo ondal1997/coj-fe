@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, withStyles } from '@material-ui/core';
 import ProblemList from './ProblemList';
 import PagenumberList from './PagenumberList';
-import { ourFetch } from '../OurLink';
+import { ourFetchAndJson } from '../OurLink';
 // import data from '../mock/problemList';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -24,22 +24,25 @@ const Body = () => {
   // const [problemData, setProblemData] = useState(data.slice(0, size));
   const [problemData, setProblemData] = useState([]);
 
-  const fetchProblems = (page) => {
+  const fetchProblems = async (page) => {
     /* local test code */
     // setProblemData(data.slice((page - 1) * size, page * size));
     // setCurpage(page);
     // setTotalpage(Math.floor(data.length / size) + 1);
 
     const pos = (page - 1) * size;
-    ourFetch(`${serverAddress}/api/problems?pos=${pos}&count=${size}`, {
-      // 비동기
-      method: 'GET',
-    }).then((res) => res.json())
-      .then(({ problems, totalCount }) => {
-        setProblemData(problems);
-        setCurpage(page);
-        setTotalpage(Math.floor(totalCount / size) + 1);
-      }, (error) => console.log(error));
+    try {
+      const { problems, totalCount } = await ourFetchAndJson(`${serverAddress}/api/problems?pos=${pos}&count=${size}`, {
+        // 비동기
+        method: 'GET',
+      });
+
+      setProblemData(problems);
+      setCurpage(page);
+      setTotalpage(Math.floor(totalCount / size) + 1);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

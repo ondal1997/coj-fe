@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container,
   FormLabel, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { ourHref, ourFetch } from '../OurLink';
+import { ourHref, ourFetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 
 const StyledForm = withStyles({
@@ -44,9 +44,13 @@ const StyledRadio = withStyles({
 const serverAddress = 'http://192.168.0.100:3000';
 
 const fetchLanguages = async () => {
-  const res = await ourFetch(`${serverAddress}/api/availableLanguages`);
-  const json = await res.json();
-  return json;
+  try {
+    const json = await ourFetchAndJson(`${serverAddress}/api/availableLanguages`);
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+  return {};
 };
 
 const Form = (props) => {
