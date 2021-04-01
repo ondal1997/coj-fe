@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-const IS_DEPLOYED = true;
+const IS_DEPLOYED = false;
 const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
@@ -80,7 +80,14 @@ const ourFetchAndJson = async (url, meta) => {
   }
 
   const res = await fetch(url, meta);
-  const json = await res.json();
+  let json = {};
+
+  try {
+    json = await res.json();
+  } catch (error) {
+    console.log('.');
+  }
+
   return json;
 };
 

@@ -162,6 +162,7 @@ const Form = (props) => {
     });
     console.log(json);
 
+    alert('제출완료!');
     ourHref('/problems', props.history);
   };
 
