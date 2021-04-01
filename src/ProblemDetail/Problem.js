@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Paper, Chip, Divider, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
-import { OurLink, ourFetch } from '../OurLink';
+import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -82,18 +82,21 @@ const Problem = (props) => {
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const fetchProblem = (callback) => {
-    ourFetch(`${serverAddress}/api/problems/${props.problemKey}`)
-      .then((res) => res.json())
-      .then((fetchedProblem) => {
-        setProblem(fetchedProblem);
-        setIsLoaded(true);
-        callback();
-      }, (error) => console.log(error));
+  const fetchProblem = async () => {
+    console.log(problemKey);
+    try {
+      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
+
+      setProblem(fetchedProblem);
+      setIsLoaded(true);
+      insertNextline();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
-    fetchProblem(insertNextline);
+    fetchProblem();
   }, []);
 
   return (isLoaded ? (
