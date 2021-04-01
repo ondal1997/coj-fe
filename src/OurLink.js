@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-const IS_DEPLOYED = false;
+const IS_DEPLOYED = true;
 const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
@@ -75,19 +75,11 @@ const ourFetchAndJson = async (url, meta) => {
       data: newBody,
       dataType: 'json',
     });
-
     return json;
   }
 
   const res = await fetch(url, meta);
-  let json = {};
-
-  try {
-    json = await res.json();
-  } catch (error) {
-    console.log('.');
-  }
-
+  const json = await res.json();
   return json;
 };
 
