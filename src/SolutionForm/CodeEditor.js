@@ -3,21 +3,25 @@ import { Container, withStyles } from '@material-ui/core';
 import CodeMirror from '@uiw/react-codemirror';
 import { getMode } from './utils';
 import 'codemirror/keymap/sublime';
+import './reset.css';
 
 const StyledContainer = withStyles({
   root: {
-    marginTop: '2%',
+    margin: '2%',
     position: 'relative',
+    border: '1px solid #E0E0E0',
+    padding: '0 0',
   },
 })(Container);
 
 const CodeEditor = ({ language, updateCode }) => {
   const onWriteCode = () => {
-    const cs = document.querySelector('.CodeMirror').CodeMirror.lineCount();
+    const cmInst = document.querySelector('.CodeMirror').CodeMirror;
+    const cs = cmInst.lineCount();
     if (cs > 10) {
-      document.querySelector('.CodeMirror').CodeMirror.setSize(null, cs * 35);
-    } else document.querySelector('.CodeMirror').CodeMirror.setSize(null, 400);
-    updateCode(document.querySelector('.CodeMirror').CodeMirror.getValue());
+      cmInst.setSize(null, cs * 35);
+    } else cmInst.setSize(null, 400);
+    updateCode(cmInst.getValue());
   };
 
   useEffect(() => {

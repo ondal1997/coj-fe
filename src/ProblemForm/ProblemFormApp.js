@@ -7,6 +7,7 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 import { ourHref, ourFetchAndJson } from '../OurLink';
+import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -114,8 +115,6 @@ const Form = (props) => {
       if (!res) {
         valid = false;
         current.focus();
-        // style.borderColor = 'red';
-        // setTimeout(() => { style.borderColor = 'black'; }, 3000);
       }
       return res;
     });

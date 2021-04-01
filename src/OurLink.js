@@ -1,21 +1,41 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-const IS_DEPLOYED = true;
+const StyledAnchor = styled.a`
+    color: white;
+    text-decoration: none;
+
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+`;
+
+// 링크 기본 스타일 제거
+const StyledLink = styled(Link)`
+    color: black;
+    text-decoration: none;
+
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+`;
+
+const IS_DEPLOYED = false;
 const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
   const { to, children } = props;
 
   return IS_DEPLOYED ? (
-    <a href={`${codersUrl}${to}`}>
+    <StyledAnchor href={`${codersUrl}${to}`}>
         {children}
-    </a>
+    </StyledAnchor>
   ) : (
-    <Link to={to}>
+    <StyledLink to={to}>
         {children}
-    </Link>
+    </StyledLink>
   );
 };
 

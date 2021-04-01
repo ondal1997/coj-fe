@@ -6,7 +6,7 @@ const solutionList = [
     state: 0,
     testcaseHitCount: 10,
     testcaseSize: 100,
-    problemKey: 1035,
+    problemKey: 1011,
     problemVersion: 1,
     language: 'python',
     sourceCode: `#pragma warning(disable: 4996)
@@ -81,7 +81,7 @@ const solutionList = [
     state: 2,
     testcaseHitCount: 100,
     testcaseSize: 100,
-    problemKey: 1035,
+    problemKey: 1011,
     problemVersion: 2,
     language: 'python',
     sourceCode: `#pragma warning(disable: 4996)
@@ -156,7 +156,7 @@ const solutionList = [
     state: 1,
     testcaseHitCount: 50,
     testcaseSize: 100,
-    problemKey: 1035,
+    problemKey: 1011,
     problemVersion: 1,
     language: 'python',
     sourceCode: `#pragma warning(disable: 4996)
@@ -231,7 +231,7 @@ const solutionList = [
     state: 3,
     testcaseHitCount: 50,
     testcaseSize: 100,
-    problemKey: 1035,
+    problemKey: 1011,
     problemVersion: 1,
     language: 'python',
     sourceCode: `#pragma warning(disable: 4996)
