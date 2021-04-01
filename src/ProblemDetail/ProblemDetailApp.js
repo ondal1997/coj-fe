@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import Problem from './Problem';
 
 const StyledProblemDetailApp = styled.div`
-  border: 1px solid black;
   width: 100%;
-  background-color: black;
 `;
 
-const ProblemDetailApp = ({ match }) => <StyledProblemDetailApp>
-      <Problem problemKey={match.params.problemKey}/>
+const ProblemDetailApp = ({ history, match }) => <StyledProblemDetailApp>
+      <Problem problemKey={match.params.problemKey} history={history}/>
       </StyledProblemDetailApp>;
 
 export default ProblemDetailApp;
