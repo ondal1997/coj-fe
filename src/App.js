@@ -8,7 +8,7 @@ import ProblemFormApp from './ProblemForm/ProblemFormApp';
 import SolutionFormApp from './SolutionForm/SolutionFormApp';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
-import Nav from './Nav';
+// import Nav from './Nav';
 
 const StyledApp = styled.div`
   max-height: 500px;
@@ -18,7 +18,7 @@ const App = () => (
   <>
   <StyledApp>
     <Router basename="/oj">
-      <Nav />
+      {/* <Nav /> */}
       <Switch>
         <Route path="/" exact component={ProblemListApp} />
         <Route path="/solutions" exact component={SolutionListApp} />
@@ -27,7 +27,7 @@ const App = () => (
         <Route path="/problems" component={ProblemListApp} />
         <Route path="/problemsForm" component={ProblemFormApp} />
         <Route path="/solutionForm/:problemKey/:problemTitle" component={SolutionFormApp} />
-        <Route path="/problem/:problemKey" component={ProblemDetailApp} />
+        <Route path="/problemDetail/:problemKey" component={ProblemDetailApp} />
       </Switch>
     </Router>
   </StyledApp>
