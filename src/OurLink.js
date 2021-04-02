@@ -95,19 +95,11 @@ const ourFetchAndJson = async (url, meta) => {
       data: newBody,
       dataType: 'json',
     });
-
     return json;
   }
 
   const res = await fetch(url, meta);
-  let json = {};
-
-  try {
-    json = await res.json();
-  } catch (error) {
-    console.log('.');
-  }
-
+  const json = await res.json();
   return json;
 };
 

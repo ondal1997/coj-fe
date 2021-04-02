@@ -99,7 +99,7 @@ const Form = (props) => {
             alert('언어를 선택해주세요');
             return;
           }
-          await fetch(`${serverAddress}/api/solutions`, {
+          await ourFetchAndJson(`${serverAddress}/api/solutions`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
