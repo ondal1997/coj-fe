@@ -11,9 +11,9 @@ const StyledKeyButton = withStyles({
 
 const PageKey = ({ direction, curPage, onClick }) => {
   if (direction === 'prev') {
-    return <StyledKeyButton onClick={() => onClick(curPage - 1)}>👈</StyledKeyButton>;
+    return <StyledKeyButton onClick={() => onClick(Number(curPage) - 1)}>👈</StyledKeyButton>;
   }
-  return <StyledKeyButton onClick={() => onClick(curPage + 1)}>👉</StyledKeyButton>;
+  return <StyledKeyButton onClick={() => onClick(Number(curPage) + 1)}>👉</StyledKeyButton>;
 };
 
 export default PageKey;

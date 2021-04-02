@@ -3,13 +3,13 @@ import { Container, withStyles } from '@material-ui/core';
 import ProblemList from './ProblemList';
 import PagenumberList from './PagenumberList';
 import { ourFetchAndJson } from '../OurLink';
-// import data from '../mock/problemList';
 
 const serverAddress = 'http://192.168.0.100:3000';
 const StyledContainer = withStyles({
   root: {
     color: 'white',
     fontSize: 'medium',
+    marginTop: '1%',
   },
   maxWidthLg: {
     width: '100%',
@@ -18,27 +18,20 @@ const StyledContainer = withStyles({
 
 const size = 10;
 
-const Body = () => {
-  const [curPage, setCurpage] = useState(1);
+const Body = (props) => {
+  const { pageNum } = props.match.params;
+
   const [totalPage, setTotalpage] = useState(0);
-  // const [problemData, setProblemData] = useState(data.slice(0, size));
   const [problemData, setProblemData] = useState([]);
 
-  const fetchProblems = async (page) => {
-    /* local test code */
-    // setProblemData(data.slice((page - 1) * size, page * size));
-    // setCurpage(page);
-    // setTotalpage(Math.floor(data.length / size) + 1);
-
-    const pos = (page - 1) * size;
+  const fetchProblems = async () => {
+    const pos = (pageNum - 1) * size;
     try {
       const { problems, totalCount } = await ourFetchAndJson(`${serverAddress}/api/problems?pos=${pos}&count=${size}`, {
         // 비동기
         method: 'GET',
       });
-
       setProblemData(problems);
-      setCurpage(page);
       setTotalpage(Math.floor(totalCount / size) + 1);
     } catch (error) {
       console.error(error);
@@ -46,20 +39,15 @@ const Body = () => {
   };
 
   useEffect(() => {
-    fetchProblems(curPage);
-  }, []);
-
-  const updatePage = (page) => {
-    fetchProblems(page);
-  };
+    fetchProblems(pageNum);
+  }, [props]);
 
   return <div>
-        <div style={{ height: '950px' }}>
+        <div>
         <ProblemList problems={problemData}/>
         </div>
         <StyledContainer>
-          <PagenumberList curPage={curPage} totalPage={totalPage}
-          updatePage={updatePage}/>
+          <PagenumberList curPage={pageNum} totalPage={totalPage} preUrl='problems' history={props.history}/>
         </StyledContainer>
         </div>;
 };
