@@ -1,3 +1,14 @@
 div {
   font-size: absolute-size !important;
 }
+
+h3 {
+  font-size: 'larger' !important;
+  font-weight: normal !important;
+}
+
+legend {
+  position: relative !important;
+  text-indent: 0 !important;
+  overflow: visible !important;
+}
