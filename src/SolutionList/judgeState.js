@@ -8,35 +8,35 @@ const judgeState = [
     name: '채점 중',
   },
   {
-    color: '#283DF5',
+    color: '#238AE3',
     name: 'Solve !',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: 'Try again ...',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: '시간 초과 ...',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: '메모리 초과 ...',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: '컴파일 에러 ...',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: '런타임 에러 ...',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: '문제 유실 ...',
   },
   {
-    color: '#F02424',
+    color: '#F73B21',
     name: '서버 실패 ...',
   },
 ];
