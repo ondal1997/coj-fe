@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ProblemListApp from './ProblemList/ProblemListApp';
-import SolutionListApp from './SolutionList/SolutionListApp';
 import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
 import ProblemFormApp from './ProblemForm/ProblemFormApp';
 import SolutionFormApp from './SolutionForm/SolutionFormApp';
@@ -15,7 +14,7 @@ const App = () => (
       <Nav />
       <Switch>
         <Route path="/" exact component={ProblemListApp} />
-        <Route path="/solutions" exact component={SolutionListApp} />
+        <Route path="/allSolutions/:pageNum" component={SolutionListAppWrapper} />
         <Route path="/solutions/:problemNo/:problemTitle/:pageNum" component={SolutionListAppWrapper} />
         <Route path="/solution/:solutionKey" component={SolutionDetailApp} />
         <Route path="/problems/:pageNum" component={ProblemListApp} />

@@ -75,8 +75,15 @@ const Body = (props) => {
           <SolutionList solutions={solutions}/>
         </div>
         <StyledContainer>
-          <PagenumberList curPage={pageNum} totalPage={totalPage}
-          preUrl={`solutions/${problemNo}/${problemTitle}`} history={history}/>
+          {
+            problemNo !== undefined ? (
+              <PagenumberList curPage={pageNum} totalPage={totalPage}
+            preUrl={`solutions/${problemNo}/${problemTitle}`} history={history}/>
+            ) : (
+              <PagenumberList curPage={pageNum} totalPage={totalPage}
+            preUrl={'allSolutions'} history={history}/>
+            )
+          }
         </StyledContainer>
         </div>;
 };

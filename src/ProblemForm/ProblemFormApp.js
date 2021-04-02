@@ -8,6 +8,7 @@ import Examples from './Examples';
 import Hashtags from './Hashtags';
 import { ourHref, ourFetchAndJson } from '../OurLink';
 import './reset.css';
+import MyEditor from './MyEditor';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -188,6 +189,9 @@ const Form = (props) => {
       margin="normal"
       variant="outlined"
       onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
+
+      <MyEditor />
+
       <StyledTextField
       name='description'
       label='설명'

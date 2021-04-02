@@ -86,8 +86,9 @@ const Problem = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchProblem = async () => {
+    console.log(problemKey);
     try {
-      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
+      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${props.problemKey}`);
 
       setProblem(fetchedProblem);
       setIsLoaded(true);
