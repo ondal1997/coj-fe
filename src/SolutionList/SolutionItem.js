@@ -5,15 +5,18 @@ import judgeState from './judgeState';
 
 const StyledTableCell = withStyles({
   root: {
-    width: '10px',
-    height: '40px',
-    fontSize: '20px',
+    fontSize: 'larger',
+    overflow: 'hidden',
   },
 })(TableCell);
 
 const StyledState = styled.span`
-  font-weight: 700;
-  color: ${({ state }) => state || '#F23434'}
+  font-weight: 600;
+  color: white;
+  background-color: ${({ color }) => color || '#F23434'};
+  border-radius: 500px;
+  padding: 2% 3%;
+  font-size: medium;
 `;
 
 const SolutionItem = ({ info }) => (
@@ -24,7 +27,7 @@ const SolutionItem = ({ info }) => (
     <StyledTableCell align="center">{info.language}</StyledTableCell>
     <StyledTableCell align="center"> {/* if 문으로 변경해서 작성 */}
     {info.state !== 1
-      ? <StyledState state={judgeState[info.state].color}>
+      ? <StyledState color={judgeState[info.state].color}>
         {judgeState[info.state].name}</StyledState>
       : <StyledState state={judgeState[info.state].color}>
         {`${judgeState[info.state].name}
