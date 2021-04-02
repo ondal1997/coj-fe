@@ -10,7 +10,7 @@ const Nav = () => (
       <OurLink to="/solutions">
       <li>풀이 제출 현황</li>
       </OurLink>
-      <OurLink to="/problems">
+      <OurLink to="/problems/1">
       <li>문제 리스트</li>
       </OurLink>
       <OurLink to="/problemsForm">

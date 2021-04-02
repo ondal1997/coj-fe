@@ -27,13 +27,13 @@ const StyledContainer = withStyles({
 
 const size = 10;
 // 전체 리스트 보여주기랑 특정 문제에 따라 보여주는거로 분기
-const Body = ({ problemNo }) => {
-  const [curPage, setCurpage] = useState(1);
+const Body = (props) => {
+  const { problemNo, problemTitle, pageNum, history } = props;
   const [totalPage, setTotalpage] = useState(0);
   const [solutions, setSolutions] = useState([]); // 해당 문제에 해당하는 거 중에 10개씩 자름.
 
-  const fetchSolutions = async (page) => {
-    const pos = (page - 1) * size;
+  const fetchSolutions = async () => {
+    const pos = (pageNum - 1) * size;
 
     try {
       let json;
@@ -52,7 +52,6 @@ const Body = ({ problemNo }) => {
       console.log(json);
 
       setSolutions(json.solutions);
-      setCurpage(page);
       console.log(json.totalCount);
       setTotalpage(Math.ceil(json.totalCount / size));
     } catch (error) {
@@ -60,28 +59,24 @@ const Body = ({ problemNo }) => {
     }
   };
 
-  const updatePage = (page) => {
-    fetchSolutions(page);
-  };
-
   useEffect(() => {
-    updatePage(curPage);
-  }, []);
+    fetchSolutions(pageNum);
+  }, [pageNum]);
 
   return <div>
         {
           problemNo !== undefined ? (
-          <StyledTypography align='center'>NO. {problemNo}</StyledTypography>
+          <StyledTypography align='center'>{problemNo}번 {problemTitle}</StyledTypography>
           ) : (
              <StyledTypography align='center'>전체 풀이 현황{problemNo}</StyledTypography>
           )
         }
-        <div style={{ height: '950px' }}>
+        <div>
           <SolutionList solutions={solutions}/>
         </div>
         <StyledContainer>
-          <PagenumberList curPage={curPage} totalPage={totalPage}
-          updatePage={updatePage}/>
+          <PagenumberList curPage={pageNum} totalPage={totalPage}
+          preUrl={`solutions/${problemNo}/${problemTitle}`} history={history}/>
         </StyledContainer>
         </div>;
 };

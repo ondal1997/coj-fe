@@ -20,6 +20,7 @@ const StyledTableCell = withStyles({
   root: {
     width: '200px',
     height: '40px',
+    fontSize: '16px',
   },
 })(TableCell);
 
@@ -28,13 +29,15 @@ const ProblemItem = ({ info }) => (
   <TableRow>
   <StyledTableCell align="center">{info.key}</StyledTableCell>
     <StyledTableCell align="center">
-      <OurLink to={`/problemDetail/${info.key}`} style={{ textDecoration: 'none' }}>
+      <OurLink to={`/problem/${info.key}`} style={{ textDecoration: 'none' }}>
+        <span style={{ color: '#000000' }}>
      {info.title}
+     </span>
       </OurLink>
     {info.categories.map((item) => <Category name={item} />)}
     </StyledTableCell>
     <StyledTableCell align="center">
-      <OurLink to={`/solutions/${info.key}`} style={{ textDecorationLine: 'none' }}>
+      <OurLink to={`/solutions/${info.key}/${info.title}/1`} style={{ textDecorationLine: 'none' }}>
         <StyledButton>GO!</StyledButton>
       </OurLink>
     </StyledTableCell>

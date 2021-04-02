@@ -3,6 +3,7 @@ import { Container, Paper, Chip, Divider, withStyles } from '@material-ui/core';
 import styled from 'styled-components';
 import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
+import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -79,11 +80,12 @@ const StyledExamplePaper = withStyles({
 })(Paper);
 
 const Problem = (props) => {
+  const { problemKey } = props;
+
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchProblem = async () => {
-    console.log(problemKey);
     try {
       const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
 

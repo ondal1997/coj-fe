@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Button, withStyles } from '@material-ui/core';
 import _ from 'lodash';
 import PageKey from './PageKey';
+import { ourHref } from '../OurLink';
 
 const StyledContainer = withStyles({
   root: {
@@ -32,16 +33,17 @@ const StyledCurPageButton = withStyles({
   },
 })(Button);
 
-const PagenumberList = ({ curPage, totalPage, updatePage }) => {
+const PagenumberList = ({ curPage, totalPage, preUrl, history }) => {
   const onMovepage = (page) => {
     if (page === 0 || page === totalPage + 1) return;
-    updatePage(page);
+
+    ourHref(`/${preUrl}/${page}`, history);
   };
 
   return <StyledContainer>
     <PageKey direction='prev' curPage={curPage} onClick={onMovepage}/>
     {_.range(1, totalPage + 1).map((n) => {
-      if (n === curPage) { return <StyledCurPageButton>{n}</StyledCurPageButton>; }
+      if (n === Number(curPage)) { return <StyledCurPageButton>{n}</StyledCurPageButton>; }
       return <StyledPageButton onClick={() => onMovepage(n)}>{n}</StyledPageButton>;
     })}
     <PageKey direction='next' curPage={curPage} onClick={onMovepage}/>
