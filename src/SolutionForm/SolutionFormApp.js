@@ -111,7 +111,7 @@ const Form = (props) => {
             }),
           });
           alert('제출 완료!');
-          ourHref(`/solutions/${problemKey}`, history);
+          ourHref(`/solutions/${problemKey}/${problemTitle}/1`, history);
         }}>
         <a>풀이 제출하기</a></StyledButton>
       </div>

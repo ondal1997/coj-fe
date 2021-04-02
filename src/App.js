@@ -13,7 +13,7 @@ const App = () => (
     <Router basename="/oj">
       <Nav />
       <Switch>
-        <Route path="/" exact component={ProblemListApp} />
+        <Route path="/" exact component={ProblemDetailApp} />
         <Route path="/allSolutions/:pageNum" component={SolutionListAppWrapper} />
         <Route path="/solutions/:problemNo/:problemTitle/:pageNum" component={SolutionListAppWrapper} />
         <Route path="/solution/:solutionKey" component={SolutionDetailApp} />

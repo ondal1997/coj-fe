@@ -80,7 +80,7 @@ const StyledExamplePaper = withStyles({
 })(Paper);
 
 const Problem = (props) => {
-  const { problemKey } = props;
+  const problemKey = props.problemKey || 1009; // 임시
 
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
@@ -88,7 +88,7 @@ const Problem = (props) => {
   const fetchProblem = async () => {
     console.log(problemKey);
     try {
-      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${props.problemKey}`);
+      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
 
       setProblem(fetchedProblem);
       setIsLoaded(true);
@@ -106,9 +106,9 @@ const Problem = (props) => {
     <StyledProblem>
   <div>
     <span style={{ fontSize: '50px' }}>
-      {`${props.problemKey}번 ${problem.title}`}
+      {`${problemKey}번 ${problem.title}`}
     </span>
-  <OurLink to={`/solutionForm/${props.problemKey}/${problem.title}`}>
+  <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
     <span style={{ color: '#4995F2', fontSize: 'larger', float: 'right' }}>
     문제 풀러가기
     </span>
