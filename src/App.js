@@ -6,24 +6,43 @@ import ProblemFormApp from './ProblemForm/ProblemFormApp';
 import SolutionFormApp from './SolutionForm/SolutionFormApp';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
-import Nav from './Nav';
+import { OurLink } from './OurLink';
+
+const Nav = () => (
+  <nav>
+    <h3>==테스트용 네비게이션======</h3>
+    <ul>
+      <OurLink to="/allSolutions/1">
+      <li>전체 풀이 제출 현황</li>
+      </OurLink>
+      <OurLink to="/problems/1">
+      <li>문제 리스트</li>
+      </OurLink>
+      <OurLink to="/problemsForm">
+      <li>문제 제출</li>
+      </OurLink>
+    </ul>
+    <h3>=========================</h3>
+  </nav>
+);
 
 const App = () => (
-  <>
-    <Router basename="/oj">
-      <Nav />
-      <Switch>
-        <Route path="/" exact component={ProblemDetailApp} />
-        <Route path="/allSolutions/:pageNum" component={SolutionListAppWrapper} />
-        <Route path="/solutions/:problemNo/:problemTitle/:pageNum" component={SolutionListAppWrapper} />
-        <Route path="/solution/:solutionKey" component={SolutionDetailApp} />
-        <Route path="/problems/:pageNum" component={ProblemListApp} />
-        <Route path="/problemsForm" component={ProblemFormApp} />
-        <Route path="/solutionForm/:problemKey/:problemTitle" component={SolutionFormApp} />
-        <Route path="/problem/:problemKey" component={ProblemDetailApp} />
-      </Switch>
-    </Router>
-  </>
+  <Router basename="/oj">
+    <Nav />
+    <Switch>
+      <Route path="/" exact component={ProblemDetailApp} />
+      
+      <Route path="/problemsForm" component={ProblemFormApp} />
+      <Route path="/problems/:pageNum" component={ProblemListApp} />
+      <Route path="/problem/:problemKey" component={ProblemDetailApp} />
+
+      <Route path="/solutionForm/:problemKey/:problemTitle" component={SolutionFormApp} />
+      <Route path="/solutions/:problemNo/:problemTitle/:pageNum" component={SolutionListAppWrapper} />
+      <Route path="/solution/:solutionKey" component={SolutionDetailApp} />
+
+      <Route path="/allSolutions/:pageNum" component={SolutionListAppWrapper} />
+    </Switch>
+  </Router>
 );
 
 export default App;
