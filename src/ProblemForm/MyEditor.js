@@ -1,83 +1,83 @@
-import React, { Component } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// NOTE: Use the editor from source (not a build)!
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorState: EditorState.createEmpty(),
-      uploadedImages: [],
-    };
-    this.uploadImageCallBack = this.uploadImageCallBack.bind(this);
-  }
+import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 
-  onEditorStateChange = (editorState) => {
-    this.setState({
-      editorState,
-    });
-  };
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 
-  uploadImageCallBack = (file) => {
-    // long story short, every time we upload an image, we
-    // need to save it to the state so we can get it's data
-    // later when we decide what to do with it.
+import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
+import Font from '@ckeditor/ckeditor5-font/src/font';
+import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
+import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
 
-    // Make sure you have a uploadImages: [] as your default state
-    const { uploadedImages } = this.state;
+import Link from '@ckeditor/ckeditor5-link/src/link';
 
-    const imageObject = {
-      file: file,
-      localSrc: URL.createObjectURL(file),
-    };
+import Image from '@ckeditor/ckeditor5-image/src/image';
+// import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
+// import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
+import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
+import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
 
-    uploadedImages.push(imageObject);
+import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 
-    this.setState({ uploadedImages: uploadedImages });
+import Table from '@ckeditor/ckeditor5-table/src/table';
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 
-    // We need to return a promise with the image src
-    // the img src we will use here will be what's needed
-    // to preview it in the browser. This will be different than what
-    // we will see in the index.md file we generate.
-    return new Promise(
-      (resolve) => {
-        // 서버로 이미지를 전송하고, 해당 이미지의 주소를 받아온다.
-        // 클라는 fetch를 사용하면 될듯. 이미지를 인코딩해서 바디에 넣어 보낸다.
-        // 서버는 디코딩으로 이미지를 얻어내고 이름을 적절히 수정하여 파일시스템에 저장한다.
-        // 해당 이미지의 이름을 반환해준다...
-        resolve({ data: { link: imageObject.localSrc } });
-      },
-    );
-  };
+// import { Paper } from '@material-ui/core';
 
-  render() {
-    const { editorState } = this.state;
-    return (
-        <div className="App">
-        <header className="App-header">
+const editorConfiguration = {
+  plugins: [Essentials, Paragraph, Heading,
+    Bold, Italic, Underline, Strikethrough, Subscript, Superscript,
+    ListStyle, Font, BlockQuote, HorizontalLine, Link,
+    Image, ImageResize, LinkImage, ImageInsert, SimpleUploadAdapter,
+    Table, TableToolbar,
+  ],
+  simpleUpload: {
+    uploadUrl: 'http://192.168.0.100:3000/upload',
+  },
+  toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
+    '|', 'bulletedList', 'numberedList', '|', 'fontSize', 'fontColor', 'fontBackgroundColor', '|', 'blockQuote', 'horizontalLine', '|', 'link', 'insertImage', 'insertTable', '|', 'undo', 'redo'],
+  table: {
+    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+  },
+  placeholder: '여기에 내용을 입력하세요!',
+};
 
-          <Editor
-            editorState={editorState}
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="editorClassName"
-            onEditorStateChange={this.onEditorStateChange}
-            toolbar={{
-              inline: { inDropdown: true },
-              list: { inDropdown: true },
-              textAlign: { inDropdown: true },
-              link: { inDropdown: true },
-              history: { inDropdown: true },
-              image: { uploadCallback: this.uploadImageCallBack },
-              inputAccept: 'application/pdf,text/plain,application/vnd.openxmlformatsofficedocument.wordprocessingml.document,application/msword,application/vnd.ms-excel',
-            }}
-          />
-        </header>
-        </div>
-    );
-  }
-}
+const MyEditor = (props) => {
+  const { onChange, value } = props;
 
-export default App;
+  return (
+    <>
+      <CKEditor
+        height={500}
+        editor={ClassicEditor}
+        config={editorConfiguration}
+        data={value}
+        onReady={(editor) => {
+          console.log('Editor is ready to use!', editor);
+        }}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          console.log(data);
+          onChange(data);
+          // document.querySelectorAll('.ck-content')[1].innerHTML = data;
+        }}
+      />
+      {/* <Paper className="ck-content" elevation={2}
+      style={{ backgroundColor: '#ECECED', padding: '1%', marginTop: '1%' }}>
+      </Paper> */}
+    </>
+  );
+};
+
+export default MyEditor;

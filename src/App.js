@@ -31,7 +31,7 @@ const App = () => (
     <Nav />
     <Switch>
       <Route path="/" exact component={ProblemDetailApp} />
-      
+
       <Route path="/problemsForm" exact component={ProblemFormApp} />
       <Route path="/problems/:pageNum" exact component={ProblemListApp} />
       <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
