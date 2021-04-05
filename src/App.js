@@ -32,15 +32,15 @@ const App = () => (
     <Switch>
       <Route path="/" exact component={ProblemDetailApp} />
       
-      <Route path="/problemsForm" component={ProblemFormApp} />
-      <Route path="/problems/:pageNum" component={ProblemListApp} />
-      <Route path="/problem/:problemKey" component={ProblemDetailApp} />
+      <Route path="/problemsForm" exact component={ProblemFormApp} />
+      <Route path="/problems/:pageNum" exact component={ProblemListApp} />
+      <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
-      <Route path="/solutionForm/:problemKey/:problemTitle" component={SolutionFormApp} />
-      <Route path="/solutions/:problemNo/:problemTitle/:pageNum" component={SolutionListAppWrapper} />
-      <Route path="/solution/:solutionKey" component={SolutionDetailApp} />
+      <Route path="/solutionForm/:problemKey/:problemTitle" exact component={SolutionFormApp} />
+      <Route path="/solutions/:problemNo/:problemTitle/:pageNum" exact component={SolutionListAppWrapper} />
+      <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
 
-      <Route path="/allSolutions/:pageNum" component={SolutionListAppWrapper} />
+      <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
     </Switch>
   </Router>
 );

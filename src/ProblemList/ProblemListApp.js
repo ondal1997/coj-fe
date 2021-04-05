@@ -39,7 +39,7 @@ const Body = (props) => {
   };
 
   useEffect(() => {
-    fetchProblems(pageNum);
+    fetchProblems();
   }, [props]);
 
   return <div>
