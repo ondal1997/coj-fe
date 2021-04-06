@@ -142,9 +142,8 @@ const Problem = (props) => {
   <StyledDivider />
   <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
   <div style={{ fontSize: '20px' }}>
-  <Paper className='texts' elevation={2} style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}>
-    {problem.description}
-  </Paper>
+  <Paper className='ck-content' elevation={2} style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}
+    dangerouslySetInnerHTML={{ __html: problem.description }} />
   </div>
   </div>
   <StyledDivider />

@@ -70,8 +70,9 @@ const Form = (props) => {
     title: '',
     timeLimit: '',
     memoryLimit: '',
-    description: '',
   });
+
+  const [description, setDescription] = useState('');
 
   const [examples, setExamples] = useState([
     {
@@ -84,11 +85,11 @@ const Form = (props) => {
 
   const [hashtags, setHashtags] = useState([]);
 
-  const { title, timeLimit, memoryLimit, description } = inputs;
+  const { title, timeLimit, memoryLimit } = inputs;
 
   const inputsRef = useRef([]);
 
-  inputsRef.current = _.range(0, 4).map((index) => {
+  inputsRef.current = _.range(0, 3).map((index) => {
     inputsRef.current[index] = useRef(null);
     return inputsRef.current[index];
   });
@@ -184,7 +185,9 @@ const Form = (props) => {
       variant="outlined"
       onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
 
-      <StyledTextField
+      <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
+
+      {/* <StyledTextField
       name='description'
       label='설명'
       fullWidth
@@ -193,7 +196,7 @@ const Form = (props) => {
       multiline
       rows={20}
       rowsMax={Infinity}
-      onChange={(event) => onChange(event)} inputRef={inputsRef.current[3]} />
+      onChange={(event) => onChange(event)} inputRef={inputsRef.current[3]} /> */}
       <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>
       <Examples examples={examples} updateExamples={setExamples}/>
       <Testcases testcases={testcases} updateTestcases={setTestcases} />

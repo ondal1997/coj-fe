@@ -4,3 +4,7 @@ input[type=text]:focus, textarea:focus,select:focus {
     box-shadow:0 0!important;
     border: 0!important;
   }
+
+.ck-editor__editable {
+    min-height: 300px !important;
+}

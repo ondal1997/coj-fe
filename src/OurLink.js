@@ -22,7 +22,7 @@ const StyledLink = styled(Link)`
     }
 `;
 
-const IS_DEPLOYED = false;
+const IS_DEPLOYED = true;
 const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
@@ -84,7 +84,7 @@ const ourFetchAndJson = async (url, meta) => {
 
     const newBody = {};
     if (meta.body) {
-      newBody.data = JSON.parse(meta.body);
+      newBody.data = meta.body;
     }
     newBody.to = url.slice(url.indexOf('api'));
     newBody.method = meta.method;
