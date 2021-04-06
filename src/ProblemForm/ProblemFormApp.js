@@ -8,7 +8,6 @@ import Examples from './Examples';
 import Hashtags from './Hashtags';
 import { ourHref, ourFetchAndJson } from '../OurLink';
 import './reset.css';
-import MyEditor from './MyEditor';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -32,7 +31,7 @@ const StyledButton = withStyles({
   root: {
     color: 'white',
     backgroundColor: 'black',
-    left: '94%',
+    left: '93.5%',
     margin: '1%',
     padding: '1%',
     '&:hover': {
@@ -81,12 +80,7 @@ const Form = (props) => {
     },
   ]);
 
-  const [testcases, setTestcases] = useState([
-    {
-      input: '',
-      output: '',
-    },
-  ]);
+  const [testcases, setTestcases] = useState([]);
 
   const [hashtags, setHashtags] = useState([]);
 
@@ -189,8 +183,6 @@ const Form = (props) => {
       margin="normal"
       variant="outlined"
       onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
-
-      <MyEditor />
 
       <StyledTextField
       name='description'
