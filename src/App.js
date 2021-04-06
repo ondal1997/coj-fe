@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import ProblemListApp from './ProblemList/ProblemListApp';
 import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
 import ProblemFormApp from './ProblemForm/ProblemFormApp';
@@ -7,6 +8,14 @@ import SolutionFormApp from './SolutionForm/SolutionFormApp';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
 import { OurLink } from './OurLink';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#4995F2',
+    },
+  },
+});
 
 const Nav = () => (
   <nav>
@@ -27,11 +36,11 @@ const Nav = () => (
 );
 
 const App = () => (
+  <ThemeProvider theme={theme} >
   <Router basename="/oj">
     <Nav />
     <Switch>
       <Route path="/" exact component={ProblemDetailApp} />
-      
       <Route path="/problemsForm" exact component={ProblemFormApp} />
       <Route path="/problems/:pageNum" exact component={ProblemListApp} />
       <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
@@ -42,7 +51,8 @@ const App = () => (
 
       <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
     </Switch>
-  </Router>
+    </Router>
+  </ThemeProvider>
 );
 
 export default App;
