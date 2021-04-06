@@ -1,5 +1,6 @@
-import React from 'react';
-import { Container, Button, TextField } from '@material-ui/core';
+import React, { useRef } from 'react';
+import styled from 'styled-components';
+import { Container, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const StyledContainer = withStyles({
@@ -18,32 +19,18 @@ const StyledContainer = withStyles({
   },
 })(Container);
 
-const StyledButton = withStyles({
-  root: {
-    color: 'white',
-    backgroundColor: 'black',
-    left: '86%',
-    margin: '1%',
-    padding: '1%',
-    fontSize: 'medium',
-    '&:hover': {
-      backgroundColor: '#CE2727',
-    },
-  },
-})(Button);
-
-const StyledDeleteButton = withStyles({
-  root: {
-    color: 'gray',
-    padding: '0 0',
-    left: '96.5%',
-    fontSize: 'medium',
-    '&:hover': {
-      color: 'black',
-      backgroundColor: 'white',
-    },
-  },
-})(Button);
+// const StyledDeleteButton = withStyles({
+//   root: {
+//     color: 'gray',
+//     padding: '0 0',
+//     left: '96.5%',
+//     fontSize: 'medium',
+//     '&:hover': {
+//       color: 'black',
+//       backgroundColor: 'white',
+//     },
+//   },
+// })(Button);
 
 const StyledTextField = withStyles({
   root: {
@@ -63,26 +50,67 @@ const StyledTextField = withStyles({
   },
 })(TextField);
 
+const StyledLabel = styled.label`
+  background-color: #000000;
+  padding: 1.5% 1%;
+  fontSize: medium;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+  &:hover {
+    background-color: #CE2727;
+  }
+`;
+
 const Testcases = ({ testcases, updateTestcases }) => {
-  const onChangeInput = (e, i) => {
-    const newTestcases = [...testcases];
-    newTestcases[i][e.target.name] = e.target.value;
-    updateTestcases(newTestcases);
-  };
+  const textRef = useRef(null);
 
-  const onClickDeleteItem = (i) => {
-    if (testcases.length === 1) return;
-    const newTestcases = testcases.filter((e, index) => index !== i);
-    updateTestcases(newTestcases);
-  };
+  const onFileUpload = (event) => {
+    const { files } = event.target;
+    if (files.length % 2 !== 0) {
+      textRef.current.innerHTML = '입력과 출력 파일을 같이 업로드해주세요.';
+      return;
+    }
 
-  const addTestcase = () => {
-    const newTestcases = [...testcases];
-    newTestcases.push({
-      input: '',
-      output: '',
+    for (let i = 1; i < files.length; i += 2) {
+      const inNum = files[i - 1].name.split('.')[0];
+      const outNum = files[i].name.split('.')[0];
+      if (inNum !== outNum) {
+        textRef.current.innerHTML = '입력과 출력 파일을 같이 업로드해주세요.';
+        return;
+      }
+    }
+
+    const newTestcases = [{ input: '', output: '' }];
+    const testcaseLen = newTestcases.length - 1;
+
+    let idx = 0;
+    let loadedCount = 0;
+
+    textRef.current.innerHTML = '업로드 중...';
+
+    [...files].reverse().forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = function () {
+        if (newTestcases[testcaseLen + idx].input !== ''
+        && newTestcases[testcaseLen + idx].output !== '') {
+          idx += 1;
+          newTestcases[testcaseLen + idx] = { input: '', output: '' };
+        }
+        if (file.name.split('.')[1] === 'in') {
+          newTestcases[testcaseLen + idx].input = reader.result;
+        } else {
+          newTestcases[testcaseLen + idx].output = reader.result;
+        }
+        loadedCount += 1;
+        if (loadedCount === files.length) {
+          updateTestcases(newTestcases);
+          textRef.current.innerHTML = '';
+        }
+      };
+      reader.readAsText(file);
     });
-    updateTestcases(newTestcases);
   };
 
   return <>
@@ -92,25 +120,36 @@ const Testcases = ({ testcases, updateTestcases }) => {
         <div>
           테스트케이스 입력 {number + 1}
         </div>
-          <StyledTextField name="input"
-          variant='outlined' row={5} maxRow={Infinity} multiline
-          value={testcase.input} onChange={(event) => onChangeInput(event, number)}
+          <StyledTextField variant='outlined' row={5}
+          maxRow={Infinity} multiline
+          value={testcase.input}
+          InputProps={{
+            readOnly: true,
+          }}
           />
         </div>
         <div className='area-container'>
           <div>
           테스트케이스 출력 {number + 1}
           </div>
-          <StyledTextField name="output"
-          variant='outlined' row={5} maxRow={Infinity} multiline
-          value={testcase.output} onChange={(event) => onChangeInput(event, number)}
+          <StyledTextField variant='outlined' row={5}
+          maxRow={Infinity} multiline
+          value={testcase.output}
+          InputProps={{
+            readOnly: true,
+          }}
           />
         </div>
       </StyledContainer>
-      <StyledDeleteButton onClick={() => onClickDeleteItem(number)}>✖</StyledDeleteButton>
+      {/* <StyledDeleteButton onClick={() => onClickDeleteItem(number)}>✖</StyledDeleteButton> */}
       </>)}
-      <div>
-        <StyledButton onClick={addTestcase}>테스트케이스 추가</StyledButton>
+      <div style={{ textAlign: 'right', margin: '3% 0' }}>
+        <span style={{ marginRight: '1%', color: '#828282' }} ref={textRef}>
+        테스트케이스를 업로드 해주세요.
+        </span>
+        <StyledLabel for="upload">테스트케이스 업로드</StyledLabel>
+        <input id="upload" type="file" accept="text/plain" onChange={onFileUpload} multiple
+        style={{ display: 'none' }}/>
       </div>
   </>;
 };
