@@ -3,8 +3,10 @@ div {
 }
 
 h3 {
-  font-size: 'larger' !important;
-  font-weight: normal !important;
+  font-size: 25px !important;
+  font-weight: 600 !important;
+  margin: 1% 2% !important;
+  line-height: 1.6em !important;
 }
 
 legend {
