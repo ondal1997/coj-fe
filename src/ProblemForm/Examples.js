@@ -22,7 +22,7 @@ const StyledButton = withStyles({
   root: {
     color: 'white',
     backgroundColor: 'black',
-    left: '91.5%',
+    left: '91%',
     margin: '1%',
     padding: '1%',
     fontSize: 'medium',
