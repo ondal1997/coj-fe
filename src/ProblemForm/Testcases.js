@@ -19,19 +19,6 @@ const StyledContainer = withStyles({
   },
 })(Container);
 
-// const StyledDeleteButton = withStyles({
-//   root: {
-//     color: 'gray',
-//     padding: '0 0',
-//     left: '96.5%',
-//     fontSize: 'medium',
-//     '&:hover': {
-//       color: 'black',
-//       backgroundColor: 'white',
-//     },
-//   },
-// })(Button);
-
 const StyledTextField = withStyles({
   root: {
     width: '100%',
