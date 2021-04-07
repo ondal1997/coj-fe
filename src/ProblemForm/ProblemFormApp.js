@@ -140,6 +140,11 @@ const Form = (props) => {
 
     if (!valid) return;
 
+    if (testcases.length === 0) {
+      alert('적어도 하나이상의 테스트케이스를 입력해야합니다. ');
+      return;
+    }
+
     const data = {
       title,
       description,
