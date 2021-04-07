@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Paper, Chip, Divider, withStyles } from '@material-ui/core';
+import { Container, Paper, Chip, Divider, TextField, withStyles,
+  Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Grid } from '@material-ui/core';
 import styled from 'styled-components';
 import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
@@ -7,22 +8,26 @@ import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
-const pColor = '#ECECED';
+const pColor = '#F8F8F8';
 
-const StyledProblem = styled.div`
-  padding: 2%;
-  background-color: white;
-`;
-
-const StyledExampleContainer = styled.div`
-  font-size: larger;
-  display: flex;
-  justify-content: space-between;
-`;
+const StyledGrid = withStyles({
+  root: {
+    padding: '5% 20%',
+    backgroundColor: 'white',
+  },
+})(Grid);
 
 const StyledItemTitle = styled.span`
   font-weight: 700;
   font-size: 23px;
+`;
+
+const StyledChallengeResult = styled.span`
+  color: white;
+  font-weight: 700;
+  background-color: ${(props) => (props.code === 1 ? '#0057FF' : '#EA1721')};
+  font-size: larger;
+  padding: 0.5% 1%;
 `;
 
 const StyledChipContainer = withStyles({
@@ -35,7 +40,6 @@ const StyledChipContainer = withStyles({
     '& ul > li': {
       listStyle: 'none',
       display: 'inline',
-      margin: '0.3%',
     },
     display: 'inline',
   },
@@ -44,40 +48,31 @@ const StyledChipContainer = withStyles({
 const StyledChip = withStyles({
   root: {
     fontSize: 'medium',
+    marginRight: '1%',
     backgroundColor: '#4995F2',
     '&:focus': {
       backgroundColor: '#4995F2',
     },
   },
-  colorPrimary: {
-  },
 })(Chip);
 
-const StyledDivider = withStyles({
+const StyledTextField = withStyles({
   root: {
-    margin: '1% 0',
+    width: '100%',
+    marginTop: '1%',
+    '& label.Mui-focused': {
+      color: '#4995F2',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#4995F2',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: '#4995F2',
+      },
+    },
   },
-})(Divider);
-
-const StyledLimitPaper = withStyles({
-  root: {
-    backgroundColor: pColor,
-    width: '150px',
-    margin: '1%',
-    textAlign: 'center',
-    display: 'inline-block',
-  },
-  elevation: 1,
-})(Paper);
-
-const StyledExamplePaper = withStyles({
-  root: {
-    backgroundColor: pColor,
-    padding: '5%',
-    margin: '2% 0',
-  },
-  elevation: 2,
-})(Paper);
+})(TextField);
 
 const Problem = (props) => {
   const problemKey = props.problemKey || 1009; // 임시
@@ -90,6 +85,7 @@ const Problem = (props) => {
     try {
       const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
 
+      console.log(fetchedProblem);
       setProblem(fetchedProblem);
       setIsLoaded(true);
       insertNextline();
@@ -103,73 +99,107 @@ const Problem = (props) => {
   }, []);
 
   return (isLoaded ? (
-    <StyledProblem>
-  <div>
-    <span style={{ fontSize: '50px' }}>
-      {`${problemKey}번 ${problem.title}`}
-    </span>
-  <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
-    <span style={{ color: '#4995F2', fontSize: 'larger', float: 'right' }}>
-    문제 풀러가기
-    </span>
-  </OurLink>
-    <StyledChipContainer>
-        <ul>
-          {problem.categories.map((category) => <li><StyledChip label={category} color="primary"/></li>)}
-        </ul>
-    </StyledChipContainer>
-    <StyledDivider />
-    <div>
-      <StyledLimitPaper>
-      <div>
-        <StyledItemTitle>시간제한&nbsp;</StyledItemTitle>
-      </div>
-      <div>
-        {`${problem.timeLimit / 1000}초`}
-      </div>
-      </StyledLimitPaper>
-      <StyledLimitPaper>
-      <div>
-        <StyledItemTitle>메모리제한&nbsp;</StyledItemTitle>
-      </div>
-      <div>
-      {`${problem.memoryLimit}MB`}
-      </div>
-      </StyledLimitPaper>
-    </div>
-  </div>
-  <div>
-  <StyledDivider />
-  <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
-  <div style={{ fontSize: '20px' }}>
-  <Paper className='ck-content' elevation={2} style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}
-    dangerouslySetInnerHTML={{ __html: problem.description }} />
-  </div>
-  </div>
-  <StyledDivider />
-  <div style={{ margin: '2% 0' }}>
-  {problem.examples.map((example, index) => <StyledExampleContainer>
-  <div style={{ width: '45%' }}>
-    <div>
-    <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
-    </div>
-    <StyledExamplePaper className='texts'>
-    {example.input}
-    </StyledExamplePaper>
-    <div style={{ wordBreak: 'break-word' }}>
-    </div>
-  </div>
-  <div style={{ width: '45%' }}>
-    <div>
-    <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
-    </div>
-    <StyledExamplePaper className='texts'>
-      {example.output}
-    </StyledExamplePaper>
-  </div>
-  </StyledExampleContainer>)}
-  </div>
-  </StyledProblem>
+    <StyledGrid container direction='column' spacing={3}>
+      <Grid container item direction='column'>
+        <Grid container direction='row' justify='flex-end'>
+          <Grid container xs={3} direction='row' justify='space-around'>
+            <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
+              <span style={{ color: '#4995F2', fontSize: 'larger' }}>
+              문제 풀기
+              </span>
+            </OurLink>
+            <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
+              <span style={{ color: '#4995F2', fontSize: 'larger' }}>
+              제출 현황
+              </span>
+            </OurLink>
+          </Grid>
+        </Grid>
+        <Grid container alignItems='center' direction='row' spacing={2}>
+            <span style={{ fontSize: '50px', marginRight: '1%' }}>
+                {`${problemKey}번 ${problem.title}`}
+            </span>
+            {problem.challengeCode !== 0
+            && (problem.challengeCode === 1
+              ? <StyledChallengeResult code={1}>성공</StyledChallengeResult>
+              : <StyledChallengeResult code={-1}>실패</StyledChallengeResult>
+            )
+            }
+        </Grid>
+        <Grid container>
+          <strong>{problem.ownerId}&nbsp;</strong>
+          <span>{(new Date(problem.uploadTime)).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        </Grid>
+        <StyledChipContainer>
+            <ul>
+              {problem.categories.map((category) => <li><StyledChip label={category} color="primary"/></li>)}
+            </ul>
+        </StyledChipContainer>
+        <Divider />
+      </Grid>
+      <Grid container item direction='column'>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">시간 제한</TableCell>
+                <TableCell align="center">메모리 제한</TableCell>
+                <TableCell align="center">정답률</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+                <TableCell align="center">
+                  {`${problem.timeLimit / 1000}초`}</TableCell>
+                <TableCell align="center">
+                  {`${problem.memoryLimit}MB`}</TableCell>
+                <TableCell align="center">
+                  {problem.submitCount === 0 ? '데이터 없음'
+                    : `${((problem.solvedCount / problem.submitCount) * 100).toFixed(2)}%`}
+                </TableCell>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid container item direction='column'>
+        <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
+        <div style={{ fontSize: '20px' }}>
+        <Paper className='ck-content' elevation={2} style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}
+          dangerouslySetInnerHTML={{ __html: problem.description }} />
+        </div>
+      </Grid>
+      <Grid container item direction='column'>
+        <Divider />
+      </Grid>
+      <Grid container item direction='column' spacing={2}>
+      {problem.examples.map((example, index) => <Grid container item direction='row'
+      justify='space-between'>
+        <Grid container item sm={5}>
+          <div>
+          <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
+          </div>
+          <StyledTextField variant='outlined' row={5}
+                maxRow={Infinity} multiline
+                value={example.input}
+                InputProps={{
+                  readOnly: true,
+                }}
+                />
+        </Grid>
+        <Grid container item sm={5}>
+          <div>
+          <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
+          </div>
+          <StyledTextField variant='outlined' row={5}
+                maxRow={Infinity} multiline
+                value={example.output}
+                InputProps={{
+                  readOnly: true,
+                }}
+                />
+        </Grid>
+      </Grid>)}
+      </Grid>
+  </StyledGrid>
   ) : (
     <div>Loading...</div>
   ));
