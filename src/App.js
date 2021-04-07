@@ -24,7 +24,7 @@ const Nav = () => (
       <OurLink to="/allSolutions/1">
       <li>전체 풀이 제출 현황</li>
       </OurLink>
-      <OurLink to="/problems/1">
+      <OurLink to="/problems">
       <li>문제 리스트</li>
       </OurLink>
       <OurLink to="/problemsForm">
@@ -42,7 +42,7 @@ const App = () => (
     <Switch>
       <Route path="/" exact component={ProblemDetailApp} />
       <Route path="/problemsForm" exact component={ProblemFormApp} />
-      <Route path="/problems/:pageNum" exact component={ProblemListApp} />
+      <Route path="/problems" exact component={ProblemListApp} />
       <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
       <Route path="/solutionForm/:problemKey/:problemTitle" exact component={SolutionFormApp} />
