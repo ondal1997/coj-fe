@@ -7,9 +7,8 @@ import './reset.css';
 
 const StyledContainer = withStyles({
   root: {
-    margin: '2%',
-    position: 'relative',
     border: '1px solid #E0E0E0',
+    margin: '0 0',
     padding: '0 0',
   },
 })(Container);
@@ -20,12 +19,12 @@ const CodeEditor = ({ language, updateCode }) => {
     const cs = cmInst.lineCount();
     if (cs > 10) {
       cmInst.setSize(null, cs * 35);
-    } else cmInst.setSize(null, 400);
+    } else cmInst.setSize(null, 500);
     updateCode(cmInst.getValue());
   };
 
   useEffect(() => {
-    document.querySelector('.CodeMirror').CodeMirror.setSize(null, 400);
+    document.querySelector('.CodeMirror').CodeMirror.setSize(null, 500);
     document.querySelector('.CodeMirror').style.lineHeight = '2em';
     document.querySelector('.CodeMirror').style.fontSize = '17px';
   }, []);
