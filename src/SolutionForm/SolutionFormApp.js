@@ -10,9 +10,6 @@ const StyledGrid = withStyles({
     margin: '0 auto',
     padding: '5% 15%',
   },
-  maxWidthLg: {
-    width: '100%',
-  },
 })(Grid);
 
 const StyledButton = withStyles({
