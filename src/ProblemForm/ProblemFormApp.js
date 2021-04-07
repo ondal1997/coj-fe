@@ -6,6 +6,7 @@ import { isValid } from './utils';
 import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
+import MyEditor from './MyEditor';
 import { ourHref, ourFetchAndJson } from '../OurLink';
 import './reset.css';
 
@@ -164,42 +165,38 @@ const Form = (props) => {
   return (
     <StyledForm>
     <div>
-    <StyledTextField
-      name='title'
-      label='문제명'
-      fullWidth
-      margin="normal"
-      variant="outlined"
-      onChange={(event) => onChange(event)} inputRef={inputsRef.current[0]} />
-      <StyledTextField
-      name='timeLimit'
-      label='시간 제한'
-      margin="normal"
-      variant="outlined"
-      style={{ marginRight: '1%' }}
-      onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
-      <StyledTextField
-      name='memoryLimit'
-      label='메모리 제한'
-      margin="normal"
-      variant="outlined"
-      onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
-
-      <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
-
-      {/* <StyledTextField
-      name='description'
-      label='설명'
-      fullWidth
-      margin="normal"
-      variant="outlined"
-      multiline
-      rows={20}
-      rowsMax={Infinity}
-      onChange={(event) => onChange(event)} inputRef={inputsRef.current[3]} /> */}
-      <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>
-      <Examples examples={examples} updateExamples={setExamples}/>
-      <Testcases testcases={testcases} updateTestcases={setTestcases} />
+        <StyledTextField
+          name='title'
+          label='문제명'
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => onChange(event)} inputRef={inputsRef.current[0]} />
+      </div>
+      <div>
+        <StyledTextField
+        name='timeLimit'
+        label='시간 제한'
+        margin="normal"
+        variant="outlined"
+        style={{ marginRight: '1%' }}
+        onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
+        <StyledTextField
+        name='memoryLimit'
+        label='메모리 제한'
+        margin="normal"
+        variant="outlined"
+        onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
+      </div>
+      <div style={{ margin: '1.5% 0' }}>
+        <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
+      </div>
+      <div>
+        <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>
+      </div>
+      <div>
+        <Examples examples={examples} updateExamples={setExamples}/>
+        <Testcases testcases={testcases} updateTestcases={setTestcases} />
       </div>
       <div>
       <StyledDivider variant="fullWidth"/>
