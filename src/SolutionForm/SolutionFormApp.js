@@ -1,31 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container,
-  FormLabel, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
+import { Button, Grid, FormLabel, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ourHref, ourFetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 
-const StyledForm = withStyles({
+const StyledGrid = withStyles({
   root: {
     backgroundColor: 'white',
-    borderRadius: '15px',
     margin: '0 auto',
-    padding: '2%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    padding: '5% 15%',
   },
   maxWidthLg: {
     width: '100%',
   },
-})(Container);
+})(Grid);
 
 const StyledButton = withStyles({
   root: {
     color: 'white',
     backgroundColor: 'black',
-    left: '87%',
-    margin: '1%',
     padding: '1%',
     '&:hover': {
       backgroundColor: '#CE2727',
@@ -73,49 +66,56 @@ const Form = (props) => {
   }, []);
 
   return (
-    <StyledForm maxWidth='lg'>
-      <h3 style={{ marginLeft: '2%' }}>{`${problemKey}번 ${problemTitle}`}</h3>
-      <div style={{ marginLeft: '2%' }}>
-      {isLoaded ? (<>
-  <FormLabel component="legend">언어 선택</FormLabel>
-  <RadioGroup aria-label="language" name="language"
-            onChange={(event) => { setSelectedLanguage(event.target.value); }}>
-  {languages.map((language) => (
-            <FormControlLabel key={language} value={language} label={language}
-            control={<StyledRadio color="default" />} />
-  ))}
-  </RadioGroup>
-   </>)
-        : (<div>Loading...</div>)
-      }
-      </div>
-      <div>
-      <CodeEditor language={selectedLanguage} updateCode={setSourceCode} />
-      </div>
-      <div>
-      <StyledButton variant='contained'
-        size='medium' onClick={async () => {
-          if (!selectedLanguage) {
-            alert('언어를 선택해주세요');
-            return;
-          }
-          await ourFetchAndJson(`${serverAddress}/api/solutions`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              problemKey,
-              language: selectedLanguage,
-              sourceCode,
-            }),
-          });
-          alert('제출 완료!');
-          ourHref(`/solutions/${problemKey}/${problemTitle}/1`, history);
-        }}>
-        풀이 제출하기</StyledButton>
-      </div>
-    </StyledForm>
+    <StyledGrid container direction='column' spacing={3}>
+      <Grid container item direction='column' spacing={1}>
+        <Grid container item>
+        <h3 style={{ margin: '0 0' }}>{`${problemKey}번 ${problemTitle}`}</h3>
+        </Grid>
+        {isLoaded ? (<>
+          <Grid container item>
+            <FormLabel component="legend">언어 선택</FormLabel>
+          </Grid>
+          <Grid container item>
+            <RadioGroup aria-label="language" name="language"
+                      onChange={(event) => { setSelectedLanguage(event.target.value); }}>
+            {languages.map((language) => (
+                      <FormControlLabel key={language} value={language} label={language}
+                      control={<StyledRadio color="default" />} />
+            ))}
+            </RadioGroup>
+          </Grid>
+        </>)
+          : (<Grid container item>Loading...</Grid>)
+        }
+      </Grid>
+      <Grid container item>
+        <CodeEditor language={selectedLanguage} updateCode={setSourceCode} />
+      </Grid>
+      <Grid container item direction='row-reverse'>
+        <StyledButton variant='contained'
+            size='medium' onClick={async () => {
+              if (!selectedLanguage) {
+                alert('언어를 선택해주세요');
+                return;
+              }
+              await ourFetchAndJson(`${serverAddress}/api/solutions`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  problemKey,
+                  language: selectedLanguage,
+                  sourceCode,
+                }),
+              });
+              alert('제출 완료!');
+              ourHref(`/solutions/${problemKey}/${problemTitle}/1`, history);
+            }}>
+            풀이 제출하기
+            </StyledButton>
+        </Grid>
+    </StyledGrid>
   );
 };
 
