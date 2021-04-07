@@ -48,78 +48,76 @@ const ProblemList = (props) => {
   }
 
   return (
-    <>
-      <Grid container direction='column' alignItems='center' spacing={1}>
-        <Grid item>
-          <Typography variant='h4' color='primary'>문제 리스트</Typography>
-        </Grid>
-
-        <Grid item container md={9}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align='right'>번호</TableCell>
-                  <TableCell align='left'>문제명</TableCell>
-                  <TableCell align='left'>카테고리</TableCell>
-                  <TableCell align='right'>정답률</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {problems.map((problem) => (
-                  <TableRow hover key={problem.key} onClick={() => { ourHref(`/problem/${problem.key}`, props.history); }}>
-                    <TableCell align='right' component='th' scope='row'>{problem.key}</TableCell>
-                    <TableCell align='left'>
-                      {problem.title}
-                    </TableCell>
-                    <TableCell align='left'>
-                      {problem.categories.length
-                        ? (
-                          <Grid container spacing={1} justify='left'>
-                            {problem.categories.map((category) => (
-                              <Grid item key={category}>
-                                <Chip size='small' color='primary' label={`#${category}`} />
-                              </Grid>
-                            ))}
-                          </Grid>
-                        ) : (
-                          '-'
-                        )
-                      }
-                    </TableCell>
-                    <TableCell align='right'>
-                      {problem.submitCount
-                        ? (
-                          `${((problem.solvedCount / problem.submitCount) * 100).toFixed(2)}%`
-                        ) : (
-                          '-'
-                        )
-                      }
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-
-        <Grid item>
-          <Pagination
-            shape='rounded'
-            variant='outlined'
-            color='primary'
-            size='large'
-            siblingCount={2}
-            boundaryCount={2}
-            count={Math.ceil(totalCount / limitCount)}
-            page={page}
-            onChange={(event, p) => {
-              ourHref(`/problems?${queryString.stringify({ ...query, page: p })}`, props.history);
-            }}
-          />
-        </Grid>
+    <Grid container direction='column' alignItems='center' spacing={1}>
+      <Grid item>
+        <Typography variant='h4' color='primary'>문제 리스트</Typography>
       </Grid>
-    </>
+
+      <Grid item container md={9}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align='right'>번호</TableCell>
+                <TableCell align='left'>문제명</TableCell>
+                <TableCell align='left'>카테고리</TableCell>
+                <TableCell align='right'>정답률</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {problems.map((problem) => (
+                <TableRow hover key={problem.key} onClick={() => { ourHref(`/problem/${problem.key}`, props.history); }}>
+                  <TableCell align='right' component='th' scope='row'>{problem.key}</TableCell>
+                  <TableCell align='left'>
+                    {problem.title}
+                  </TableCell>
+                  <TableCell align='left'>
+                    {problem.categories.length
+                      ? (
+                        <Grid container spacing={1} justify='left'>
+                          {problem.categories.map((category) => (
+                            <Grid item key={category}>
+                              <Chip size='small' color='primary' label={`#${category}`} />
+                            </Grid>
+                          ))}
+                        </Grid>
+                      ) : (
+                        '-'
+                      )
+                    }
+                  </TableCell>
+                  <TableCell align='right'>
+                    {problem.submitCount
+                      ? (
+                        `${((problem.solvedCount / problem.submitCount) * 100).toFixed(2)}%`
+                      ) : (
+                        '-'
+                      )
+                    }
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+
+      <Grid item>
+        <Pagination
+          shape='rounded'
+          variant='outlined'
+          color='primary'
+          size='large'
+          siblingCount={2}
+          boundaryCount={2}
+          count={Math.ceil(totalCount / limitCount)}
+          page={page}
+          onChange={(event, p) => {
+            ourHref(`/problems?${queryString.stringify({ ...query, page: p })}`, props.history);
+          }}
+        />
+      </Grid>
+    </Grid>
   );
 };
 
