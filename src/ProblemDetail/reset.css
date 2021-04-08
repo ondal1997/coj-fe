@@ -1,3 +1,11 @@
 hr {
   display: block!important;
 }
+
+p {
+  font-size: relative!important;
+}
+
+ol > li {
+  font-size: relative!important;
+}

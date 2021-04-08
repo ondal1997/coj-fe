@@ -50,19 +50,18 @@ const StyledChipContainer = withStyles({
     '& ul': {
       listStyle: 'none',
       padding: '0',
+      margin: '0 0',
     },
     '& ul > li': {
       listStyle: 'none',
       display: 'inline',
     },
-    display: 'inline',
   },
 })(Container);
 
 const StyledChip = withStyles({
   root: {
     fontSize: 'medium',
-    marginRight: '1%',
     backgroundColor: '#4995F2',
     '&:focus': {
       backgroundColor: '#4995F2',
@@ -131,7 +130,7 @@ const Problem = (props) => {
             </OurLink>
           </Grid>
         </Grid>
-        <Grid item container alignItems="center" direction="row" spacing={1}>
+        <Grid item container alignItems="center" direction="row">
           <Grid item>
             <Typography style={{ fontSize: '50px' }}>
               {`${problemKey}번 ${problem.title}`}
@@ -150,6 +149,7 @@ const Problem = (props) => {
             ))}
         </Grid>
         <Grid item>
+          <Typography>
           <strong>{problem.ownerId}&nbsp;</strong>
           <span>
             {new Date(problem.uploadTime).toLocaleDateString(undefined, {
@@ -158,45 +158,50 @@ const Problem = (props) => {
               day: 'numeric',
             })}
           </span>
+          </Typography>
         </Grid>
         <Grid item>
           <StyledChipContainer>
-            <ul>
-              {problem.categories.map((category) => (
-                <li>
-                  <StyledChip label={category} color="primary" />
-                </li>
-              ))}
-            </ul>
+              <ul>
+                <Grid container direction='row' spacing={1}>
+                {problem.categories.map((category) => (
+                  <Grid item>
+                    <li>
+                      <StyledChip label={category} color="primary" />
+                    </li>
+                  </Grid>
+                ))}
+                </Grid>
+              </ul>
           </StyledChipContainer>
         </Grid>
-        <Divider />
       </Grid>
       <Grid container item direction="column">
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">시간 제한</TableCell>
-                <TableCell align="center">메모리 제한</TableCell>
-                <TableCell align="center">정답률</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableCell align="center">
-                {`${problem.timeLimit / 1000}초`}
-              </TableCell>
-              <TableCell align="center">{`${problem.memoryLimit}MB`}</TableCell>
-              <TableCell align="center">
-                {problem.submitCount === 0
-                  ? '데이터 없음'
-                  : `${(
-                    (problem.solvedCount / problem.submitCount)
-                      * 100).toFixed(2)}%`}
-              </TableCell>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Divider />
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">시간 제한</TableCell>
+                  <TableCell align="center">메모리 제한</TableCell>
+                  <TableCell align="center">정답률</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableCell align="center">
+                  {`${problem.timeLimit / 1000}초`}
+                </TableCell>
+                <TableCell align="center">{`${problem.memoryLimit}MB`}</TableCell>
+                <TableCell align="center">
+                  {problem.submitCount === 0
+                    ? '데이터 없음'
+                    : `${(
+                      (problem.solvedCount / problem.submitCount)
+                        * 100).toFixed(2)}%`}
+                </TableCell>
+              </TableBody>
+            </Table>
+          </TableContainer>
       </Grid>
       <Grid container item direction="column" spacing={1}>
         <Grid item>
