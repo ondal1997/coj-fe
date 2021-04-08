@@ -2,8 +2,8 @@ hr {
   display: block!important;
 }
 
-div > p {
-  font-size:large !important;
+.ck-content p {
+  font-size: large !important;
 }
 
 ol > li {
