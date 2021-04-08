@@ -125,7 +125,7 @@ const Problem = (props) => {
               </Typography>
             </OurLink>
             <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
-              <Typography style={{ color: '#4995F2', fontSize: 'larger' }}>
+              <Typography style={{ color: '#4995F2', fontSize: 'large' }}>
                 제출 현황
               </Typography>
             </OurLink>
@@ -133,9 +133,9 @@ const Problem = (props) => {
         </Grid>
         <Grid item container alignItems="center" direction="row" spacing={1}>
           <Grid item>
-            <span style={{ fontSize: '50px' }}>
+            <Typography style={{ fontSize: '50px' }}>
               {`${problemKey}번 ${problem.title}`}
-            </span>
+            </Typography>
           </Grid>
           {problem.challengeCode !== 0
           && (problem.challengeCode === 1
@@ -170,9 +170,7 @@ const Problem = (props) => {
             </ul>
           </StyledChipContainer>
         </Grid>
-        <Grid item>
-          <Divider />
-        </Grid>
+        <Divider />
       </Grid>
       <Grid container item direction="column">
         <TableContainer>
