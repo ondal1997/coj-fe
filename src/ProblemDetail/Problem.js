@@ -120,7 +120,7 @@ const Problem = (props) => {
         <Grid container item direction="row" justify="flex-end">
           <Grid container item xs={3} direction="row" justify="space-around">
             <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
-              <Typography style={{ color: '#4995F2', fontSize: 'larger' }}>
+              <Typography style={{ color: '#4995F2', fontSize: 'large' }}>
                 문제 풀기
               </Typography>
             </OurLink>
@@ -206,7 +206,7 @@ const Problem = (props) => {
           <Paper
             className="ck-content"
             elevation={0}
-            style={{ backgroundColor: pColor, padding: '1%', fontSize: 'larger' }}
+            style={{ backgroundColor: pColor, padding: '1%', fontSize: 'large' }}
             dangerouslySetInnerHTML={{ __html: problem.description }}
           />
         </Grid>
