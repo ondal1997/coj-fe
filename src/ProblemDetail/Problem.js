@@ -149,7 +149,6 @@ const Problem = (props) => {
             ))}
         </Grid>
         <Grid item>
-          <Typography>
           <strong>{problem.ownerId}&nbsp;</strong>
           <span>
             {new Date(problem.uploadTime).toLocaleDateString(undefined, {
@@ -158,7 +157,6 @@ const Problem = (props) => {
               day: 'numeric',
             })}
           </span>
-          </Typography>
         </Grid>
         <Grid item>
           <StyledChipContainer>

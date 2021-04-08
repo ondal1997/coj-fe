@@ -2,10 +2,10 @@ hr {
   display: block!important;
 }
 
-p {
-  font-size: relative!important;
+div > p {
+  font-size:large !important;
 }
 
 ol > li {
-  font-size: relative!important;
+  font-size: large!important;
 }
