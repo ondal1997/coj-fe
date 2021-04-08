@@ -200,16 +200,18 @@ const Problem = (props) => {
           </Table>
         </TableContainer>
       </Grid>
-      <Grid container item direction="column">
-        <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
-        <div style={{ fontSize: '20px' }}>
+      <Grid container item direction="column" spacing={1}>
+        <Grid item>
+          <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
+        </Grid>
+        <Grid item>
           <Paper
             className="ck-content"
             elevation={0}
-            style={{ backgroundColor: pColor, padding: '1%' }}
+            style={{ backgroundColor: pColor, padding: '1%', fontSize: 'larger' }}
             dangerouslySetInnerHTML={{ __html: problem.description }}
           />
-        </div>
+        </Grid>
       </Grid>
       <Grid item>
         <Divider />
@@ -217,35 +219,39 @@ const Problem = (props) => {
       <Grid container item direction="column" spacing={2}>
         {problem.examples.map((example, index) => (
           <Grid container item direction="row" justify="space-between">
-            <Grid item sm={5}>
-              <div>
+            <Grid item container sm={5} spacing={1} direction="column">
+              <Grid item>
                 <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
-              </div>
-              <StyledTextField
-                variant="outlined"
-                row={5}
-                maxRow={Infinity}
-                multiline
-                value={example.input}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
+              </Grid>
+              <Grid item>
+                <StyledTextField
+                  variant="outlined"
+                  row={5}
+                  maxRow={Infinity}
+                  multiline
+                  value={example.input}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+               </Grid>
             </Grid>
-            <Grid item sm={5}>
-              <div>
+            <Grid item container sm={5} spacing={1} direction='column'>
+              <Grid item>
                 <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
-              </div>
-              <StyledTextField
-                variant="outlined"
-                row={5}
-                maxRow={Infinity}
-                multiline
-                value={example.output}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
+              </Grid>
+              <Grid item>
+                <StyledTextField
+                  variant="outlined"
+                  row={5}
+                  maxRow={Infinity}
+                  multiline
+                  value={example.output}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </Grid>
             </Grid>
           </Grid>
         ))}
