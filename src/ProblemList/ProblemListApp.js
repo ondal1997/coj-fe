@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import queryString from 'query-string';
 import { Pagination } from '@material-ui/lab';
 import { Chip, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import { DoneOutline, PriorityHigh } from '@material-ui/icons';
 import { ourFetchAndJson, ourHref } from '../OurLink';
 import { serverAddress } from '../config';
 
@@ -33,6 +34,7 @@ const ProblemList = (props) => {
         setError(err);
         return;
       }
+      console.log(result.problems);
       setIsLoaded(true);
       setProblems(result.problems);
       setTotalCount(result.totalCount);
@@ -48,80 +50,108 @@ const ProblemList = (props) => {
   }
 
   return (
-    <Grid container direction='column' alignItems='center' spacing={1}>
-      <Grid item>
-        <Typography variant='h4' color='primary'>문제 리스트</Typography>
-      </Grid>
+    <>
+      <Grid container direction='column' alignItems='center' spacing={1}>
+        <Grid item>
+          <Typography variant='h4' color='primary'>문제 리스트</Typography>
+        </Grid>
 
-      <Grid item container md={9}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align='right'><strong>번호</strong></TableCell>
-                <TableCell align='left'><strong>문제명</strong></TableCell>
-                <TableCell align='left'><strong>카테고리</strong></TableCell>
-                <TableCell align='right'><strong>정답률</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {problems.map((problem) => (
-                <TableRow hover key={problem.key} onClick={() => { ourHref(`/problem/${problem.key}`, props.history); }}>
-                  <TableCell align='right' component='th' scope='row'>
-                    <strong>{problem.key}</strong>
-                  </TableCell>
-                  <TableCell align='left'>
-                    <strong>{problem.title}</strong>
-                  </TableCell>
-                  <TableCell align='left'>
-                    {problem.categories.length
-                      ? (
-                        <Grid container spacing={1} justify='left'>
-                          {problem.categories.map((category) => (
-                            <Grid item key={category}>
-                              <Chip size='small' color='primary' label={`#${category}`} />
-                            </Grid>
-                          ))}
+        <Grid item container direction='column' md={9}>
+          <Grid item>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align='right'><strong>번호</strong></TableCell>
+                    <TableCell align='left'><strong>문제명</strong></TableCell>
+                    <TableCell align='left'><strong>카테고리</strong></TableCell>
+                    <TableCell align='right'><strong>AC</strong></TableCell>
+                    <TableCell align='right'><strong>제출</strong></TableCell>
+                    <TableCell align='right'><strong>정답률</strong></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {problems.map((problem) => (
+                    <TableRow hover key={problem.key} onClick={() => { ourHref(`/problem/${problem.key}`, props.history); }}>
+                      <TableCell align='right' component='th' scope='row'>
+                        <Grid container justify='flex-end' alignItems='center' spacing={1}>
+                          <Grid item>
+                            {
+                              problem.challengeCode === 1 ? (
+                                <DoneOutline color='primary' />
+                              ) : (
+                                null
+                              )
+                            }
+                            {
+                              problem.challengeCode === -1 ? (
+                                <PriorityHigh color='secondary' />
+                              ) : (
+                                null
+                              )
+                            }
+                          </Grid>
+                          <Grid item>
+                            <strong>{problem.key}</strong>
+                          </Grid>
                         </Grid>
-                      ) : (
-                        '-'
-                      )
-                    }
-                  </TableCell>
-                  <TableCell align='right'>
-                    {problem.submitCount
-                      ? (
-                        `${((problem.solvedCount / problem.submitCount) * 100).toFixed(2)}%`
-                      ) : (
-                        '-'
-                      )
-                    }
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
+                      </TableCell>
+                      <TableCell align='left'>
+                        <strong>{problem.title}</strong>
+                      </TableCell>
+                      <TableCell align='left'>
+                        {problem.categories.length
+                          ? (
+                            <Grid container spacing={1} justify='left'>
+                              {problem.categories.map((category) => (
+                                <Grid item key={category}>
+                                  <Chip size='small' color='primary' label={`#${category}`} />
+                                </Grid>
+                              ))}
+                            </Grid>
+                          ) : (
+                            '-'
+                          )
+                        }
+                      </TableCell>
+                      <TableCell align='right'>{problem.solvedCount}</TableCell>
+                      <TableCell align='right'>{problem.submitCount}</TableCell>
+                      <TableCell align='right'>
+                        {problem.submitCount
+                          ? (
+                            `${((problem.solvedCount / problem.submitCount) * 100).toFixed(2)}%`
+                          ) : (
+                            '-'
+                          )
+                        }
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        </Grid>
 
-      <Grid item>
-        <Pagination
-          shape='rounded'
-          variant='outlined'
-          color='primary'
-          size='large'
-          siblingCount={2}
-          boundaryCount={2}
-          count={Math.ceil(totalCount / limitCount)}
-          page={page}
-          onChange={(event, p) => {
-            ourHref(`/problems?${queryString.stringify({ ...query, page: p })}`, props.history);
-          }}
-        />
-      </Grid>
+        <Grid item>
+          <Pagination
+            shape='rounded'
+            variant='outlined'
+            color='primary'
+            size='large'
+            siblingCount={2}
+            boundaryCount={2}
+            count={Math.ceil(totalCount / limitCount)}
+            page={page}
+            onChange={(event, p) => {
+              ourHref(`/problems?${queryString.stringify({ ...query, page: p })}`, props.history);
+            }}
+          />
+        </Grid>
 
-      <Grid item></Grid>
-    </Grid>
+        <Grid item></Grid>
+      </Grid>
+    </>
   );
 };
 

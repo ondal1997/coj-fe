@@ -88,7 +88,7 @@ const StyledTextField = withStyles({
 })(TextField);
 
 const Problem = (props) => {
-  const problemKey = props.problemKey || 1009; // 임시
+  const { problemKey } = props;
 
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
