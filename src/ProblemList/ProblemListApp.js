@@ -58,18 +58,20 @@ const ProblemList = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align='right'>번호</TableCell>
-                <TableCell align='left'>문제명</TableCell>
-                <TableCell align='left'>카테고리</TableCell>
-                <TableCell align='right'>정답률</TableCell>
+                <TableCell align='right'><strong>번호</strong></TableCell>
+                <TableCell align='left'><strong>문제명</strong></TableCell>
+                <TableCell align='left'><strong>카테고리</strong></TableCell>
+                <TableCell align='right'><strong>정답률</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {problems.map((problem) => (
                 <TableRow hover key={problem.key} onClick={() => { ourHref(`/problem/${problem.key}`, props.history); }}>
-                  <TableCell align='right' component='th' scope='row'>{problem.key}</TableCell>
+                  <TableCell align='right' component='th' scope='row'>
+                    <strong>{problem.key}</strong>
+                  </TableCell>
                   <TableCell align='left'>
-                    {problem.title}
+                    <strong>{problem.title}</strong>
                   </TableCell>
                   <TableCell align='left'>
                     {problem.categories.length
@@ -117,6 +119,8 @@ const ProblemList = (props) => {
           }}
         />
       </Grid>
+
+      <Grid item></Grid>
     </Grid>
   );
 };
