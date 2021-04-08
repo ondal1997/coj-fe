@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Paper, Chip, Divider, TextField, withStyles,
-  Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Grid } from '@material-ui/core';
+import {
+  Container,
+  Paper,
+  Chip,
+  Divider,
+  TextField,
+  withStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Grid,
+} from '@material-ui/core';
 import styled from 'styled-components';
 import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
@@ -83,7 +96,9 @@ const Problem = (props) => {
   const fetchProblem = async () => {
     console.log(problemKey);
     try {
-      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`);
+      const fetchedProblem = await ourFetchAndJson(
+        `${serverAddress}/api/problems/${problemKey}`,
+      );
 
       console.log(fetchedProblem);
       setProblem(fetchedProblem);
@@ -98,46 +113,63 @@ const Problem = (props) => {
     fetchProblem();
   }, []);
 
-  return (isLoaded ? (
-    <StyledGrid container direction='column' spacing={3}>
-      <Grid container item direction='column'>
-        <Grid container direction='row' justify='flex-end'>
-          <Grid container xs={3} direction='row' justify='space-around'>
+  return isLoaded ? (
+    <StyledGrid container direction="column" spacing={3}>
+      <Grid container item direction="column" spacing={1}>
+        <Grid container item direction="row" justify="flex-end">
+          <Grid container item xs={3} direction="row" justify="space-around">
             <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
               <span style={{ color: '#4995F2', fontSize: 'larger' }}>
-              문제 풀기
+                문제 풀기
               </span>
             </OurLink>
             <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
               <span style={{ color: '#4995F2', fontSize: 'larger' }}>
-              제출 현황
+                제출 현황
               </span>
             </OurLink>
           </Grid>
         </Grid>
-        <Grid container alignItems='center' direction='row' spacing={2}>
-            <span style={{ fontSize: '50px', marginRight: '1%' }}>
-                {`${problemKey}번 ${problem.title}`}
+        <Grid container alignItems="center" direction="row" spacing={1}>
+          <Grid item>
+            <span style={{ fontSize: '50px' }}>
+              {`${problemKey}번 ${problem.title}`}
             </span>
-            {problem.challengeCode !== 0
-            && (problem.challengeCode === 1
-              ? <StyledChallengeResult code={1}>성공</StyledChallengeResult>
-              : <StyledChallengeResult code={-1}>실패</StyledChallengeResult>
-            )
-            }
+          </Grid>
+          {problem.challengeCode !== 0
+          && (problem.challengeCode === 1
+            ? (
+              <Grid item sm={5}>
+                <StyledChallengeResult code={1}>성공</StyledChallengeResult>
+              </Grid>
+            ) : (
+              <Grid item sm={5}>
+                <StyledChallengeResult code={-1}>실패</StyledChallengeResult>
+              </Grid>
+            ))}
         </Grid>
-        <Grid container>
+        <Grid item>
           <strong>{problem.ownerId}&nbsp;</strong>
-          <span>{(new Date(problem.uploadTime)).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          <span>
+            {new Date(problem.uploadTime).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
         </Grid>
         <StyledChipContainer>
-            <ul>
-              {problem.categories.map((category) => <li><StyledChip label={category} color="primary"/></li>)}
-            </ul>
+          <ul>
+            {problem.categories.map((category) => (
+              <li>
+                <StyledChip label={category} color="primary" />
+              </li>
+            ))}
+          </ul>
         </StyledChipContainer>
         <Divider />
       </Grid>
-      <Grid container item direction='column'>
+      <Grid container item direction="column">
         <TableContainer>
           <Table>
             <TableHead>
@@ -148,61 +180,75 @@ const Problem = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-                <TableCell align="center">
-                  {`${problem.timeLimit / 1000}초`}</TableCell>
-                <TableCell align="center">
-                  {`${problem.memoryLimit}MB`}</TableCell>
-                <TableCell align="center">
-                  {problem.submitCount === 0 ? '데이터 없음'
-                    : `${((problem.solvedCount / problem.submitCount) * 100).toFixed(2)}%`}
-                </TableCell>
+              <TableCell align="center">
+                {`${problem.timeLimit / 1000}초`}
+              </TableCell>
+              <TableCell align="center">{`${problem.memoryLimit}MB`}</TableCell>
+              <TableCell align="center">
+                {problem.submitCount === 0
+                  ? '데이터 없음'
+                  : `${(
+                    (problem.solvedCount / problem.submitCount)
+                      * 100).toFixed(2)}%`}
+              </TableCell>
             </TableBody>
           </Table>
         </TableContainer>
       </Grid>
-      <Grid container item direction='column'>
+      <Grid container item direction="column">
         <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
         <div style={{ fontSize: '20px' }}>
-        <Paper className='ck-content' elevation={2} style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}
-          dangerouslySetInnerHTML={{ __html: problem.description }} />
+          <Paper
+            className="ck-content"
+            elevation={0}
+            style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}
+            dangerouslySetInnerHTML={{ __html: problem.description }}
+          />
         </div>
       </Grid>
-      <Grid container item direction='column'>
+      <Grid container item direction="column" spacing={1}>
         <Divider />
       </Grid>
-      <Grid container item direction='column' spacing={2}>
-      {problem.examples.map((example, index) => <Grid container item direction='row'
-      justify='space-between'>
-        <Grid container item sm={5}>
-          <div>
-          <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
-          </div>
-          <StyledTextField variant='outlined' row={5}
-                maxRow={Infinity} multiline
+      <Grid container item direction="column" spacing={2}>
+        {problem.examples.map((example, index) => (
+          <Grid container item direction="row" justify="space-between">
+            <Grid item sm={5}>
+              <div>
+                <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
+              </div>
+              <StyledTextField
+                variant="outlined"
+                row={5}
+                maxRow={Infinity}
+                multiline
                 value={example.input}
                 InputProps={{
                   readOnly: true,
                 }}
-                />
-        </Grid>
-        <Grid container item sm={5}>
-          <div>
-          <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
-          </div>
-          <StyledTextField variant='outlined' row={5}
-                maxRow={Infinity} multiline
+              />
+            </Grid>
+            <Grid item sm={5}>
+              <div>
+                <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
+              </div>
+              <StyledTextField
+                variant="outlined"
+                row={5}
+                maxRow={Infinity}
+                multiline
                 value={example.output}
                 InputProps={{
                   readOnly: true,
                 }}
-                />
-        </Grid>
-      </Grid>)}
+              />
+            </Grid>
+          </Grid>
+        ))}
       </Grid>
-  </StyledGrid>
+    </StyledGrid>
   ) : (
     <div>Loading...</div>
-  ));
+  );
 };
 
 export default Problem;
