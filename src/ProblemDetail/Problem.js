@@ -13,6 +13,7 @@ import {
   TableRow,
   TableContainer,
   Grid,
+  Typography,
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { OurLink, ourFetchAndJson } from '../OurLink';
@@ -38,7 +39,7 @@ const StyledItemTitle = styled.span`
 const StyledChallengeResult = styled.span`
   color: white;
   font-weight: 700;
-  background-color: ${(props) => (props.code === 1 ? '#0057FF' : '#EA1721')};
+  background-color: ${(props) => (props.code === 1 ? '#0057FF' : '#E94D00')};
   font-size: larger;
   padding: 0.5% 1%;
 `;
@@ -119,18 +120,18 @@ const Problem = (props) => {
         <Grid container item direction="row" justify="flex-end">
           <Grid container item xs={3} direction="row" justify="space-around">
             <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
-              <span style={{ color: '#4995F2', fontSize: 'larger' }}>
+              <Typography style={{ color: '#4995F2', fontSize: 'larger' }}>
                 문제 풀기
-              </span>
+              </Typography>
             </OurLink>
             <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
-              <span style={{ color: '#4995F2', fontSize: 'larger' }}>
+              <Typography style={{ color: '#4995F2', fontSize: 'larger' }}>
                 제출 현황
-              </span>
+              </Typography>
             </OurLink>
           </Grid>
         </Grid>
-        <Grid container alignItems="center" direction="row" spacing={1}>
+        <Grid item container alignItems="center" direction="row" spacing={1}>
           <Grid item>
             <span style={{ fontSize: '50px' }}>
               {`${problemKey}번 ${problem.title}`}
@@ -158,16 +159,20 @@ const Problem = (props) => {
             })}
           </span>
         </Grid>
-        <StyledChipContainer>
-          <ul>
-            {problem.categories.map((category) => (
-              <li>
-                <StyledChip label={category} color="primary" />
-              </li>
-            ))}
-          </ul>
-        </StyledChipContainer>
-        <Divider />
+        <Grid item>
+          <StyledChipContainer>
+            <ul>
+              {problem.categories.map((category) => (
+                <li>
+                  <StyledChip label={category} color="primary" />
+                </li>
+              ))}
+            </ul>
+          </StyledChipContainer>
+        </Grid>
+        <Grid item>
+          <Divider />
+        </Grid>
       </Grid>
       <Grid container item direction="column">
         <TableContainer>
@@ -201,12 +206,12 @@ const Problem = (props) => {
           <Paper
             className="ck-content"
             elevation={0}
-            style={{ backgroundColor: pColor, padding: '1%', marginTop: '1%' }}
+            style={{ backgroundColor: pColor, padding: '1%' }}
             dangerouslySetInnerHTML={{ __html: problem.description }}
           />
         </div>
       </Grid>
-      <Grid container item direction="column" spacing={1}>
+      <Grid item>
         <Divider />
       </Grid>
       <Grid container item direction="column" spacing={2}>
