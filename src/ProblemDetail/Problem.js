@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Paper, Chip, Divider, TextField, withStyles,
-  Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Grid } from '@material-ui/core';
+  Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Grid, Typography } from '@material-ui/core';
 import styled from 'styled-components';
 import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
@@ -22,13 +22,13 @@ const StyledItemTitle = styled.span`
   font-size: 23px;
 `;
 
-const StyledChallengeResult = styled.span`
-  color: white;
-  font-weight: 700;
-  background-color: ${(props) => (props.code === 1 ? '#0057FF' : '#EA1721')};
-  font-size: larger;
-  padding: 0.5% 1%;
-`;
+// const StyledChallengeResult = styled.span`
+//   color: white;
+//   font-weight: 700;
+//   background-color: ${(props) => (props.code === 1 ? '#0057FF' : '#EA1721')};
+//   font-size: larger;
+//   padding: 0.5% 1%;
+// `;
 
 const StyledChipContainer = withStyles({
   root: {
@@ -100,41 +100,60 @@ const Problem = (props) => {
 
   return (isLoaded ? (
     <StyledGrid container direction='column' spacing={3}>
-      <Grid container item direction='column'>
-        <Grid container direction='row' justify='flex-end'>
-          <Grid container xs={3} direction='row' justify='space-around'>
-            <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
-              <span style={{ color: '#4995F2', fontSize: 'larger' }}>
-              문제 풀기
-              </span>
-            </OurLink>
-            <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
-              <span style={{ color: '#4995F2', fontSize: 'larger' }}>
-              제출 현황
-              </span>
-            </OurLink>
+      <Grid item container direction='column'>
+        <Grid item container direction='row' alignItems='center' justify='space-between'>
+          <Grid item>
+            <Grid container direction='column'>
+              <Grid item>
+                <Grid container alignItems='center' spacing={2}>
+                  <Grid item>
+                    <Typography variant='h4'>
+                      {`${problemKey}번 ${problem.title}`}
+                    </Typography>
+                  </Grid>
+
+                  <Grid item>
+                    {problem.challengeCode !== 0
+                    && (problem.challengeCode === 1
+                      ? <Typography code={1}>성공</Typography>
+                      : <Typography code={-1}>실패</Typography>
+                    )
+                    }
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item>
+                <strong>{problem.ownerId}&nbsp;</strong>
+                <span>{(new Date(problem.uploadTime)).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <StyledChipContainer>
+                  <ul>
+                    {problem.categories.map((category) => <li><StyledChip label={category} color="primary"/></li>)}
+                  </ul>
+                </StyledChipContainer>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item>
+            <Grid container spacing={3}>
+              <Grid item>
+                <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
+                  <span style={{ color: '#4995F2', fontSize: 'larger' }}>
+                  문제 풀기
+                  </span>
+                </OurLink>
+              </Grid>
+              <Grid item>
+                <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
+                  <span style={{ color: '#4995F2', fontSize: 'larger' }}>
+                  제출 현황
+                  </span>
+                </OurLink>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid container alignItems='center' direction='row' spacing={2}>
-            <span style={{ fontSize: '50px', marginRight: '1%' }}>
-                {`${problemKey}번 ${problem.title}`}
-            </span>
-            {problem.challengeCode !== 0
-            && (problem.challengeCode === 1
-              ? <StyledChallengeResult code={1}>성공</StyledChallengeResult>
-              : <StyledChallengeResult code={-1}>실패</StyledChallengeResult>
-            )
-            }
-        </Grid>
-        <Grid container>
-          <strong>{problem.ownerId}&nbsp;</strong>
-          <span>{(new Date(problem.uploadTime)).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-        </Grid>
-        <StyledChipContainer>
-            <ul>
-              {problem.categories.map((category) => <li><StyledChip label={category} color="primary"/></li>)}
-            </ul>
-        </StyledChipContainer>
         <Divider />
       </Grid>
       <Grid container item direction='column'>
