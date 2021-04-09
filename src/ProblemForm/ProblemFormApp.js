@@ -51,11 +51,13 @@ const StyledDivider = withStyles({
 const Form = (props) => {
   const [inputs, setInputs] = useState({
     title: '',
-    timeLimit: '',
-    memoryLimit: '',
+    timeLimit: '2000',
+    memoryLimit: '512',
   });
 
   const [description, setDescription] = useState('');
+  const [inputDescription, setInputDescription] = useState('');
+  const [outputDescription, setOutputDescription] = useState('');
 
   const [examples, setExamples] = useState([
     {
@@ -135,6 +137,8 @@ const Form = (props) => {
       memoryLimit: Number(memoryLimit),
       examples,
       testcases,
+      inputDescription,
+      outputDescription,
     };
 
     console.log(data);
@@ -146,7 +150,7 @@ const Form = (props) => {
     console.log(json);
 
     alert('제출완료!');
-    ourHref('/problems/1', props.history);
+    ourHref('/problems', props.history);
   };
 
   return (
@@ -165,22 +169,35 @@ const Form = (props) => {
         <Grid item>
           <StyledTextField
           name='timeLimit'
-          label='시간 제한'
+          label='시간 제한 (ms)'
           margin="normal"
+          type="number"
           variant="outlined"
+          defaultValue={timeLimit}
           onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
         </Grid>
         <Grid item>
           <StyledTextField
           name='memoryLimit'
-          label='메모리 제한'
+          label='메모리 제한 (MB)'
           margin="normal"
+          type="number"
           variant="outlined"
+          defaultValue={memoryLimit}
           onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
         </Grid>
       </Grid>
       <Grid item style={{ margin: '2% 0' }}>
+        <p>문제 설명</p>
         <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
+      </Grid>
+      <Grid item style={{ margin: '2% 0' }}>
+        <p>입력 형식 설명(선택)</p>
+        <MyEditor value={inputDescription} onChange={(res) => { setInputDescription(res); }} />
+      </Grid>
+      <Grid item style={{ margin: '2% 0' }}>
+        <p>출력 형식 설명(선택)</p>
+        <MyEditor value={outputDescription} onChange={(res) => { setOutputDescription(res); }} />
       </Grid>
       <Grid item>
         <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>

@@ -14,7 +14,7 @@ const validatePositiveInteger = (anything) => {
   return parsedNumber;
 };
 
-const ProblemList = (props) => {
+const ProblemListApp = (props) => {
   const query = queryString.parse(props.location.search);
   const page = validatePositiveInteger(query.page);
   const limitCount = validatePositiveInteger(query.limitCount || 20);
@@ -38,6 +38,8 @@ const ProblemList = (props) => {
       setIsLoaded(true);
       setProblems(result.problems);
       setTotalCount(result.totalCount);
+
+      window.scrollTo(0, 0);
     })();
   }, [props]);
 
@@ -155,4 +157,4 @@ const ProblemList = (props) => {
   );
 };
 
-export default ProblemList;
+export default ProblemListApp;

@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-const StyledAnchor = styled.a`
-    color: white;
-    text-decoration: none;
+// const StyledAnchor = styled.a`
+//     color: white;
+//     text-decoration: none;
 
-    &:focus, &:hover, &:visited, &:link, &:active {
-        text-decoration: none;
-    }
-`;
+//     &:focus, &:hover, &:visited, &:link, &:active {
+//         text-decoration: none;
+//     }
+// `;
 
 // 링크 기본 스타일 제거
 const StyledLink = styled(Link)`
@@ -23,16 +23,22 @@ const StyledLink = styled(Link)`
 `;
 
 const IS_DEPLOYED = true;
-const codersUrl = 'http://codersit.co.kr/oj';
+// const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
   const { to, children } = props;
 
-  return IS_DEPLOYED ? (
-    <StyledAnchor href={`${codersUrl}${to}`}>
-        {children}
-    </StyledAnchor>
-  ) : (
+  // return IS_DEPLOYED ? (
+  //   <StyledAnchor href={`${codersUrl}${to}`}>
+  //       {children}
+  //   </StyledAnchor>
+  // ) : (
+  //   <StyledLink to={to}>
+  //       {children}
+  //   </StyledLink>
+  // );
+
+  return (
     <StyledLink to={to}>
         {children}
     </StyledLink>
@@ -40,11 +46,13 @@ const OurLink = (props) => {
 };
 
 const ourHref = (url, history) => {
-  if (IS_DEPLOYED) {
-    window.location.href = `${codersUrl}${url}`;
-  } else {
-    history.push(url);
-  }
+  // if (IS_DEPLOYED) {
+  //   window.location.href = `${codersUrl}${url}`;
+  // } else {
+  //   history.push(url);
+  // }
+
+  history.push(url);
 };
 
 // (async () => {

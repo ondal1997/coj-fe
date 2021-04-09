@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 import ProblemListApp from './ProblemList/ProblemListApp';
 import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
 import ProblemFormApp from './ProblemForm/ProblemFormApp';
@@ -36,7 +38,8 @@ const theme = createMuiTheme({
 // );
 
 const App = () => (
-  <ThemeProvider theme={theme} >
+  <ThemeProvider theme={theme}>
+  <SnackbarProvider content={(key, message) => (<Button id={key} variant='contained' color='primary' size='large'>{message}</Button>)}>
   <Router basename="/oj">
     <Switch>
       <Route path="/" exact component={ProblemListApp} />
@@ -51,6 +54,7 @@ const App = () => (
       <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
     </Switch>
     </Router>
+  </SnackbarProvider>
   </ThemeProvider>
 );
 

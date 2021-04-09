@@ -21,8 +21,10 @@ const SolutionDetailApp = (props) => {
   }, []);
 
   return (<>
-    <div>{solutionKey}번 솔루션 상세</div>
+    <div>제출 번호 {solutionKey}</div>
+    <div>
     <CodeMirror value={sourceCode} options={{ readOnly: true }}/>
+    </div>
     </>);
 };
 

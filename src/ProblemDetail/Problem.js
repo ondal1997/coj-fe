@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Button,
   Container,
   Paper,
   Chip,
@@ -16,6 +17,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import styled from 'styled-components';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useSnackbar } from 'notistack';
 import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
 import './reset.css';
@@ -26,7 +29,7 @@ const pColor = '#F8F8F8';
 
 const StyledGrid = withStyles({
   root: {
-    padding: '5% 20%',
+    padding: '1% 20%',
     backgroundColor: 'white',
   },
 })(Grid);
@@ -41,7 +44,6 @@ const StyledChallengeResult = styled.span`
   font-weight: 700;
   background-color: ${(props) => (props.code === 1 ? '#0057FF' : '#E94D00')};
   font-size: larger;
-  padding: 0.5% 1%;
 `;
 
 const StyledChipContainer = withStyles({
@@ -93,6 +95,8 @@ const Problem = (props) => {
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const fetchProblem = async () => {
     console.log(problemKey);
     try {
@@ -115,63 +119,80 @@ const Problem = (props) => {
 
   return isLoaded ? (
     <StyledGrid container direction="column" spacing={3}>
-      <Grid container item direction="column" spacing={1}>
-        <Grid container item direction="row" justify="flex-end">
-          <Grid container item xs={3} direction="row" justify="space-around">
-            <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
-              <Typography style={{ color: '#4995F2', fontSize: 'large' }}>
-                문제 풀기
-              </Typography>
-            </OurLink>
-            <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
-              <Typography style={{ color: '#4995F2', fontSize: 'large' }}>
-                제출 현황
-              </Typography>
-            </OurLink>
-          </Grid>
-        </Grid>
-        <Grid item container alignItems="center" direction="row">
-          <Grid item>
-            <Typography style={{ fontSize: '50px' }}>
-              {`${problemKey}번 ${problem.title}`}
-            </Typography>
-          </Grid>
-          {problem.challengeCode !== 0
-          && (problem.challengeCode === 1
-            ? (
-              <Grid item sm={5}>
-                <StyledChallengeResult code={1}>성공</StyledChallengeResult>
-              </Grid>
-            ) : (
-              <Grid item sm={5}>
-                <StyledChallengeResult code={-1}>실패</StyledChallengeResult>
-              </Grid>
-            ))}
-        </Grid>
+      <Grid container item justify='space-between' alignItems='center'>
         <Grid item>
-          <strong>{problem.ownerId}&nbsp;</strong>
-          <span>
-            {new Date(problem.uploadTime).toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </span>
-        </Grid>
-        <Grid item>
-          <StyledChipContainer>
-              <ul>
-                <Grid container direction='row' spacing={1}>
-                {problem.categories.map((category) => (
-                  <Grid item>
-                    <li>
-                      <StyledChip label={category} color="primary" />
-                    </li>
-                  </Grid>
-                ))}
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <Grid container alignItems="center" direction="row" spacing={1}>
+                <Grid item>
+                  <Typography style={{ fontSize: '50px' }}>
+                    {`${problemKey}. ${problem.title}`}
+                  </Typography>
                 </Grid>
-              </ul>
-          </StyledChipContainer>
+                {problem.challengeCode !== 0
+                && (problem.challengeCode === 1
+                  ? (
+                    <Grid item>
+                      <StyledChallengeResult code={1}>성공</StyledChallengeResult>
+                    </Grid>
+                  ) : (
+                    <Grid item>
+                      <StyledChallengeResult code={-1}>실패</StyledChallengeResult>
+                    </Grid>
+                  ))}
+              </Grid>
+            </Grid>
+            <Grid item container spacing={1}>
+              <Grid item>
+              <strong>{problem.ownerId}</strong>
+              </Grid>
+              <Grid item>
+              <span>·</span>
+              </Grid>
+              <Grid item>
+              <span>
+                {new Date(problem.uploadTime).toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <StyledChipContainer>
+                  <ul>
+                    <Grid container direction='row' spacing={1}>
+                    {problem.categories.map((category) => (
+                      <Grid item>
+                        <li>
+                          <StyledChip label={category} color="primary" />
+                        </li>
+                      </Grid>
+                    ))}
+                    </Grid>
+                  </ul>
+              </StyledChipContainer>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container direction="row" justify="space-around" spacing={1}>
+            <Grid item>
+              <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
+                <Button color='primary' variant='outlined' size='large'>
+                  제출 현황
+                </Button>
+              </OurLink>
+            </Grid>
+            <Grid item>
+              <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
+                <Button color='primary' variant='outlined' size='large'>
+                  문제 풀기
+                </Button>
+              </OurLink>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Grid container item direction="column">
@@ -182,6 +203,8 @@ const Problem = (props) => {
                 <TableRow>
                   <TableCell align="center">시간 제한</TableCell>
                   <TableCell align="center">메모리 제한</TableCell>
+                  <TableCell align="center">AC</TableCell>
+                  <TableCell align="center">제출</TableCell>
                   <TableCell align="center">정답률</TableCell>
                 </TableRow>
               </TableHead>
@@ -191,8 +214,14 @@ const Problem = (props) => {
                 </TableCell>
                 <TableCell align="center">{`${problem.memoryLimit}MB`}</TableCell>
                 <TableCell align="center">
+                  {problem.solvedCount}
+                </TableCell>
+                <TableCell align="center">
+                  {problem.submitCount}
+                </TableCell>
+                <TableCell align="center">
                   {problem.submitCount === 0
-                    ? '데이터 없음'
+                    ? '-'
                     : `${(
                       (problem.solvedCount / problem.submitCount)
                         * 100).toFixed(2)}%`}
@@ -201,18 +230,42 @@ const Problem = (props) => {
             </Table>
           </TableContainer>
       </Grid>
-      <Grid container item direction="column" spacing={1}>
+      <Grid container item direction="column" spacing={2}>
         <Grid item>
-          <StyledItemTitle>문제 설명&nbsp;</StyledItemTitle>
-        </Grid>
-        <Grid item>
+          <StyledItemTitle>문제 설명</StyledItemTitle>
           <Paper
             className="ck-content"
             elevation={0}
-            style={{ backgroundColor: pColor, padding: '1%', fontSize: 'large' }}
+            style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
             dangerouslySetInnerHTML={{ __html: problem.description }}
           />
         </Grid>
+        {
+          problem.inputDescription && (
+            <Grid item>
+              <StyledItemTitle>입력 형식</StyledItemTitle>
+              <Paper
+                className="ck-content"
+                elevation={0}
+                style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
+                dangerouslySetInnerHTML={{ __html: problem.inputDescription }}
+              />
+            </Grid>
+          )
+        }
+        {
+          problem.outputDescription && (
+            <Grid item>
+              <StyledItemTitle>출력 형식</StyledItemTitle>
+              <Paper
+                className="ck-content"
+                elevation={0}
+                style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
+                dangerouslySetInnerHTML={{ __html: problem.outputDescription }}
+              />
+            </Grid>
+          )
+        }
       </Grid>
       <Grid item>
         <Divider />
@@ -220,9 +273,14 @@ const Problem = (props) => {
       <Grid container item direction="column" spacing={2}>
         {problem.examples.map((example, index) => (
           <Grid container item direction="row" justify="space-between">
-            <Grid item container sm={5} spacing={1} direction="column">
-              <Grid item>
-                <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
+            <Grid item container sm={6} spacing={1} direction="column">
+              <Grid item container alignItems='center' spacing={2}>
+                <Grid item>
+                  <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
+                </Grid>
+                <CopyToClipboard text={example.input}>
+                  <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
+                </CopyToClipboard>
               </Grid>
               <Grid item>
                 <StyledTextField
@@ -237,9 +295,14 @@ const Problem = (props) => {
                 />
                </Grid>
             </Grid>
-            <Grid item container sm={5} spacing={1} direction='column'>
-              <Grid item>
-                <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
+            <Grid item container sm={6} spacing={1} direction='column'>
+            <Grid item container alignItems='center' spacing={2}>
+                <Grid item>
+                  <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
+                </Grid>
+                <CopyToClipboard text={example.output}>
+                  <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
+                </CopyToClipboard>
               </Grid>
               <Grid item>
                 <StyledTextField

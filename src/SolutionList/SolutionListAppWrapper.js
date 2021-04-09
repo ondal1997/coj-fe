@@ -8,6 +8,7 @@ const SolutionListAppWrapper = (props) => { // solution 번호 전달
     problemTitle={props.match.params.problemTitle}
     pageNum={props.match.params.pageNum}
     history={props.history}
+    location={props.location}
     />
   </div>);
 };
