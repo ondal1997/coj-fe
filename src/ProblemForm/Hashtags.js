@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Chip, TextField } from '@material-ui/core';
+import { Container, Chip, TextField, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const StyledChipContainer = withStyles({
@@ -22,12 +22,9 @@ const StyledChipContainer = withStyles({
 
 const StyledChip = withStyles({
   root: {
-    backgroundColor: '#4995F2',
     '&:focus': {
       backgroundColor: '#4995F2',
     },
-  },
-  colorPrimary: {
   },
 })(Chip);
 
@@ -60,17 +57,22 @@ const Hashtags = ({ hashtags, updateHashtags }) => {
     e.target.value = '';
   };
 
-  return <div>
-      <StyledTextField label='카테고리' variant='outlined' placeholder='카테고리 작성 후 엔터를 입력하세요.'
-      onKeyPress={(e) => { if (e.charCode === 13) onEnterInput(e); }} />
-    <StyledChipContainer>
-      <ul>
-        {hashtags.map((hashtag, number) => <li><StyledChip label={hashtag} color="primary"
-        onDelete={() => deleteHashtag(number)}/>
-        </li>)}
-      </ul>
-    </StyledChipContainer>
-    </div>;
+  return <Grid container direction='column' spacing={1}>
+      <Grid item>
+        <StyledTextField label='카테고리' variant='outlined' placeholder='카테고리 작성 후 엔터를 입력하세요.'
+        onKeyPress={(e) => { if (e.charCode === 13) onEnterInput(e); }} />
+      </Grid>
+      <Grid item container direction='row'>
+        <StyledChipContainer>
+          <ul>
+            {hashtags.map((hashtag, number) => <li>
+              <StyledChip label={hashtag} color="primary"
+              onDelete={() => deleteHashtag(number)}/>
+            </li>)}
+          </ul>
+        </StyledChipContainer>
+      </Grid>
+    </Grid>;
 };
 
 export default Hashtags;
