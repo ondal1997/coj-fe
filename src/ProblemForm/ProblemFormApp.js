@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Container, Button, TextField, Divider } from '@material-ui/core';
+import { Button, TextField, Divider, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import { isValid } from './utils';
@@ -12,28 +12,10 @@ import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
-const StyledForm = withStyles({
-  root: {
-    minHeight: '700px',
-    backgroundColor: 'white',
-    borderRadius: '15px',
-    margin: '0 auto',
-    padding: '2%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  maxWidthLg: {
-    width: '100%',
-  },
-})(Container);
-
 const StyledButton = withStyles({
   root: {
     color: 'white',
     backgroundColor: 'black',
-    left: '93.5%',
-    margin: '1%',
     padding: '1%',
     '&:hover': {
       backgroundColor: '#CE2727',
@@ -168,46 +150,55 @@ const Form = (props) => {
   };
 
   return (
-    <StyledForm>
-    <div>
-        <StyledTextField
-          name='title'
-          label='문제명'
-          fullWidth
+  <Grid container justify='center'>
+    <Grid container item direction='column' spacing={1} sm={6}>
+      <Grid item>
+          <StyledTextField
+            name='title'
+            label='문제명'
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            onChange={(event) => onChange(event)} inputRef={inputsRef.current[0]} />
+      </Grid>
+      <Grid container item direction='row' spacing={2}>
+        <Grid item>
+          <StyledTextField
+          name='timeLimit'
+          label='시간 제한'
           margin="normal"
           variant="outlined"
-          onChange={(event) => onChange(event)} inputRef={inputsRef.current[0]} />
-      </div>
-      <div>
-        <StyledTextField
-        name='timeLimit'
-        label='시간 제한'
-        margin="normal"
-        variant="outlined"
-        style={{ marginRight: '1%' }}
-        onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
-        <StyledTextField
-        name='memoryLimit'
-        label='메모리 제한'
-        margin="normal"
-        variant="outlined"
-        onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
-      </div>
-      <div style={{ margin: '1.5% 0' }}>
+          onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
+        </Grid>
+        <Grid item>
+          <StyledTextField
+          name='memoryLimit'
+          label='메모리 제한'
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
+        </Grid>
+      </Grid>
+      <Grid item style={{ margin: '2% 0' }}>
         <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
-      </div>
-      <div>
+      </Grid>
+      <Grid item>
         <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>
-      </div>
-      <div>
+      </Grid>
+      <Grid item>
         <Examples examples={examples} updateExamples={setExamples}/>
+      </Grid>
+      <Grid item>
         <Testcases testcases={testcases} updateTestcases={setTestcases} />
-      </div>
-      <div>
-      <StyledDivider variant="fullWidth"/>
-      <StyledButton onClick={(event) => submit(event)}>확인</StyledButton>
-      </div>
-    </StyledForm>
+      </Grid>
+      <Grid item>
+        <StyledDivider variant="fullWidth"/>
+      </Grid>
+      <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
+        <StyledButton onClick={(event) => submit(event)}>확인</StyledButton>
+      </Grid>
+    </Grid>
+  </Grid>
   );
 };
 
