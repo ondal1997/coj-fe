@@ -150,8 +150,8 @@ const Form = (props) => {
   };
 
   return (
-  <Grid container justify='center'>
-    <Grid container item direction='column' spacing={1} sm={6}>
+  <Grid container style={{ padding: '10% 15%' }}>
+    <Grid container item direction='column' spacing={1}>
       <Grid item>
           <StyledTextField
             name='title'
