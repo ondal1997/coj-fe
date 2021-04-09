@@ -1,23 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Container, TextField } from '@material-ui/core';
+import { TextField, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-
-const StyledContainer = withStyles({
-  root: {
-    margin: '0 auto',
-    padding: '0.5% 0%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    '& .area-container': {
-      padding: '0 0',
-      width: '500px',
-    },
-  },
-  maxWidthLg: {
-    width: '100%',
-  },
-})(Container);
 
 const StyledTextField = withStyles({
   root: {
@@ -77,7 +61,17 @@ const Testcases = ({ testcases, updateTestcases }) => {
 
     textRef.current.innerHTML = '업로드 중...';
 
-    [...files].reverse().forEach((file) => {
+    const sortedFiles = [...files].sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      return 0;
+    });
+
+    sortedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = function () {
         if (newTestcases[testcaseLen + idx].input !== ''
@@ -100,45 +94,44 @@ const Testcases = ({ testcases, updateTestcases }) => {
     });
   };
 
-  return <>
- {testcases.map((testcase, number) => <>
-  <StyledContainer key={number + 1} fullWidth>
-       <div className='area-container'>
-        <div>
-          테스트케이스 입력 {number + 1}
-        </div>
-          <StyledTextField variant='outlined' row={5}
-          maxRow={Infinity} multiline
-          value={testcase.input}
-          InputProps={{
-            readOnly: true,
-          }}
-          />
-        </div>
-        <div className='area-container'>
-          <div>
-          테스트케이스 출력 {number + 1}
-          </div>
-          <StyledTextField variant='outlined' row={5}
-          maxRow={Infinity} multiline
-          value={testcase.output}
-          InputProps={{
-            readOnly: true,
-          }}
-          />
-        </div>
-      </StyledContainer>
-      {/* <StyledDeleteButton onClick={() => onClickDeleteItem(number)}>✖</StyledDeleteButton> */}
-      </>)}
-      <div style={{ textAlign: 'right', margin: '3% 0' }}>
-        <span style={{ marginRight: '1%', color: '#828282' }} ref={textRef}>
-        테스트케이스를 업로드 해주세요.
-        </span>
-        <StyledLabel for="upload">테스트케이스 업로드</StyledLabel>
-        <input id="upload" type="file" accept="text/plain" onChange={onFileUpload} multiple
-        style={{ display: 'none' }}/>
-      </div>
-  </>;
+  return <Grid container direction='column' spacing={2}>
+          {testcases.map((testcase, number) => <>
+            <Grid container item key={number + 1} direction='row' justify='space-between'>
+              <Grid item sm={5}>
+                  <div>
+                    테스트케이스 입력 {number + 1}
+                  </div>
+                    <StyledTextField variant='outlined' row={5}
+                    maxRow={Infinity} multiline
+                    value={testcase.input}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    />
+              </Grid>
+                <Grid item sm={5}>
+                  <div>
+                    테스트케이스 출력 {number + 1}
+                  </div>
+                  <StyledTextField variant='outlined' row={5}
+                  maxRow={Infinity} multiline
+                  value={testcase.output}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  />
+                </Grid>
+              </Grid>
+            </>)}
+          <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
+            <span style={{ marginRight: '1%', color: '#828282' }} ref={textRef}>
+              테스트케이스를 업로드 해주세요.
+            </span>
+            <StyledLabel for="upload">테스트케이스 업로드</StyledLabel>
+            <input id="upload" type="file" accept="text/plain" onChange={onFileUpload} multiple
+            style={{ display: 'none' }}/>
+          </Grid>
+        </Grid>;
 };
 
 export default Testcases;
