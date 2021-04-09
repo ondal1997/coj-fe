@@ -55,7 +55,7 @@ const ProblemListApp = (props) => {
     <>
       <Grid container direction='column' alignItems='center' spacing={1}>
         <Grid item>
-          <Typography variant='h4' color='primary'>문제 리스트</Typography>
+          <Typography variant='h4'>문제 리스트</Typography>
         </Grid>
 
         <Grid item container direction='column' md={9}>

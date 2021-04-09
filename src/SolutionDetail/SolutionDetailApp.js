@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import 'codemirror/keymap/sublime';
+import { ourFetchAndJson } from '../OurLink';
 
 const serverAddress = 'http://192.168.0.100:3000';
 
@@ -8,12 +9,10 @@ const SolutionDetailApp = (props) => {
   const { solutionKey } = props.match.params;
   const [sourceCode, setSourceCode] = useState('');
 
-  const fetchSolutions = () => {
-    fetch(`${serverAddress}/api/solutions/${solutionKey}`)
-      .then((res) => res.json())
-      .then((fetchedCode) => {
-        setSourceCode(fetchedCode.sourceCode);
-      });
+  const fetchSolutions = async () => {
+    const solution = await ourFetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    console.log(solution);
+    setSourceCode(solution.sourceCode);
   };
 
   useEffect(() => {

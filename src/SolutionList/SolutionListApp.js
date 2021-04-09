@@ -70,7 +70,7 @@ const SolutionListApp = (props) => {
       <Grid container direction='column' alignItems='center' spacing={1}>
         <Grid item container justify='space-around' spacing={10}>
             <Grid item>
-              <Typography variant='h4' color='primary'>{problemNo}. {problemTitle}</Typography>
+              <Typography variant='h4'>{problemNo}. {problemTitle}</Typography>
             </Grid>
             <Grid item>
               <Button color='primary' variant='outlined'
