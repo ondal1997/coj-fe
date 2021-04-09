@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, FormLabel, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
+import { Button, Grid, FormControlLabel,
+  FormLabel, RadioGroup, Radio, Backdrop } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ourHref, ourFetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
+import JudgeProgress from './JudgeProgress';
 
 const StyledGrid = withStyles({
   root: {
@@ -26,11 +28,6 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-const StyledRadio = withStyles({
-  colorPrimary: {
-  },
-})(Radio);
-
 const serverAddress = 'http://192.168.0.100:3000';
 
 const fetchLanguages = async () => {
@@ -53,6 +50,25 @@ const Form = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [sourceCode, setSourceCode] = useState('');
 
+  const [open, setOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const fetchJudgeResult = async (solutionKey) => {
+    console.log(solutionKey);
+    const solutionInfo = await ourFetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    const { testcaseHitCount, testcaseSize } = solutionInfo;
+    setProgress((testcaseHitCount / testcaseSize) * 100);
+
+    if (solutionInfo.state > 1) {
+      setTimeout(() => {
+        setOpen(false);
+        ourHref(`/solutions/${problemKey}/${problemTitle}/1`, history);
+      }, 2000);
+    } else {
+      setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const fetchedLanguages = await fetchLanguages();
@@ -68,20 +84,23 @@ const Form = (props) => {
         <Grid container item>
         <h3 style={{ margin: '0 0' }}>{`${problemKey}번 ${problemTitle}`}</h3>
         </Grid>
-        {isLoaded ? (<>
+        {isLoaded ? (<div style={{
+          backgroundColor: '#F8F8F8', padding: '1%' }}>
           <Grid container item>
-            <FormLabel component="legend">언어 선택</FormLabel>
+            <FormLabel component="legend">
+              <strong>언어 선택</strong>
+              </FormLabel>
           </Grid>
           <Grid container item>
             <RadioGroup aria-label="language" name="language"
                       onChange={(event) => { setSelectedLanguage(event.target.value); }}>
             {languages.map((language) => (
                       <FormControlLabel key={language} value={language} label={language}
-                      control={<StyledRadio color="default" />} />
+                      control={<Radio color="default" />} />
             ))}
             </RadioGroup>
           </Grid>
-        </>)
+        </div>)
           : (<Grid container item>Loading...</Grid>)
         }
       </Grid>
@@ -95,7 +114,10 @@ const Form = (props) => {
                 alert('언어를 선택해주세요');
                 return;
               }
-              await ourFetchAndJson(`${serverAddress}/api/solutions`, {
+
+              setOpen(true);
+
+              const solution = await ourFetchAndJson(`${serverAddress}/api/solutions`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -106,11 +128,14 @@ const Form = (props) => {
                   sourceCode,
                 }),
               });
-              alert('제출 완료!');
-              ourHref(`/solutions/${problemKey}/${problemTitle}/1`, history);
+
+              fetchJudgeResult(solution.key);
             }}>
             풀이 제출하기
             </StyledButton>
+            <Backdrop open={open} style={{ zIndex: 9999 }}>
+              <JudgeProgress progress={progress} />
+            </Backdrop>
         </Grid>
     </StyledGrid>
   );
