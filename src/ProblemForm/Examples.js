@@ -1,29 +1,11 @@
 import React from 'react';
-import { Container, Button, TextField } from '@material-ui/core';
+import { Button, TextField, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-
-const StyledContainer = withStyles({
-  root: {
-    margin: '0 auto',
-    padding: '0.5% 0%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    '& .area-container': {
-      padding: '0 0',
-      width: '500px',
-    },
-  },
-  maxWidthLg: {
-    width: '100%',
-  },
-})(Container);
 
 const StyledButton = withStyles({
   root: {
     color: 'white',
     backgroundColor: 'black',
-    left: '91%',
-    margin: '1%',
     padding: '1%',
     fontSize: 'medium',
     '&:hover': {
@@ -36,7 +18,7 @@ const StyledDeleteButton = withStyles({
   root: {
     color: 'gray',
     padding: '0 0',
-    left: '96.5%',
+    minWidth: '0',
     fontSize: 'medium',
     '&:hover': {
       color: 'black',
@@ -85,32 +67,37 @@ const Examples = ({ examples, updateExamples }) => {
     updateExamples(newExamples);
   };
 
-  return <>
+  return <Grid container direction='column' spacing={2}>
     {examples.map((example, number) => <>
-      <StyledContainer key={number + 1} fullWidth>
-        <div className='area-container'>
+      <Grid container item key={number + 1} direction='row' justify='space-between'>
+        <Grid item sm={5}>
           <div>
            예제 입력 {number + 1}
           </div>
           <StyledTextField name="input"
           variant='outlined' row={5} maxRow={Infinity} multiline
           value={example.input} onChange={(e) => onChangeInput(e, number)}/>
-        </div>
-        <div className='area-container'>
+        </Grid>
+        <Grid item sm={5}>
           <div>
            예제 출력 {number + 1}
           </div>
           <StyledTextField name="output"
           variant='outlined' row={5} maxRow={Infinity} multiline
           value={example.output} onChange={(e) => onChangeInput(e, number)}/>
-        </div>
-       </StyledContainer>
-      <StyledDeleteButton onClick={() => onClickDeleteItem(number)}>✖</StyledDeleteButton>
+        </Grid>
+        <Grid container direction='row' justify='flex-end'>
+          <Grid item>
+            <StyledDeleteButton onClick={() => onClickDeleteItem(number)}>
+              ✖</StyledDeleteButton>
+            </Grid>
+        </Grid>
+       </Grid>
       </>)}
-    <div>
-      <StyledButton onClick={addExample}>예제 추가</StyledButton>
-    </div>
-    </>;
+      <Grid item style={{ textAlign: 'right' }}>
+        <StyledButton onClick={addExample}>예제 추가</StyledButton>
+      </Grid>
+    </Grid>;
 };
 
 export default Examples;
