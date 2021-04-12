@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import queryString from 'query-string';
 import { Pagination } from '@material-ui/lab';
-import { Chip, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
-import { DoneOutline, PriorityHigh } from '@material-ui/icons';
+import { Radio, InputAdornment, TextField, Chip, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Search, DoneOutline, PriorityHigh } from '@material-ui/icons';
 import { ourFetchAndJson, ourHref } from '../OurLink';
 import { serverAddress } from '../config';
 
@@ -24,11 +24,13 @@ const ProblemListApp = (props) => {
   const [problems, setProblems] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
 
+  const [selectedSearchType, setSelectedSearchType] = useState('title');
+
   useEffect(() => {
     (async () => {
       let result;
       try {
-        result = await ourFetchAndJson(`${serverAddress}/api/problems?pos=${(page - 1) * limitCount}&count=${limitCount}`);
+        result = await ourFetchAndJson(`${serverAddress}/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
       } catch (err) {
         setIsLoaded(true);
         setError(err);
@@ -53,15 +55,83 @@ const ProblemListApp = (props) => {
 
   return (
     <>
-      <Grid container direction='column' alignItems='center' spacing={1}>
-        <Grid item>
-          <Typography variant='h4'>문제 리스트</Typography>
+      <Grid container direction='column' alignItems='center' spacing={2}>
+
+        <Grid item container justify='space-between' alignItems='center' lg={9} spacing={10}>
+
+          <Grid item>
+            <Typography variant='h4'>문제 리스트</Typography>
+          </Grid>
+
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item>
+                <Grid container container alignItems='center'>
+                  <Grid item>
+                    <Radio
+                      size='small'
+                      checked={selectedSearchType === 'title'}
+                      color='primary'
+                      onChange={(event) => { setSelectedSearchType(event.target.value); }}
+                      value={'title'}
+                    />
+                  </Grid>
+
+                  <Grid item>
+                    <Typography
+                      onClick={() => { setSelectedSearchType('title'); }}
+                    >
+                      문제명
+                  </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item>
+
+                <Grid container container alignItems='center'>
+                  <Grid item>
+                    <Radio
+                      size='small'
+                      checked={selectedSearchType === 'category'}
+                      color='primary'
+                      onChange={(event) => { setSelectedSearchType(event.target.value); }}
+                      value={'category'}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      onClick={() => { setSelectedSearchType('category'); }}
+                    >
+                      카테고리
+                  </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+            </Grid>
+
+            <Grid item>
+              <TextField
+                placeholder='검색어를 입력하세요'
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+                onKeyPress={(e) => { if (e.charCode === 13) ourHref(`/problems?${selectedSearchType}=${e.target.value.replace(/\+/g, '%2B')}`, props.history); }}
+              ></TextField>
+            </Grid>
+
+          </Grid>
         </Grid>
 
-        <Grid item container direction='column' md={9}>
+        <Grid item container direction='column' lg={9}>
           <Grid item>
             <TableContainer>
-              <Table>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell align='right'><strong>번호</strong></TableCell>
