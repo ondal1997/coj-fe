@@ -4,10 +4,12 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import CodeViewer from './CodeViewer';
 import SolutionInform from './SolutionInform';
 import 'codemirror/keymap/sublime';
 import { ourHref, ourFetchAndJson } from '../OurLink';
+import judgeState from '../SolutionList/judgeState';
 
 const StyledContainer = withStyles({
   root: {
@@ -28,6 +30,7 @@ const SolutionDetailApp = (props) => {
     const solutionInfo = await ourFetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
     setSolution(solutionInfo);
     setIsLoaded(true);
+    console.log(solutionInfo);
     // 이렇게 연속으로 setState할 때 rerendering 문제 다시 잘 생각해보기
   };
 
@@ -36,7 +39,7 @@ const SolutionDetailApp = (props) => {
   }, []);
 
   return isLoaded
-    ? (<Grid container direction='column' spacing={2} style={{ padding: '10% 15%' }}>
+    ? (<Grid container direction='column' spacing={3} style={{ padding: '0 15%' }}>
         <Grid container item direction='row' justify='flex-end'>
           <Grid item>
             <Button color='primary' variant='outlined' size='large'
@@ -46,21 +49,36 @@ const SolutionDetailApp = (props) => {
           </Grid>
         </Grid>
         <Grid item>
+          <Typography variant='h3'>
+            제출 정보
+          </Typography>
           <SolutionInform solution={solution}/>
         </Grid>
         <Grid item>
-          <Paper elevation={0}
-            style={{ backgroundColor: '#F8F8F8', padding: '10px', fontSize: 'large' }}>
-            <pre>
-              {solution.judgeError}
-            </pre>
-          </Paper>
-        </Grid>
-        <Grid item>
+        <Typography variant='h3'>
+            제출 코드
+          </Typography>
           <StyledContainer>
             <CodeViewer code={solution.sourceCode} />
           </StyledContainer>
         </Grid>
+        {(() => {
+          if (solution.state === '6' || solution.state === '7') {
+            return (<Grid item>
+                  <Typography variant='h6' style={{ color: '#858585' }}>
+                    {judgeState[parseInt(solution.state, 10)].name}
+                  </Typography>
+                  <Paper elevation={0}
+                    style={{ backgroundColor: '#F8F8F8', padding: '10px', fontSize: 'large' }}>
+                    <pre>
+                      {solution.judgeError}
+                    </pre>
+                  </Paper>
+                  </Grid>);
+          }
+          return null;
+        })()
+        }
       </Grid>) : (
         <div>Loading...</div>
     );
