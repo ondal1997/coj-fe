@@ -43,7 +43,7 @@ const App = () => (
   <Router basename="/oj">
     <Switch>
       <Route path="/" exact component={ProblemListApp} />
-      <Route path="/problemsForm" exact component={ProblemFormApp} />
+      <Route path="/new" exact component={ProblemFormApp} />
       <Route path="/problems" exact component={ProblemListApp} />
       <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 

@@ -12,8 +12,8 @@ const StyledState = styled.span`
   color: white;
   background-color: ${({ color }) => color || '#F23434'};
   border-radius: 500px;
-  padding: 8px;
-  font-size: medium;
+  padding: 4px;
+  font-size: 12px;
 `;
 
 const validatePositiveInteger = (anything) => {
@@ -132,7 +132,6 @@ const SolutionListApp = (props) => {
                 </TableContainer>
               </Grid>
             </Grid>
-
             <Grid item>
               <Pagination
                 shape='rounded'
@@ -142,7 +141,7 @@ const SolutionListApp = (props) => {
                 siblingCount={2}
                 boundaryCount={2}
                 count={Math.ceil(totalCount / limitCount)}
-                page={page}
+                page={Number.parseInt(page, 10)}
                 onChange={(event, p) => {
                   ourHref(`/solutions/${problemKey}/${problemTitle}/${p}?${queryString.stringify({ ...query, page: p })}`, props.history);
                 }}
