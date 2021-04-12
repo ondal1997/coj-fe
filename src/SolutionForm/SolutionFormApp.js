@@ -10,7 +10,7 @@ const StyledGrid = withStyles({
   root: {
     backgroundColor: 'white',
     margin: '0 auto',
-    padding: '5% 15%',
+    padding: '0 15%',
   },
 })(Grid);
 
