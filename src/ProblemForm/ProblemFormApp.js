@@ -55,6 +55,8 @@ const Form = (props) => {
     memoryLimit: '512',
   });
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const [description, setDescription] = useState('');
   const [inputDescription, setInputDescription] = useState('');
   const [outputDescription, setOutputDescription] = useState('');
@@ -153,9 +155,18 @@ const Form = (props) => {
     ourHref('/problems', props.history);
   };
 
-  useEffect(() => {
-    window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+  useEffect(async () => {
+    const loginData = await ourFetchAndJson(`${serverAddress}/api/auth`);
+    console.log(loginData);
+    if (!loginData.isAuthenticated) {
+      window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+    }
+    setIsLoaded(true);
   }, []);
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
   <Grid container style={{ padding: '10% 15%' }}>
