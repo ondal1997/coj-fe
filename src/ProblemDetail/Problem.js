@@ -119,9 +119,9 @@ const Problem = (props) => {
 
   return isLoaded ? (
     <StyledGrid container direction="column" spacing={3}>
-      <Grid container item justify='space-between' alignItems='center'>
+      <Grid container item justify='space-between' alignItems='center' spacing={3}>
         <Grid item>
-          <Grid container direction="column" spacing={2}>
+          <Grid container direction="column" spacing={1}>
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
                 <Grid item>
