@@ -22,7 +22,7 @@ const StyledLink = styled(Link)`
     }
 `;
 
-const IS_DEPLOYED = false;
+const IS_DEPLOYED = true;
 // const codersUrl = 'http://codersit.co.kr/oj';
 
 const OurLink = (props) => {
