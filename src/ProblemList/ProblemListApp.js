@@ -17,7 +17,7 @@ const validatePositiveInteger = (anything) => {
 const ProblemListApp = (props) => {
   const query = queryString.parse(props.location.search);
   const page = validatePositiveInteger(query.page);
-  const limitCount = validatePositiveInteger(query.limitCount || 20);
+  const limitCount = validatePositiveInteger(query.limitCount || 15);
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -131,7 +131,26 @@ const ProblemListApp = (props) => {
         <Grid item container direction='column' lg={9}>
           <Grid item>
             <TableContainer>
-              <Table size="small">
+              <Table size="small" columns={[
+                {
+                  width: '500',
+                },
+                {
+                  width: '200',
+                },
+                {
+                  width: '200',
+                },
+                {
+                  width: '200',
+                },
+                {
+                  width: '200',
+                },
+                {
+                  width: '200',
+                },
+              ]}>
                 <TableHead>
                   <TableRow>
                     <TableCell align='right'><strong>번호</strong></TableCell>
