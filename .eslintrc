@@ -13,6 +13,7 @@
     "mocha": true
   },
   "rules": {
+    "import/no-unresolved": "off",
     "max-length": 0, // 0으로 설정하면 에러 검출 X
     "linebreak-style": 0,
     "object-curly-newline": 0,
