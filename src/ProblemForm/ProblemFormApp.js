@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, TextField, Divider, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
@@ -54,6 +54,8 @@ const Form = (props) => {
     timeLimit: '2000',
     memoryLimit: '512',
   });
+
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const [description, setDescription] = useState('');
   const [inputDescription, setInputDescription] = useState('');
@@ -152,6 +154,19 @@ const Form = (props) => {
     alert('제출완료!');
     ourHref('/problems', props.history);
   };
+
+  useEffect(async () => {
+    const loginData = await ourFetchAndJson(`${serverAddress}/api/auth`);
+    console.log(loginData);
+    if (!loginData.isAuthenticated) {
+      window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+    }
+    setIsLoaded(true);
+  }, []);
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
   <Grid container style={{ padding: '10% 15%' }}>
