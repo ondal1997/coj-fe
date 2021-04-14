@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, TextField, Divider, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
@@ -152,6 +152,10 @@ const Form = (props) => {
     alert('제출완료!');
     ourHref('/problems', props.history);
   };
+
+  useEffect(() => {
+    window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+  }, []);
 
   return (
   <Grid container style={{ padding: '10% 15%' }}>

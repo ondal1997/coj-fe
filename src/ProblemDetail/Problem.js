@@ -17,8 +17,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import styled from 'styled-components';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useSnackbar } from 'notistack';
+// import { CopyToClipboard } from 'react-copy-to-clipboard';
+// import { useSnackbar } from 'notistack';
 import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
 import './reset.css';
@@ -95,7 +95,7 @@ const Problem = (props) => {
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
   const fetchProblem = async () => {
     console.log(problemKey);
@@ -186,11 +186,16 @@ const Problem = (props) => {
               </OurLink>
             </Grid>
             <Grid item>
-              <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}>
-                <Button color='primary' variant='outlined' size='large'>
+              {/* <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}> */}
+                <Button color='primary' variant='outlined' size='large'
+                onClick = {() => {
+                  window.location.href = `http://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/
+                  ${problemKey}/${problem.title}`;
+                }
+                }>
                   문제 풀기
                 </Button>
-              </OurLink>
+              {/* </OurLink> */}
             </Grid>
           </Grid>
         </Grid>
@@ -278,9 +283,9 @@ const Problem = (props) => {
                 <Grid item>
                   <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
                 </Grid>
-                <CopyToClipboard text={example.input}>
-                  <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
-                </CopyToClipboard>
+                {/* <CopyToClipboard text={example.input}>
+                  <Button variant='outlined' color='primary'>copy</Button>
+                </CopyToClipboard> */}
               </Grid>
               <Grid item>
                 <StyledTextField
@@ -300,9 +305,9 @@ const Problem = (props) => {
                 <Grid item>
                   <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
                 </Grid>
-                <CopyToClipboard text={example.output}>
-                  <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
-                </CopyToClipboard>
+                {/* <CopyToClipboard text={example.output}>
+                  <Button variant='outlined' color='primary'>copy</Button>
+                </CopyToClipboard> */}
               </Grid>
               <Grid item>
                 <StyledTextField
