@@ -43,8 +43,7 @@ const editorConfiguration = {
     Table, TableToolbar,
   ],
   simpleUpload: {
-    uploadUrl: 'https://coderit.co.kr/coders/upload.php',
-  },
+    uploadUrl: 'https://coderit.co.kr/coders/upload.php', },
   toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
     '|', 'bulletedList', 'numberedList', '|', 'fontSize', 'fontColor', 'fontBackgroundColor', '|', 'blockQuote', 'horizontalLine', '|', 'link', 'insertImage', 'insertTable', '|', 'undo', 'redo'],
   table: {

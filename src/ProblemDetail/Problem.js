@@ -191,7 +191,7 @@ const Problem = (props) => {
           }
         </Grid>
       </Grid>
-      <Grid container item justify='space-between' alignItems='center' spacing={3}>
+<Grid container item justify='space-between' alignItems='center' spacing={3}>
         <Grid item>
           <Grid container direction="column" spacing={1}>
             <Grid item>
@@ -248,8 +248,9 @@ const Problem = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <Grid container direction="row" justify="space-around" spacing={1}>
+      </Grid>
+      <Grid item>
+          <Grid container direction="row" justify="flex-end" spacing={1}>
             <Grid item>
               <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
                 <Button color='primary' variant='outlined' size='large'>
@@ -270,7 +271,6 @@ const Problem = (props) => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
       <Grid container item direction="column">
         <Divider />
           <TableContainer>
@@ -308,6 +308,8 @@ const Problem = (props) => {
             </Table>
           </TableContainer>
       </Grid>
+
+    <Grid item container direction="column" spacing={3}>
       <Grid container item direction="column" spacing={2}>
         <Grid item>
           <StyledItemTitle>문제 설명</StyledItemTitle>
@@ -394,6 +396,7 @@ const Problem = (props) => {
           </Grid>
         ))}
       </Grid>
+    </Grid>
     </StyledGrid>
   ) : (
     <div>Loading...</div>

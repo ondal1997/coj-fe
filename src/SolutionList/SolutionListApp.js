@@ -31,7 +31,7 @@ const SolutionListApp = (props) => {
   console.log(props.location);
   const query = queryString.parse(props.location.search);
   // const page = validatePositiveInteger(query.page);
-  const limitCount = validatePositiveInteger(query.limitCount || 20);
+  const limitCount = validatePositiveInteger(query.limitCount || 15);
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
