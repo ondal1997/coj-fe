@@ -9,6 +9,7 @@ import ProblemFormApp from './ProblemForm/ProblemFormApp';
 import SolutionFormApp from './SolutionForm/SolutionFormApp';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
+import ProblemUpdateApp from './ProblemUpdate/ProblemFormApp';
 // import { OurLink } from './OurLink';
 
 const theme = createMuiTheme({
@@ -44,6 +45,7 @@ const App = () => (
     <Switch>
       <Route path="/" exact component={ProblemListApp} />
       <Route path="/new" exact component={ProblemFormApp} />
+      <Route path="/update/:problemKey" exact component={ProblemUpdateApp} />
       <Route path="/problems" exact component={ProblemListApp} />
       <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 

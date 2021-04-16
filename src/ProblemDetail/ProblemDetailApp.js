@@ -6,8 +6,8 @@ const StyledProblemDetailApp = styled.div`
   width: 100%;
 `;
 
-const ProblemDetailApp = ({ match }) => <StyledProblemDetailApp>
-      <Problem problemKey={match.params.problemKey} />
+const ProblemDetailApp = (props) => <StyledProblemDetailApp>
+      <Problem history={props.history} problemKey={props.match.params.problemKey} />
       </StyledProblemDetailApp>;
 
 export default ProblemDetailApp;
