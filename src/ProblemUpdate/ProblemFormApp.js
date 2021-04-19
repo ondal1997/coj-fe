@@ -49,27 +49,24 @@ const StyledDivider = withStyles({
 })(Divider);
 
 const Form = (props) => {
+  const { problemKey } = props.match.params;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [problem, setProblem] = useState({});
   const [inputs, setInputs] = useState({
     title: '',
     timeLimit: '2000',
     memoryLimit: '512',
   });
-
-  const [isLoaded, setIsLoaded] = useState(false);
-
   const [description, setDescription] = useState('');
   const [inputDescription, setInputDescription] = useState('');
   const [outputDescription, setOutputDescription] = useState('');
-
   const [examples, setExamples] = useState([
     {
       input: '',
       output: '',
     },
   ]);
-
   const [testcases, setTestcases] = useState([]);
-
   const [hashtags, setHashtags] = useState([]);
 
   const { title, timeLimit, memoryLimit } = inputs;
@@ -91,7 +88,6 @@ const Form = (props) => {
 
   const submit = async () => {
     let valid = true;
-    console.log(description);
     inputsRef.current.every(({ current }) => { // 유효 X가 하나라도 있으면 종료
       const { name, value } = current;
       const res = isValid(name, value);
@@ -143,8 +139,11 @@ const Form = (props) => {
       outputDescription,
     };
 
-    await ourFetchAndJson(`${serverAddress}/api/problems`, {
-      method: 'POST',
+    // update method
+    // 수정 시 정상적으로 연결 중인지도 같이 응답받고,
+    // 로그인이 필요하면 로그인 창으로 이동
+    await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
@@ -152,14 +151,31 @@ const Form = (props) => {
   };
 
   useEffect(async () => {
-    const loginData = await ourFetchAndJson(`${serverAddress}/api/auth`);
-    console.log(loginData);
-    if (!loginData.isAuthenticated) {
-      window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+    if (isLoaded) {
+      // 데이터 로딩
+      console.log(problemKey);
+      console.log(problem);
+      // problem이 undefined
+      // isLoaded 다시 확인,,ㅠ
+      inputsRef.current[0].current.value = problem.title;
+      inputsRef.current[1].current.value = problem.timeLimit;
+      inputsRef.current[2].current.value = problem.memoryLimit;
+      // setTestcases([]);
     } else {
+      // get problem
+      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=ondal1997`);
+      console.log(fetchedProblem);
       setIsLoaded(true);
+      setProblem(fetchedProblem);
+      setDescription(fetchedProblem.description);
+      setInputDescription(fetchedProblem.inputDescription);
+      setOutputDescription(fetchedProblem.outputDescription);
+      setHashtags(fetchedProblem.categories);
+      setExamples(fetchedProblem.examples);
+      setTestcases([]);
+      // setTestcases(fetchedProblem.testcases);
     }
-  }, []);
+  }, [isLoaded, problem]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
