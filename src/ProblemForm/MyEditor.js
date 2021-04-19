@@ -32,6 +32,7 @@ import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleu
 
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
+import { useEffect, useRef, useState } from 'react';
 
 // import { Paper } from '@material-ui/core';
 
@@ -43,18 +44,27 @@ const editorConfiguration = {
     Table, TableToolbar,
   ],
   simpleUpload: {
-    uploadUrl: 'http://codersit.co.kr:3210/upload',
+    uploadUrl: 'https://codersit.co.kr/coders/upload.php',
   },
   toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
     '|', 'bulletedList', 'numberedList', '|', 'fontSize', 'fontColor', 'fontBackgroundColor', '|', 'blockQuote', 'horizontalLine', '|', 'link', 'insertImage', 'insertTable', '|', 'undo', 'redo'],
   table: {
     contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
   },
-  placeholder: '여기에 내용을 입력하세요!',
+  placeholder: '여기에 내용을 입력하세요',
 };
 
-const MyEditor = (props) => {
-  const { onChange, value } = props;
+const MyEditor = ({ value, onChange }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (value !== ref.current.editor.getData()) {
+        ref.current.editor.setData(value);
+      }
+    }
+  }, [isLoaded, value]);
 
   return (
     <>
@@ -62,15 +72,14 @@ const MyEditor = (props) => {
         height={500}
         editor={ClassicEditor}
         config={editorConfiguration}
-        data={value}
-        onReady={(editor) => {
-          console.log('Editor is ready to use!', editor);
+        // data={value}
+        onReady={() => {
+          setIsLoaded(true);
         }}
+        ref={ref}
         onChange={(event, editor) => {
           const data = editor.getData();
-          console.log(data);
           onChange(data);
-          // document.querySelectorAll('.ck-content')[1].innerHTML = data;
         }}
       />
       {/* <Paper className="ck-content" elevation={2}
