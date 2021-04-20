@@ -222,7 +222,7 @@ const Form = (props) => {
         <StyledDivider variant="fullWidth"/>
       </Grid>
       <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
-        <StyledButton onClick={(event) => submit(event)}>확인</StyledButton>
+        <StyledButton onClick={() => submit()}>확인</StyledButton>
       </Grid>
     </Grid>
   </Grid>
