@@ -147,7 +147,7 @@ const Problem = (props) => {
   }
 
   return isLoaded ? (
-    <StyledGrid container direction="column" spacing={3}>
+    <StyledGrid container direction="column" spacing={2}>
       <Grid item>
         <Grid container justify='flex-end'>
           {isOwners
@@ -205,7 +205,7 @@ const Problem = (props) => {
       </Grid>
 <Grid container item justify='space-between' alignItems='center' spacing={3}>
         <Grid item>
-          <Grid container direction="column" spacing={1}>
+          <Grid container direction="column" spacing={0}>
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
                 <Grid item>
