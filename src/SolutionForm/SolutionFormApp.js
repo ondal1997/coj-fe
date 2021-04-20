@@ -72,7 +72,7 @@ const Form = (props) => {
       const loginData = await fetchAndJson('/api/auth');
       console.log(loginData);
       if (!loginData.isAuthenticated) {
-        window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problemTitle}`;
+        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problemTitle}`);
         return;
       }
       const fetchedLanguages = await fetchLanguages();
@@ -115,6 +115,11 @@ const Form = (props) => {
             size='medium' onClick={async () => {
               if (!selectedLanguage) {
                 alert('언어를 선택해주세요');
+                return;
+              }
+
+              if (!sourceCode) {
+                alert('코드를 입력해주세요');
                 return;
               }
 
