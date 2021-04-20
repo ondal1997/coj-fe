@@ -177,7 +177,7 @@ const Problem = (props) => {
                         });
                         // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
                         if (result.status === 200) {
-                          ourHref('/problems', props.history);
+                          props.history.push('/problems');
                         } else {
                           setError({ status: result.status });
                           return;

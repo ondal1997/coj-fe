@@ -3,13 +3,8 @@ import queryString from 'query-string';
 import { Pagination } from '@material-ui/lab';
 import { Radio, InputAdornment, TextField, Chip, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Search, DoneOutline, PriorityHigh } from '@material-ui/icons';
-<<<<<<< HEAD
-import { ourFetchAndJson, ourHref } from '../OurLink';
-import { serverAddress } from '../config';
-import Error from '../Error/Error';
-=======
 import { fetchAndJson } from '../OurLink';
->>>>>>> 762ed497ac797551fb341a8621254777f65fc442
+import Error from '../Error/Error';
 
 const validatePositiveInteger = (anything) => {
   const parsedNumber = Number.parseInt(anything, 10);
@@ -35,16 +30,12 @@ const ProblemListApp = (props) => {
     (async () => {
       let result;
       try {
-<<<<<<< HEAD
-        result = await ourFetchAndJson(`${serverAddress}/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
+        result = await fetchAndJson(`/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
         if (result.status !== 200) {
           setIsLoaded(true);
           setError({ status: result.status });
           return;
         }
-=======
-        result = await fetchAndJson(`/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
->>>>>>> 762ed497ac797551fb341a8621254777f65fc442
       } catch (err) {
         setIsLoaded(true);
         setError({ status: 500 });
