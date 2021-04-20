@@ -97,8 +97,7 @@ const Problem = (props) => {
 
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const isOwners = true;
-  // const [isOwners, setIsOwners] = useState(true);
+  const [isOwners, setIsOwners] = useState(false);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(null);
 
@@ -117,6 +116,12 @@ const Problem = (props) => {
       const result = await fetchAndJson(`/api/problems/${problemKey}`);
       // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
       if (result.status === 200) {
+        // 현재 사용자가 누군지 정보를..
+        const loginData = await fetchAndJson('/api/auth');
+        // ownerId와 현재 사용자 아이디가 같으면
+        if (loginData.id === result.problem.ownerId) {
+          setIsOwners(true);
+        }
         setProblem(result.problem);
         setIsLoaded(true);
       } else if (result.status === 404) {
@@ -124,9 +129,6 @@ const Problem = (props) => {
         props.history.push('/problems');
         // props.history.go(1);
       } else {
-        // 현재 사용자가 누군지 정보를..
-        // ownerId와 현재 사용자 아이디가 같으면
-        // setIsOwners(true);
         setError({ status: result.status });
       }
     } catch (err) {
