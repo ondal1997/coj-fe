@@ -28,8 +28,6 @@ import { OurLink, fetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
 import './reset.css';
 
-const serverAddress = 'http://192.168.0.100:3000';
-
 const pColor = '#F8F8F8';
 
 const StyledGrid = withStyles({
@@ -115,9 +113,7 @@ const Problem = (props) => {
   const fetchProblem = async () => {
     console.log(problemKey);
     try {
-      const fetchedProblem = await fetchAndJson(
-        `${serverAddress}/api/problems/${problemKey}`,
-      );
+      const fetchedProblem = await fetchAndJson(`/api/problems/${problemKey}`);
       // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
       if (!fetchedProblem) {
         console.log('문제 history');
@@ -169,7 +165,7 @@ const Problem = (props) => {
                   <Button onClick={() => {
                     handleClose();
                     (async () => {
-                      await fetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
+                      await fetchAndJson(`/api/problems/${problemKey}`, {
                         method: 'DELETE',
                       });
                       console.log('삭제');
@@ -262,7 +258,7 @@ const Problem = (props) => {
               {/* <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}> */}
                 <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
-                  window.location.href = `http://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problem.title}`;
+                  window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problem.title}`;
                 }
                 }>
                   문제 풀기

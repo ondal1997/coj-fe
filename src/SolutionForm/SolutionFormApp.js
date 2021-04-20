@@ -28,11 +28,9 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-const serverAddress = 'http://192.168.0.100:3000';
-
 const fetchLanguages = async () => {
   try {
-    const json = await fetchAndJson(`${serverAddress}/api/availableLanguages`);
+    const json = await fetchAndJson('/api/availableLanguages');
     return json;
   } catch (error) {
     console.error(error);
@@ -55,7 +53,7 @@ const Form = (props) => {
 
   const fetchJudgeResult = async (solutionKey) => {
     console.log(solutionKey);
-    const solutionInfo = await fetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
     const { testcaseHitCount, testcaseSize } = solutionInfo;
     setProgress((testcaseHitCount / testcaseSize) * 100);
 
@@ -117,7 +115,7 @@ const Form = (props) => {
 
               setOpen(true);
 
-              const solution = await fetchAndJson(`${serverAddress}/api/solutions`, {
+              const solution = await fetchAndJson('/api/solutions', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

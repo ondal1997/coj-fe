@@ -19,15 +19,13 @@ const StyledContainer = withStyles({
   },
 })(Container);
 
-const serverAddress = 'http://192.168.0.100:3000';
-
 const SolutionDetailApp = (props) => {
   const { solutionKey } = props.match.params;
   const [solution, setSolution] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchSolutions = async () => {
-    const solutionInfo = await fetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
     setSolution(solutionInfo);
     setIsLoaded(true);
     console.log(solutionInfo);

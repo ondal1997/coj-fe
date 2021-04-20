@@ -10,8 +10,6 @@ import MyEditor from './MyEditor';
 import { fetchAndJson } from '../OurLink';
 import './reset.css';
 
-const serverAddress = 'http://192.168.0.100:3000';
-
 const StyledButton = withStyles({
   root: {
     color: 'white',
@@ -143,7 +141,7 @@ const Form = (props) => {
       outputDescription,
     };
 
-    await fetchAndJson(`${serverAddress}/api/problems`, {
+    await fetchAndJson('/api/problems', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -152,10 +150,10 @@ const Form = (props) => {
   };
 
   useEffect(async () => {
-    const loginData = await fetchAndJson(`${serverAddress}/api/auth`);
+    const loginData = await fetchAndJson('/api/auth');
     console.log(loginData);
     if (!loginData.isAuthenticated) {
-      window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+      window.location.href = 'https://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
     } else {
       setIsLoaded(true);
     }
