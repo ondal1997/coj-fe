@@ -72,6 +72,8 @@ const Form = (props) => {
 
   const [hashtags, setHashtags] = useState([]);
 
+  const [error, setError] = useState(null);
+
   const { title, timeLimit, memoryLimit } = inputs;
 
   const inputsRef = useRef([]);
@@ -143,11 +145,30 @@ const Form = (props) => {
       outputDescription,
     };
 
-    await ourFetchAndJson(`${serverAddress}/api/problems`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    try {
+      const result = await ourFetchAndJson(`${serverAddress}/api/problems`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      switch (result.status) {
+        case 200:
+          break;
+        case 401:
+        case 403:
+        case 404:
+          setError({ status: result.status });
+          return;
+        default:
+          setError({ status: 500 });
+          return;
+      }
+    } catch (err) {
+      console.log(err);
+      setIsLoaded(true);
+      setError({ status: 500 });
+      return;
+    }
     ourHref('/problems', props.history);
   };
 
@@ -157,9 +178,33 @@ const Form = (props) => {
     if (!loginData.isAuthenticated) {
       window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
     } else {
-      setIsLoaded(true);
+      let result;
+      try {
+        setIsLoaded(true);
+        switch (result.status) {
+          case 200:
+            break;
+          case 401:
+          case 403:
+          case 404:
+            setError({ status: result.status });
+            return;
+          default:
+            setError({ status: 500 });
+            return;
+        }
+      } catch (err) {
+        console.log(err);
+        setIsLoaded(true);
+        setError({ status: 500 });
+        return;
+      }
     }
   }, []);
+
+  if (error) {
+    return <Error error={error} />;
+  }
 
   if (!isLoaded) {
     return <div>Loading...</div>;

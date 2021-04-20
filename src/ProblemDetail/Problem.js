@@ -25,7 +25,7 @@ import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
 import { OurLink, ourHref, ourFetchAndJson } from '../OurLink';
-import { insertNextline } from './utils';
+import Error from '../Error/Error';
 import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -99,8 +99,10 @@ const Problem = (props) => {
 
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isOwners, setIsOwners] = useState(true);
+  const isOwners = true;
+  // const [isOwners, setIsOwners] = useState(true);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -112,36 +114,38 @@ const Problem = (props) => {
     setOpen(false);
   };
 
-  const fetchProblem = async () => {
-    console.log(problemKey);
+  const fetchProblem = async () => { // 본인인지 확인하는 구문
     try {
-      const fetchedProblem = await ourFetchAndJson(
+      const result = await ourFetchAndJson(
         `${serverAddress}/api/problems/${problemKey}`,
       );
       // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
-      if (!fetchedProblem) {
-        console.log('문제 history');
-        console.log(props.history);
+      if (result.status === 200) {
+        setProblem(result.problem);
+        setIsLoaded(true);
+      } else if (result.status === 404) {
         alert('삭제되었거나 없는 문제입니다.');
         ourHref('/problems', props.history);
-        // props.history.go(1);
       } else {
         // 현재 사용자가 누군지 정보를..
         // ownerId와 현재 사용자 아이디가 같으면
-        // setIsOwners
-        setProblem(fetchedProblem);
-        setIsLoaded(true);
-        insertNextline();
+        // setIsOwners(true);
+        setError({ status: result.status });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError({ status: 500 });
     }
   };
 
   useEffect(() => {
-    setIsOwners(true); // 접속자의 아이디와 제출자의 아이디의 동일 여부에 따라
+    // setIsOwners(true); // 접속자의 아이디와 제출자의 아이디의 동일 여부에 따라
     fetchProblem();
   }, []);
+
+  if (error) {
+    return <Error error={error}/>;
+  }
 
   return isLoaded ? (
     <StyledGrid container direction="column" spacing={3}>
@@ -169,14 +173,23 @@ const Problem = (props) => {
                   <Button onClick={() => {
                     handleClose();
                     (async () => {
-                      await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
-                        method: 'DELETE',
-                      });
-                      console.log('삭제');
-                      ourHref('/problems', props.history);
+                      setIsLoaded(true);
+                      try {
+                        const result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=손님`, {
+                          method: 'DELETE',
+                        });
+                        // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
+                        if (result.status === 200) {
+                          ourHref('/problems', props.history);
+                        } else {
+                          setError({ status: result.status });
+                          return;
+                        }
+                      } catch (err) {
+                        console.error(err);
+                        setError({ status: 500 });
+                      }
                     })();
-                    // console.log('삭제');
-                    // ourHref('/problems', props.history);
                     // 뒤로가기 할 때 없는 문제임을 처리해야함.
                   }} color="primary">
                     삭제

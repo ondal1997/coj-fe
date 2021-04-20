@@ -5,6 +5,7 @@ import { Radio, InputAdornment, TextField, Chip, Grid, Table, TableBody, TableCe
 import { Search, DoneOutline, PriorityHigh } from '@material-ui/icons';
 import { ourFetchAndJson, ourHref } from '../OurLink';
 import { serverAddress } from '../config';
+import Error from '../Error/Error';
 
 const validatePositiveInteger = (anything) => {
   const parsedNumber = Number.parseInt(anything, 10);
@@ -31,12 +32,16 @@ const ProblemListApp = (props) => {
       let result;
       try {
         result = await ourFetchAndJson(`${serverAddress}/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
+        if (result.status !== 200) {
+          setIsLoaded(true);
+          setError({ status: result.status });
+          return;
+        }
       } catch (err) {
         setIsLoaded(true);
-        setError(err);
+        setError({ status: 500 });
         return;
       }
-      console.log(result.problems);
       setIsLoaded(true);
       setProblems(result.problems);
       setTotalCount(result.totalCount);
@@ -46,7 +51,7 @@ const ProblemListApp = (props) => {
   }, [props]);
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <Error error={error}/>;
   }
 
   if (!isLoaded) {

@@ -8,6 +8,7 @@ import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
 import { ourHref, ourFetchAndJson } from '../OurLink';
+import Error from '../Error/Error';
 import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -68,6 +69,7 @@ const Form = (props) => {
   ]);
   const [testcases, setTestcases] = useState([]);
   const [hashtags, setHashtags] = useState([]);
+  const [error, setError] = useState(null);
 
   const { title, timeLimit, memoryLimit } = inputs;
 
@@ -142,40 +144,82 @@ const Form = (props) => {
     // update method
     // 수정 시 정상적으로 연결 중인지도 같이 응답받고,
     // 로그인이 필요하면 로그인 창으로 이동
-    await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    let result;
+    try {
+      result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=ondal1997`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      switch (result.status) {
+        case 200:
+          break;
+        case 401:
+        case 403:
+        case 404:
+          setError({ status: result.status });
+          return;
+        default:
+          setError({ status: 500 });
+          return;
+      }
+    } catch (err) {
+      console.log(err);
+      setIsLoaded(true);
+      setError({ status: 500 });
+      return;
+    }
     ourHref('/problems', props.history);
   };
 
   useEffect(async () => {
     if (isLoaded) {
-      // 데이터 로딩
-      console.log(problemKey);
-      console.log(problem);
-      // problem이 undefined
-      // isLoaded 다시 확인,,ㅠ
       inputsRef.current[0].current.value = problem.title;
       inputsRef.current[1].current.value = problem.timeLimit;
       inputsRef.current[2].current.value = problem.memoryLimit;
-      // setTestcases([]);
+      setInputs({
+        title: problem.title,
+        timeLimit: problem.timeLimit,
+        memoryLimit: problem.memoryLimit,
+      });
+      setDescription(problem.description);
+      setInputDescription(problem.inputDescription || '');
+      setOutputDescription(problem.outputDescription || '');
+      setHashtags(problem.categories);
+      setExamples(problem.examples);
+      setTestcases(problem.testcases);
     } else {
-      // get problem
-      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=ondal1997`);
-      console.log(fetchedProblem);
-      setIsLoaded(true);
-      setProblem(fetchedProblem);
-      setDescription(fetchedProblem.description);
-      setInputDescription(fetchedProblem.inputDescription);
-      setOutputDescription(fetchedProblem.outputDescription);
-      setHashtags(fetchedProblem.categories);
-      setExamples(fetchedProblem.examples);
-      setTestcases([]);
-      // setTestcases(fetchedProblem.testcases);
+      let result;
+      try {
+        result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}/all?userId=ondal1997`);
+
+        setIsLoaded(true);
+        switch (result.status) {
+          case 200:
+            break;
+          case 401: // 로그인 페이지 전환
+          case 403: // reload
+          case 404:
+            setError({ status: result.status });
+            return;
+          default:
+            setError({ status: 500 });
+            return;
+        }
+      } catch (err) {
+        console.log(err);
+        setIsLoaded(true);
+        setError({ status: 500 });
+        return;
+      }
+      setProblem(result.problem);
     }
-  }, [isLoaded, problem]);
+  }, [problem]);
+
+  if (error) {
+    return <Error error={error} />;
+  }
 
   if (!isLoaded) {
     return <div>Loading...</div>;
