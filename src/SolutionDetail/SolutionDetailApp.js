@@ -53,11 +53,11 @@ const SolutionDetailApp = (props) => {
           <SolutionInform solution={solution}/>
         </Grid>
         <Grid item>
-        <Typography variant='h3'>
+          <Typography variant='h3'>
             제출 코드
           </Typography>
           <StyledContainer>
-            <CodeViewer code={solution.sourceCode} />
+            <CodeViewer code={solution.sourceCode || '이 정보를 조회할 수 있는 조건이 만족되지 않았습니다.'} />
           </StyledContainer>
         </Grid>
         {(() => {
@@ -69,7 +69,7 @@ const SolutionDetailApp = (props) => {
                   <Paper elevation={0}
                     style={{ backgroundColor: '#F8F8F8', padding: '10px', fontSize: 'large' }}>
                     <pre>
-                      {solution.judgeError}
+                      {solution.judgeError || '이 정보를 조회할 수 있는 조건이 만족되지 않았습니다.'}
                     </pre>
                   </Paper>
                   </Grid>);
