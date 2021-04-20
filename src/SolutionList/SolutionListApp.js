@@ -5,6 +5,8 @@ import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, T
 import styled from 'styled-components';
 import { fetchAndJson } from '../OurLink';
 import judgeState from './judgeState';
+import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 
 const StyledState = styled.span`
   font-weight: 600;
@@ -39,25 +41,20 @@ const SolutionListApp = (props) => {
 
   useEffect(() => {
     (async () => {
-      let result;
-      try {
-        result = await fetchAndJson(`/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
-      } catch (err) {
+      const result = await fetchAndJson(`/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
+      console.log(result);
+      _handleFetchRes(result.status, setError, () => {
         setIsLoaded(true);
-        setError(err);
-        return;
-      }
-      console.log(result.solutions);
-      setIsLoaded(true);
-      setSolutions(result.solutions);
-      setTotalCount(result.totalCount);
+        setSolutions(result.solutions);
+        setTotalCount(result.totalCount);
 
-      window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
+      });
     })();
   }, [props]);
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <Error error={error} />;
   }
 
   if (!isLoaded) {

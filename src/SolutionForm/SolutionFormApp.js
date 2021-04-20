@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { fetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 import JudgeProgress from './JudgeProgress';
+import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 
 const StyledGrid = withStyles({
   root: {
@@ -51,13 +53,14 @@ const Form = (props) => {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const [error, setError] = useState(null);
+
   const fetchJudgeResult = async (solutionKey) => {
-    console.log(solutionKey);
-    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
-    const { testcaseHitCount, testcaseSize } = solutionInfo;
+    const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
+    const { testcaseHitCount, testcaseSize } = result.solution;
     setProgress((testcaseHitCount / testcaseSize) * 100);
 
-    if (solutionInfo.state > 1) {
+    if (result.solution.state > 1) {
       setTimeout(() => {
         setOpen(false);
         history.push(`/solutions/${problemKey}/${problemTitle}/1`);
@@ -80,6 +83,10 @@ const Form = (props) => {
       setIsLoaded(true);
     })();
   }, []);
+
+  if (error) {
+    <Error error={error}/>;
+  }
 
   return (
     <StyledGrid container direction='column' spacing={3}>
@@ -123,9 +130,7 @@ const Form = (props) => {
                 return;
               }
 
-              setOpen(true);
-
-              const solution = await fetchAndJson('/api/solutions', {
+              const result = await fetchAndJson('/api/solutions', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -137,7 +142,10 @@ const Form = (props) => {
                 }),
               });
 
-              fetchJudgeResult(solution.key);
+              _handleFetchRes(result.status, setError, () => {
+                setOpen(true);
+                fetchJudgeResult(result.solution.key);
+              });
             }}>
             풀이 제출하기
             </StyledButton>

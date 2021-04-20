@@ -26,6 +26,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
 import { OurLink, fetchAndJson } from '../OurLink';
 import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 import './reset.css';
 
 const pColor = '#F8F8F8';
@@ -114,28 +115,15 @@ const Problem = (props) => {
   const fetchProblem = async () => { // 본인인지 확인하는 구문
     const result = await fetchAndJson(`/api/problems/${problemKey}`);
 
-    switch (result.status) {
-      case 200:
-        break;
-      case 404:
-        alert('삭제되었거나 없는 문제입니다.');
-        props.history.push('/problems');
-        return;
-      case 403: // 로그아웃 된 상태
-      case 500:
-        setError({ status: result.status });
-        return;
-      default: // 알 수 없는 에러
-        setError({ status: -1 });
-        return;
-    }
-    const loginData = await fetchAndJson('/api/auth');
-    // ownerId와 현재 사용자 아이디가 같으면
-    if (loginData.id === result.problem.ownerId) {
-      setIsOwners(true);
-    }
-    setProblem(result.problem);
-    setIsLoaded(true);
+    _handleFetchRes(result.status, setError, async () => {
+      const loginData = await fetchAndJson('/api/auth');
+      // ownerId와 현재 사용자 아이디가 같으면
+      if (loginData.id === result.problem.ownerId) {
+        setIsOwners(true);
+      }
+      setProblem(result.problem);
+      setIsLoaded(true);
+    });
   };
 
   useEffect(() => {
@@ -173,25 +161,13 @@ const Problem = (props) => {
                   <Button onClick={() => {
                     handleClose();
                     (async () => {
-                      setIsLoaded(true);
                       const result = await fetchAndJson(`/api/problems/${problemKey}`, {
                         method: 'DELETE',
                       });
-
-                      switch (result.status) {
-                        case 200:
-                          break;
-                        case 401:
-                        case 403: // 로그아웃 된 상태
-                        case 404:
-                        case 500:
-                          setError({ status: result.status });
-                          return;
-                        default: // 알 수 없는 에러
-                          setError({ status: -1 });
-                          return;
-                      }
-                      props.history.push('/problems');
+                      console.log(result);
+                      _handleFetchRes(result.status, setError, () => {
+                        props.history.push('/problems');
+                      });
                     })();
                     // 뒤로가기 할 때 없는 문제임을 처리해야함.
                   }} color="primary">

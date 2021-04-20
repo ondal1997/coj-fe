@@ -10,6 +10,8 @@ import SolutionInform from './SolutionInform';
 import 'codemirror/keymap/sublime';
 import { fetchAndJson } from '../OurLink';
 import judgeState from '../SolutionList/judgeState';
+import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 
 const StyledContainer = withStyles({
   root: {
@@ -21,38 +23,24 @@ const StyledContainer = withStyles({
 
 const SolutionDetailApp = (props) => {
   const { solutionKey } = props.match.params;
-  const [solution, setSolution] = useState({});
+  const [solution, setSolution] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchSolutions = async () => {
-    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
-    setSolution(solutionInfo);
-    setIsLoaded(true);
-    console.log(solutionInfo);
+    const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
 
-    // const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
-
-    // switch (result.status) {
-    //   case 200:
-    //     break;
-    //   case 401:
-    //   case 403: // 로그아웃 된 상태
-    //   case 404:
-    //   case 500:
-    //     setError({ status: result.status });
-    //     return;
-    //   default: // 알 수 없는 에러
-    //     setError({ status: -1 });
-    //     return;
-    // }
-
-    // setIsLoaded(true);
-    // setSolution(solution);
+    _handleFetchRes(result.status, setError, () => {
+      setSolution(result.solution);
+      setIsLoaded(true);
+    });
   };
 
   useEffect(() => {
     fetchSolutions();
   }, []);
+
+  if (error) <Error error={error}/>;
 
   return isLoaded
     ? (<Grid container direction='column' spacing={3} style={{ padding: '0 15%' }}>
