@@ -19,6 +19,10 @@ const errorMessage = [
     statusCode: 500,
     message: 'Internal server error',
   },
+  {
+    statusCode: -1,
+    message: 'Uncaught error',
+  },
 ];
 
 export default errorMessage;
