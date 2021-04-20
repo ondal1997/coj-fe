@@ -174,7 +174,7 @@ const Form = (props) => {
     const loginData = await fetchAndJson('/api/auth');
     console.log(loginData);
     if (!loginData.isAuthenticated) {
-      window.location.href = 'https://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+      window.location.replace('https://codersit.co.kr/bbs/login.php?url=%2Foj/new');
       return;
     }
     setIsLoaded(true);
