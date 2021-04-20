@@ -28,20 +28,12 @@ const SolutionDetailApp = (props) => {
   const [error, setError] = useState(null);
 
   const fetchSolutions = async () => {
-<<<<<<< HEAD
-    const solutionInfo = (await fetchAndJson(`/api/solutions/${solutionKey}`)).solution;
-    setSolution(solutionInfo);
-    setIsLoaded(true);
-    console.log(solutionInfo);
-    // 이렇게 연속으로 setState할 때 rerendering 문제 다시 잘 생각해보기
-=======
     const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
 
     _handleFetchRes(result.status, setError, () => {
       setSolution(result.solution);
       setIsLoaded(true);
     });
->>>>>>> b77d0dd9b5ca6fb115a9d28fa6fea6823cf48aa1
   };
 
   useEffect(() => {

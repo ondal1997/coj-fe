@@ -56,14 +56,8 @@ const Form = (props) => {
   const [error, setError] = useState(null);
 
   const fetchJudgeResult = async (solutionKey) => {
-<<<<<<< HEAD
-    console.log(solutionKey);
-    const solutionInfo = (await fetchAndJson(`/api/solutions/${solutionKey}`)).solution;
-    const { testcaseHitCount, testcaseSize } = solutionInfo;
-=======
     const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
     const { testcaseHitCount, testcaseSize } = result.solution;
->>>>>>> b77d0dd9b5ca6fb115a9d28fa6fea6823cf48aa1
     setProgress((testcaseHitCount / testcaseSize) * 100);
 
     if (result.solution.state > 1) {
