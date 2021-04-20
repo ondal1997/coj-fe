@@ -10,6 +10,7 @@ import SolutionFormApp from './SolutionForm/SolutionFormApp';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
 import ProblemUpdateApp from './ProblemUpdate/ProblemFormApp';
+import Error from './Error/Error';
 
 const theme = createMuiTheme({
   palette: {
@@ -35,6 +36,9 @@ const App = () => (
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
 
           <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
+          <Route render={({ location }) => (
+            <Error error={{ status: 404 }} path={location.pathname}/>
+          )} />
         </Switch>
       </Router>
     </SnackbarProvider>
