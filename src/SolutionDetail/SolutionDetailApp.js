@@ -29,7 +29,25 @@ const SolutionDetailApp = (props) => {
     setSolution(solutionInfo);
     setIsLoaded(true);
     console.log(solutionInfo);
-    // 이렇게 연속으로 setState할 때 rerendering 문제 다시 잘 생각해보기
+
+    // const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
+
+    // switch (result.status) {
+    //   case 200:
+    //     break;
+    //   case 401:
+    //   case 403: // 로그아웃 된 상태
+    //   case 404:
+    //   case 500:
+    //     setError({ status: result.status });
+    //     return;
+    //   default: // 알 수 없는 에러
+    //     setError({ status: -1 });
+    //     return;
+    // }
+
+    // setIsLoaded(true);
+    // setSolution(solution);
   };
 
   useEffect(() => {

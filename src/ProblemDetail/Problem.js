@@ -112,29 +112,30 @@ const Problem = (props) => {
   };
 
   const fetchProblem = async () => { // 본인인지 확인하는 구문
-    try {
-      const result = await fetchAndJson(`/api/problems/${problemKey}`);
-      // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
-      if (result.status === 200) {
-        // 현재 사용자가 누군지 정보를..
-        const loginData = await fetchAndJson('/api/auth');
-        // ownerId와 현재 사용자 아이디가 같으면
-        if (loginData.id === result.problem.ownerId) {
-          setIsOwners(true);
-        }
-        setProblem(result.problem);
-        setIsLoaded(true);
-      } else if (result.status === 404) {
+    const result = await fetchAndJson(`/api/problems/${problemKey}`);
+
+    switch (result.status) {
+      case 200:
+        break;
+      case 404:
         alert('삭제되었거나 없는 문제입니다.');
         props.history.push('/problems');
-        // props.history.go(1);
-      } else {
+        return;
+      case 403: // 로그아웃 된 상태
+      case 500:
         setError({ status: result.status });
-      }
-    } catch (err) {
-      console.error(err);
-      setError({ status: 500 });
+        return;
+      default: // 알 수 없는 에러
+        setError({ status: -1 });
+        return;
     }
+    const loginData = await fetchAndJson('/api/auth');
+    // ownerId와 현재 사용자 아이디가 같으면
+    if (loginData.id === result.problem.ownerId) {
+      setIsOwners(true);
+    }
+    setProblem(result.problem);
+    setIsLoaded(true);
   };
 
   useEffect(() => {
@@ -173,21 +174,24 @@ const Problem = (props) => {
                     handleClose();
                     (async () => {
                       setIsLoaded(true);
-                      try {
-                        const result = await fetchAndJson(`/api/problems/${problemKey}`, {
-                          method: 'DELETE',
-                        });
-                        // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
-                        if (result.status === 200) {
-                          props.history.push('/problems');
-                        } else {
+                      const result = await fetchAndJson(`/api/problems/${problemKey}`, {
+                        method: 'DELETE',
+                      });
+
+                      switch (result.status) {
+                        case 200:
+                          break;
+                        case 401:
+                        case 403: // 로그아웃 된 상태
+                        case 404:
+                        case 500:
                           setError({ status: result.status });
                           return;
-                        }
-                      } catch (err) {
-                        console.error(err);
-                        setError({ status: 500 });
+                        default: // 알 수 없는 에러
+                          setError({ status: -1 });
+                          return;
                       }
+                      props.history.push('/problems');
                     })();
                     // 뒤로가기 할 때 없는 문제임을 처리해야함.
                   }} color="primary">
