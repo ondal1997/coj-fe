@@ -45,9 +45,13 @@ const fetchAndJson = async (url, meta) => {
     return json;
   }
 
-  const res = await fetch(`http://192.168.0.100:3000${url}${(url.includes('?') ? '&' : '?')}userId=ondal1997`, meta);
-  const json = await res.json();
-  return json;
+  try {
+    const res = await fetch(`http://192.168.0.100:3000${url}${(url.includes('?') ? '&' : '?')}userId=`, meta);
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    return { status: 500 };
+  }
 };
 
 export { OurLink, fetchAndJson };
