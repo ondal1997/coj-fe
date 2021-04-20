@@ -69,8 +69,13 @@ const Form = (props) => {
 
   useEffect(() => {
     (async () => {
+      const loginData = await fetchAndJson('/api/auth');
+      console.log(loginData);
+      if (!loginData.isAuthenticated) {
+        window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problemTitle}`;
+        return;
+      }
       const fetchedLanguages = await fetchLanguages();
-
       setLanguages(fetchedLanguages);
       setIsLoaded(true);
     })();

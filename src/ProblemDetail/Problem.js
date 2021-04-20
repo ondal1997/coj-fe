@@ -272,7 +272,7 @@ const Problem = (props) => {
               {/* <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}> */}
                 <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
-                  window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problem.title}`;
+                  props.history.push(`/solutionForm/${problemKey}/${problem.title}`);
                 }
                 }>
                   문제 풀기

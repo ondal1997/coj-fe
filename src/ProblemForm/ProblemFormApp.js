@@ -175,29 +175,9 @@ const Form = (props) => {
     console.log(loginData);
     if (!loginData.isAuthenticated) {
       window.location.href = 'https://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
-    } else {
-      let result;
-      try {
-        setIsLoaded(true);
-        switch (result.status) {
-          case 200:
-            break;
-          case 401:
-          case 403:
-          case 404:
-            setError({ status: result.status });
-            return;
-          default:
-            setError({ status: 500 });
-            return;
-        }
-      } catch (err) {
-        console.log(err);
-        setIsLoaded(true);
-        setError({ status: 500 });
-        return;
-      }
+      return;
     }
+    setIsLoaded(true);
   }, []);
 
   if (error) {
