@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import CodeViewer from './CodeViewer';
 import SolutionInform from './SolutionInform';
 import 'codemirror/keymap/sublime';
-import { ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import judgeState from '../SolutionList/judgeState';
 
 const StyledContainer = withStyles({
@@ -27,7 +27,7 @@ const SolutionDetailApp = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchSolutions = async () => {
-    const solutionInfo = await ourFetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    const solutionInfo = await fetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
     setSolution(solutionInfo);
     setIsLoaded(true);
     console.log(solutionInfo);

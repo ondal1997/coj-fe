@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Grid, FormControlLabel,
   FormLabel, RadioGroup, Radio, Backdrop } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 import JudgeProgress from './JudgeProgress';
 
@@ -32,7 +32,7 @@ const serverAddress = 'http://192.168.0.100:3000';
 
 const fetchLanguages = async () => {
   try {
-    const json = await ourFetchAndJson(`${serverAddress}/api/availableLanguages`);
+    const json = await fetchAndJson(`${serverAddress}/api/availableLanguages`);
     return json;
   } catch (error) {
     console.error(error);
@@ -55,7 +55,7 @@ const Form = (props) => {
 
   const fetchJudgeResult = async (solutionKey) => {
     console.log(solutionKey);
-    const solutionInfo = await ourFetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    const solutionInfo = await fetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
     const { testcaseHitCount, testcaseSize } = solutionInfo;
     setProgress((testcaseHitCount / testcaseSize) * 100);
 
@@ -117,7 +117,7 @@ const Form = (props) => {
 
               setOpen(true);
 
-              const solution = await ourFetchAndJson(`${serverAddress}/api/solutions`, {
+              const solution = await fetchAndJson(`${serverAddress}/api/solutions`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

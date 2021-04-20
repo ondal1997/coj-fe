@@ -24,7 +24,7 @@ const OurLink = (props) => {
   );
 };
 
-const ourFetchAndJson = async (url, meta) => {
+const fetchAndJson = async (url, meta) => {
   if (isProductionMode) {
     meta = meta || { method: 'GET' };
 
@@ -50,4 +50,4 @@ const ourFetchAndJson = async (url, meta) => {
   return json;
 };
 
-export { OurLink, ourFetchAndJson };
+export { OurLink, fetchAndJson };

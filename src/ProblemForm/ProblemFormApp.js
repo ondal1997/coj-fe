@@ -7,7 +7,7 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
-import { ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -143,7 +143,7 @@ const Form = (props) => {
       outputDescription,
     };
 
-    await ourFetchAndJson(`${serverAddress}/api/problems`, {
+    await fetchAndJson(`${serverAddress}/api/problems`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -152,7 +152,7 @@ const Form = (props) => {
   };
 
   useEffect(async () => {
-    const loginData = await ourFetchAndJson(`${serverAddress}/api/auth`);
+    const loginData = await fetchAndJson(`${serverAddress}/api/auth`);
     console.log(loginData);
     if (!loginData.isAuthenticated) {
       window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';

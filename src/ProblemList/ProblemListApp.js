@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import { Pagination } from '@material-ui/lab';
 import { Radio, InputAdornment, TextField, Chip, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Search, DoneOutline, PriorityHigh } from '@material-ui/icons';
-import { ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 
 const validatePositiveInteger = (anything) => {
   const parsedNumber = Number.parseInt(anything, 10);
@@ -29,7 +29,7 @@ const ProblemListApp = (props) => {
     (async () => {
       let result;
       try {
-        result = await ourFetchAndJson(`/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
+        result = await fetchAndJson(`/api/problems?${queryString.stringify({ ...query, pos: (page - 1) * limitCount, count: limitCount })}`);
       } catch (err) {
         setIsLoaded(true);
         setError(err);

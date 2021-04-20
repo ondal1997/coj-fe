@@ -7,7 +7,7 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
-import { ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -142,7 +142,7 @@ const Form = (props) => {
     // update method
     // 수정 시 정상적으로 연결 중인지도 같이 응답받고,
     // 로그인이 필요하면 로그인 창으로 이동
-    await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
+    await fetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -163,7 +163,7 @@ const Form = (props) => {
       // setTestcases([]);
     } else {
       // get problem
-      const fetchedProblem = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=ondal1997`);
+      const fetchedProblem = await fetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=ondal1997`);
       console.log(fetchedProblem);
       setIsLoaded(true);
       setProblem(fetchedProblem);

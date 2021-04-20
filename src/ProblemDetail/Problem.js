@@ -24,7 +24,7 @@ import {
 import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
-import { OurLink, ourFetchAndJson } from '../OurLink';
+import { OurLink, fetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
 import './reset.css';
 
@@ -115,7 +115,7 @@ const Problem = (props) => {
   const fetchProblem = async () => {
     console.log(problemKey);
     try {
-      const fetchedProblem = await ourFetchAndJson(
+      const fetchedProblem = await fetchAndJson(
         `${serverAddress}/api/problems/${problemKey}`,
       );
       // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
@@ -169,7 +169,7 @@ const Problem = (props) => {
                   <Button onClick={() => {
                     handleClose();
                     (async () => {
-                      await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
+                      await fetchAndJson(`${serverAddress}/api/problems/${problemKey}`, {
                         method: 'DELETE',
                       });
                       console.log('삭제');
