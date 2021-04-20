@@ -25,7 +25,7 @@ const SolutionDetailApp = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchSolutions = async () => {
-    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
+    const solutionInfo = (await fetchAndJson(`/api/solutions/${solutionKey}`)).solution;
     setSolution(solutionInfo);
     setIsLoaded(true);
     console.log(solutionInfo);
@@ -52,27 +52,33 @@ const SolutionDetailApp = (props) => {
           </Typography>
           <SolutionInform solution={solution}/>
         </Grid>
+        {
+          solution.sourceCode && (
         <Grid item>
           <Typography variant='h3'>
             제출 코드
           </Typography>
           <StyledContainer>
-            <CodeViewer code={solution.sourceCode || '이 정보를 조회할 수 있는 조건이 만족되지 않았습니다.'} />
+            <CodeViewer code={solution.sourceCode} />
           </StyledContainer>
         </Grid>
+          )
+        }
         {(() => {
           if (solution.state === '6' || solution.state === '7') {
-            return (<Grid item>
+            if (solution.judgeError) {
+              return (<Grid item>
                   <Typography variant='h6' style={{ color: '#858585' }}>
                     {judgeState[parseInt(solution.state, 10)].name}
                   </Typography>
                   <Paper elevation={0}
                     style={{ backgroundColor: '#F8F8F8', padding: '10px', fontSize: 'large' }}>
                     <pre>
-                      {solution.judgeError || '이 정보를 조회할 수 있는 조건이 만족되지 않았습니다.'}
+                      {solution.judgeError}
                     </pre>
                   </Paper>
                   </Grid>);
+            }
           }
           return null;
         })()

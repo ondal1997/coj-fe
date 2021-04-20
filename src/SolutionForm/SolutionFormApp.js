@@ -53,7 +53,7 @@ const Form = (props) => {
 
   const fetchJudgeResult = async (solutionKey) => {
     console.log(solutionKey);
-    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
+    const solutionInfo = (await fetchAndJson(`/api/solutions/${solutionKey}`)).solution;
     const { testcaseHitCount, testcaseSize } = solutionInfo;
     setProgress((testcaseHitCount / testcaseSize) * 100);
 
@@ -125,7 +125,7 @@ const Form = (props) => {
 
               setOpen(true);
 
-              const solution = await fetchAndJson('/api/solutions', {
+              const result = await fetchAndJson('/api/solutions', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ const Form = (props) => {
                 }),
               });
 
-              fetchJudgeResult(solution.key);
+              fetchJudgeResult(result.solution.key);
             }}>
             풀이 제출하기
             </StyledButton>
