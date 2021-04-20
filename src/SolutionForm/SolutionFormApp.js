@@ -118,6 +118,11 @@ const Form = (props) => {
                 return;
               }
 
+              if (!sourceCode) {
+                alert('코드를 입력해주세요');
+                return;
+              }
+
               setOpen(true);
 
               const solution = await fetchAndJson('/api/solutions', {
