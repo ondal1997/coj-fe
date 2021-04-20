@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import CodeViewer from './CodeViewer';
 import SolutionInform from './SolutionInform';
 import 'codemirror/keymap/sublime';
-import { ourHref, ourFetchAndJson } from '../OurLink';
+import { ourFetchAndJson } from '../OurLink';
 import judgeState from '../SolutionList/judgeState';
 
 const StyledContainer = withStyles({
@@ -43,7 +43,7 @@ const SolutionDetailApp = (props) => {
         <Grid container item direction='row' justify='flex-end'>
           <Grid item>
             <Button color='primary' variant='outlined' size='large'
-              onClick={() => { ourHref(`/problem/${solution.problemKey}`, props.history); }}>
+              onClick={() => { props.history.push(`/problem/${solution.problemKey}`); }}>
             문제로 이동
             </Button>
           </Grid>

@@ -69,7 +69,7 @@ const MyEditor = ({ value, onChange }) => {
   return (
     <>
       <CKEditor
-        height={500}
+        // height={500}
         editor={ClassicEditor}
         config={editorConfiguration}
         // data={value}

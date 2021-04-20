@@ -24,7 +24,7 @@ import {
 import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
-import { OurLink, ourHref, ourFetchAndJson } from '../OurLink';
+import { OurLink, ourFetchAndJson } from '../OurLink';
 import { insertNextline } from './utils';
 import './reset.css';
 
@@ -123,7 +123,7 @@ const Problem = (props) => {
         console.log('문제 history');
         console.log(props.history);
         alert('삭제되었거나 없는 문제입니다.');
-        ourHref('/problems', props.history);
+        props.history.push('/problems');
         // props.history.go(1);
       } else {
         // 현재 사용자가 누군지 정보를..
@@ -173,10 +173,10 @@ const Problem = (props) => {
                         method: 'DELETE',
                       });
                       console.log('삭제');
-                      ourHref('/problems', props.history);
+                      props.history.push('/problems');
                     })();
                     // console.log('삭제');
-                    // ourHref('/problems', props.history);
+                    // props.history.push('/problems');
                     // 뒤로가기 할 때 없는 문제임을 처리해야함.
                   }} color="primary">
                     삭제

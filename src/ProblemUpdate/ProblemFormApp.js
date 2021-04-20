@@ -7,7 +7,7 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
-import { ourHref, ourFetchAndJson } from '../OurLink';
+import { ourFetchAndJson } from '../OurLink';
 import './reset.css';
 
 const serverAddress = 'http://192.168.0.100:3000';
@@ -147,7 +147,7 @@ const Form = (props) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    ourHref('/problems', props.history);
+    props.history.push('/problems');
   };
 
   useEffect(async () => {

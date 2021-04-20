@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import { Pagination } from '@material-ui/lab';
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import styled from 'styled-components';
-import { ourFetchAndJson, ourHref } from '../OurLink';
+import { ourFetchAndJson } from '../OurLink';
 import { serverAddress } from '../config';
 import judgeState from './judgeState';
 
@@ -42,7 +42,7 @@ const SolutionListApp = (props) => {
     (async () => {
       let result;
       try {
-        result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
+        result = await ourFetchAndJson(`/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
       } catch (err) {
         setIsLoaded(true);
         setError(err);
@@ -76,7 +76,7 @@ const SolutionListApp = (props) => {
               </Grid>
               <Grid item>
                 <Button color='primary' variant='outlined'
-                  onClick={() => { ourHref(`/problem/${problemKey}`, props.history); }}
+                  onClick={() => { props.history.push(`/problem/${problemKey}`); }}
                 >
                   문제로 이동
               </Button>
@@ -102,7 +102,7 @@ const SolutionListApp = (props) => {
                     <TableBody>
                       {solutions.map((solution) => (
                         <TableRow hover key={solution.key}
-                          onClick={() => { ourHref(`/solution/${solution.key}`, props.history); }}
+                          onClick={() => { props.history.push(`/solution/${solution.key}`); }}
                         >
                           <TableCell align='center' component='th' scope='row'><strong>{solution.key}</strong></TableCell>
                           <TableCell align='center'><strong>{solution.ownerId}</strong></TableCell>
@@ -143,7 +143,7 @@ const SolutionListApp = (props) => {
                 count={Math.ceil(totalCount / limitCount)}
                 page={Number.parseInt(page, 10)}
                 onChange={(event, p) => {
-                  ourHref(`/solutions/${problemKey}/${problemTitle}/${p}?${queryString.stringify({ ...query, page: p })}`, props.history);
+                  props.history.push(`/solutions/${problemKey}/${problemTitle}/${p}?${queryString.stringify({ ...query, page: p })}`);
                 }}
               />
             </Grid>
@@ -167,7 +167,7 @@ const SolutionListApp = (props) => {
 
             <Grid item>
               <Button color='primary' variant='outlined'
-                onClick={() => { ourHref(`/problem/${problemKey}`, props.history); }}
+                onClick={() => { props.history.push(`/problem/${problemKey}`); }}
               >
                 문제로 이동
               </Button>

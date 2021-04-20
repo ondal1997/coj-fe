@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Grid, FormControlLabel,
   FormLabel, RadioGroup, Radio, Backdrop } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { ourHref, ourFetchAndJson } from '../OurLink';
+import { ourFetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 import JudgeProgress from './JudgeProgress';
 
@@ -62,7 +62,7 @@ const Form = (props) => {
     if (solutionInfo.state > 1) {
       setTimeout(() => {
         setOpen(false);
-        ourHref(`/solutions/${problemKey}/${problemTitle}/1`, history);
+        history.push(`/solutions/${problemKey}/${problemTitle}/1`);
       }, 2000);
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
