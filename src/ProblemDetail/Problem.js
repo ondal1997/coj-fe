@@ -24,11 +24,9 @@ import {
 import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
-import { OurLink, ourHref, ourFetchAndJson } from '../OurLink';
+import { OurLink, fetchAndJson } from '../OurLink';
 import Error from '../Error/Error';
 import './reset.css';
-
-const serverAddress = 'http://192.168.0.100:3000';
 
 const pColor = '#F8F8F8';
 
@@ -116,16 +114,15 @@ const Problem = (props) => {
 
   const fetchProblem = async () => { // 본인인지 확인하는 구문
     try {
-      const result = await ourFetchAndJson(
-        `${serverAddress}/api/problems/${problemKey}`,
-      );
+      const result = await fetchAndJson(`/api/problems/${problemKey}`);
       // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
       if (result.status === 200) {
         setProblem(result.problem);
         setIsLoaded(true);
       } else if (result.status === 404) {
         alert('삭제되었거나 없는 문제입니다.');
-        ourHref('/problems', props.history);
+        props.history.push('/problems');
+        // props.history.go(1);
       } else {
         // 현재 사용자가 누군지 정보를..
         // ownerId와 현재 사용자 아이디가 같으면
@@ -175,7 +172,7 @@ const Problem = (props) => {
                     (async () => {
                       setIsLoaded(true);
                       try {
-                        const result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=손님`, {
+                        const result = await fetchAndJson(`/api/problems/${problemKey}`, {
                           method: 'DELETE',
                         });
                         // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
@@ -275,7 +272,7 @@ const Problem = (props) => {
               {/* <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}> */}
                 <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
-                  window.location.href = `http://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problem.title}`;
+                  window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problem.title}`;
                 }
                 }>
                   문제 풀기

@@ -7,11 +7,9 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
-import { ourHref, ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import Error from '../Error/Error';
 import './reset.css';
-
-const serverAddress = 'http://192.168.0.100:3000';
 
 const StyledButton = withStyles({
   root: {
@@ -146,7 +144,7 @@ const Form = (props) => {
     // 로그인이 필요하면 로그인 창으로 이동
     let result;
     try {
-      result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}?userId=ondal1997`, {
+      result = await fetchAndJson(`/api/problems/${problemKey}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -170,7 +168,7 @@ const Form = (props) => {
       setError({ status: 500 });
       return;
     }
-    ourHref('/problems', props.history);
+    props.history.push('/problems');
   };
 
   useEffect(async () => {
@@ -192,7 +190,7 @@ const Form = (props) => {
     } else {
       let result;
       try {
-        result = await ourFetchAndJson(`${serverAddress}/api/problems/${problemKey}/all?userId=ondal1997`);
+        result = await fetchAndJson(`/api/problems/${problemKey}/all`);
 
         setIsLoaded(true);
         switch (result.status) {

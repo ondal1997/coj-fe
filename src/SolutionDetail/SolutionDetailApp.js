@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import CodeViewer from './CodeViewer';
 import SolutionInform from './SolutionInform';
 import 'codemirror/keymap/sublime';
-import { ourHref, ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import judgeState from '../SolutionList/judgeState';
 
 const StyledContainer = withStyles({
@@ -19,15 +19,13 @@ const StyledContainer = withStyles({
   },
 })(Container);
 
-const serverAddress = 'http://192.168.0.100:3000';
-
 const SolutionDetailApp = (props) => {
   const { solutionKey } = props.match.params;
   const [solution, setSolution] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchSolutions = async () => {
-    const solutionInfo = await ourFetchAndJson(`${serverAddress}/api/solutions/${solutionKey}`);
+    const solutionInfo = await fetchAndJson(`/api/solutions/${solutionKey}`);
     setSolution(solutionInfo);
     setIsLoaded(true);
     console.log(solutionInfo);
@@ -43,7 +41,7 @@ const SolutionDetailApp = (props) => {
         <Grid container item direction='row' justify='flex-end'>
           <Grid item>
             <Button color='primary' variant='outlined' size='large'
-              onClick={() => { ourHref(`/problem/${solution.problemKey}`, props.history); }}>
+              onClick={() => { props.history.push(`/problem/${solution.problemKey}`); }}>
             문제로 이동
             </Button>
           </Grid>

@@ -7,10 +7,8 @@ import Testcases from './Testcases';
 import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
-import { ourHref, ourFetchAndJson } from '../OurLink';
+import { fetchAndJson } from '../OurLink';
 import './reset.css';
-
-const serverAddress = 'http://192.168.0.100:3000';
 
 const StyledButton = withStyles({
   root: {
@@ -146,7 +144,7 @@ const Form = (props) => {
     };
 
     try {
-      const result = await ourFetchAndJson(`${serverAddress}/api/problems`, {
+      const result = await fetchAndJson('/api/problems', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -169,14 +167,14 @@ const Form = (props) => {
       setError({ status: 500 });
       return;
     }
-    ourHref('/problems', props.history);
+    props.history.push('/problems');
   };
 
   useEffect(async () => {
-    const loginData = await ourFetchAndJson(`${serverAddress}/api/auth`);
+    const loginData = await fetchAndJson('/api/auth');
     console.log(loginData);
     if (!loginData.isAuthenticated) {
-      window.location.href = 'http://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
+      window.location.href = 'https://codersit.co.kr/bbs/login.php?url=%2Foj/new/';
     } else {
       let result;
       try {
@@ -269,7 +267,7 @@ const Form = (props) => {
         <StyledDivider variant="fullWidth"/>
       </Grid>
       <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
-        <StyledButton onClick={(event) => submit(event)}>확인</StyledButton>
+        <StyledButton onClick={() => submit()}>확인</StyledButton>
       </Grid>
     </Grid>
   </Grid>

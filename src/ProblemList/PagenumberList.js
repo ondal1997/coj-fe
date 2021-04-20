@@ -2,7 +2,6 @@ import React from 'react';
 import { Container, Button, withStyles } from '@material-ui/core';
 import _ from 'lodash';
 import PageKey from './PageKey';
-import { ourHref } from '../OurLink';
 
 const StyledContainer = withStyles({
   root: {
@@ -37,7 +36,7 @@ const PagenumberList = ({ curPage, totalPage, preUrl, history }) => {
   const onMovepage = (page) => {
     if (page === 0 || page === totalPage + 1) return;
 
-    ourHref(`/${preUrl}/${page}`, history);
+    history.push(`/${preUrl}/${page}`);
   };
 
   return <StyledContainer>
