@@ -10,6 +10,7 @@ import MyEditor from './MyEditor';
 import { fetchAndJson } from '../OurLink';
 import Error from '../Error/Error';
 import './reset.css';
+import _handleFetchRes from '../Error/utils';
 
 const StyledButton = withStyles({
   root: {
@@ -142,33 +143,15 @@ const Form = (props) => {
     // update method
     // 수정 시 정상적으로 연결 중인지도 같이 응답받고,
     // 로그인이 필요하면 로그인 창으로 이동
-    let result;
-    try {
-      result = await fetchAndJson(`/api/problems/${problemKey}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+    const result = await fetchAndJson(`/api/problems/${problemKey}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
 
-      switch (result.status) {
-        case 200:
-          break;
-        case 401:
-        case 403:
-        case 404:
-          setError({ status: result.status });
-          return;
-        default:
-          setError({ status: 500 });
-          return;
-      }
-    } catch (err) {
-      console.log(err);
-      setIsLoaded(true);
-      setError({ status: 500 });
-      return;
-    }
-    props.history.push('/problems');
+    _handleFetchRes(result.status, setError, () => {
+      props.history.push('/problems');
+    });
   };
 
   useEffect(async () => {
@@ -188,30 +171,13 @@ const Form = (props) => {
       setExamples(problem.examples);
       setTestcases(problem.testcases);
     } else {
-      let result;
-      try {
-        result = await fetchAndJson(`/api/problems/${problemKey}/all`);
+      const result = await fetchAndJson(`/api/problems/${problemKey}/all`);
+      console.log(result);
 
+      _handleFetchRes(result.status, setError, () => {
         setIsLoaded(true);
-        switch (result.status) {
-          case 200:
-            break;
-          case 401: // 로그인 페이지 전환
-          case 403: // reload
-          case 404:
-            setError({ status: result.status });
-            return;
-          default:
-            setError({ status: 500 });
-            return;
-        }
-      } catch (err) {
-        console.log(err);
-        setIsLoaded(true);
-        setError({ status: 500 });
-        return;
-      }
-      setProblem(result.problem);
+        setProblem(result.problem);
+      });
     }
   }, [problem]);
 

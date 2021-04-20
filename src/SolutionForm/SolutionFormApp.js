@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { fetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 import JudgeProgress from './JudgeProgress';
+import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 
 const StyledGrid = withStyles({
   root: {
@@ -51,13 +53,20 @@ const Form = (props) => {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const [error, setError] = useState(null);
+
   const fetchJudgeResult = async (solutionKey) => {
+<<<<<<< HEAD
     console.log(solutionKey);
     const solutionInfo = (await fetchAndJson(`/api/solutions/${solutionKey}`)).solution;
     const { testcaseHitCount, testcaseSize } = solutionInfo;
+=======
+    const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
+    const { testcaseHitCount, testcaseSize } = result.solution;
+>>>>>>> b77d0dd9b5ca6fb115a9d28fa6fea6823cf48aa1
     setProgress((testcaseHitCount / testcaseSize) * 100);
 
-    if (solutionInfo.state > 1) {
+    if (result.solution.state > 1) {
       setTimeout(() => {
         setOpen(false);
         history.push(`/solutions/${problemKey}/${problemTitle}/1`);
@@ -80,6 +89,10 @@ const Form = (props) => {
       setIsLoaded(true);
     })();
   }, []);
+
+  if (error) {
+    <Error error={error}/>;
+  }
 
   return (
     <StyledGrid container direction='column' spacing={3}>
@@ -123,8 +136,6 @@ const Form = (props) => {
                 return;
               }
 
-              setOpen(true);
-
               const result = await fetchAndJson('/api/solutions', {
                 method: 'POST',
                 headers: {
@@ -137,7 +148,10 @@ const Form = (props) => {
                 }),
               });
 
-              fetchJudgeResult(result.solution.key);
+              _handleFetchRes(result.status, setError, () => {
+                setOpen(true);
+                fetchJudgeResult(result.solution.key);
+              });
             }}>
             풀이 제출하기
             </StyledButton>

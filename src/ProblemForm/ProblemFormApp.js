@@ -8,6 +8,8 @@ import Examples from './Examples';
 import Hashtags from './Hashtags';
 import MyEditor from './MyEditor';
 import { fetchAndJson } from '../OurLink';
+import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 import './reset.css';
 
 const StyledButton = withStyles({
@@ -143,31 +145,15 @@ const Form = (props) => {
       outputDescription,
     };
 
-    try {
-      const result = await fetchAndJson('/api/problems', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      switch (result.status) {
-        case 200:
-          break;
-        case 401:
-        case 403:
-        case 404:
-          setError({ status: result.status });
-          return;
-        default:
-          setError({ status: 500 });
-          return;
-      }
-    } catch (err) {
-      console.log(err);
-      setIsLoaded(true);
-      setError({ status: 500 });
-      return;
-    }
-    props.history.push('/problems');
+    const result = await fetchAndJson('/api/problems', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    _handleFetchRes(result.status, setError, () => {
+      props.history.push('/problems');
+    });
   };
 
   useEffect(async () => {

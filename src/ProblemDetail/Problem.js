@@ -26,6 +26,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
 import { OurLink, fetchAndJson } from '../OurLink';
 import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
 import './reset.css';
 
 const pColor = '#F8F8F8';
@@ -112,29 +113,17 @@ const Problem = (props) => {
   };
 
   const fetchProblem = async () => { // 본인인지 확인하는 구문
-    try {
-      const result = await fetchAndJson(`/api/problems/${problemKey}`);
-      // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
-      if (result.status === 200) {
-        // 현재 사용자가 누군지 정보를..
-        const loginData = await fetchAndJson('/api/auth');
-        // ownerId와 현재 사용자 아이디가 같으면
-        if (loginData.id === result.problem.ownerId) {
-          setIsOwners(true);
-        }
-        setProblem(result.problem);
-        setIsLoaded(true);
-      } else if (result.status === 404) {
-        alert('삭제되었거나 없는 문제입니다.');
-        props.history.push('/problems');
-        // props.history.go(1);
-      } else {
-        setError({ status: result.status });
+    const result = await fetchAndJson(`/api/problems/${problemKey}`);
+
+    _handleFetchRes(result.status, setError, async () => {
+      const loginData = await fetchAndJson('/api/auth');
+      // ownerId와 현재 사용자 아이디가 같으면
+      if (loginData.id === result.problem.ownerId) {
+        setIsOwners(true);
       }
-    } catch (err) {
-      console.error(err);
-      setError({ status: 500 });
-    }
+      setProblem(result.problem);
+      setIsLoaded(true);
+    });
   };
 
   useEffect(() => {
@@ -172,22 +161,13 @@ const Problem = (props) => {
                   <Button onClick={() => {
                     handleClose();
                     (async () => {
-                      setIsLoaded(true);
-                      try {
-                        const result = await fetchAndJson(`/api/problems/${problemKey}`, {
-                          method: 'DELETE',
-                        });
-                        // fetchedProblem이 없으면, 삭제되었거나 없는 문제입니다. 안내메시지
-                        if (result.status === 200) {
-                          props.history.push('/problems');
-                        } else {
-                          setError({ status: result.status });
-                          return;
-                        }
-                      } catch (err) {
-                        console.error(err);
-                        setError({ status: 500 });
-                      }
+                      const result = await fetchAndJson(`/api/problems/${problemKey}`, {
+                        method: 'DELETE',
+                      });
+                      console.log(result);
+                      _handleFetchRes(result.status, setError, () => {
+                        props.history.push('/problems');
+                      });
                     })();
                     // 뒤로가기 할 때 없는 문제임을 처리해야함.
                   }} color="primary">
