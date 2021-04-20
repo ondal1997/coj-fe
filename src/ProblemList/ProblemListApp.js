@@ -4,7 +4,6 @@ import { Pagination } from '@material-ui/lab';
 import { Radio, InputAdornment, TextField, Chip, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Search, DoneOutline, PriorityHigh } from '@material-ui/icons';
 import { ourFetchAndJson } from '../OurLink';
-import { serverAddress } from '../config';
 
 const validatePositiveInteger = (anything) => {
   const parsedNumber = Number.parseInt(anything, 10);

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-const isProductionMode = true;
+const isProductionMode = false;
 
 // 링크 기본 스타일 제거
 const StyledLink = styled(Link)`

@@ -4,7 +4,6 @@ import { Pagination } from '@material-ui/lab';
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import styled from 'styled-components';
 import { ourFetchAndJson } from '../OurLink';
-import { serverAddress } from '../config';
 import judgeState from './judgeState';
 
 const StyledState = styled.span`
