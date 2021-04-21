@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Grid, FormControlLabel,
   FormLabel, RadioGroup, Radio, Backdrop } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { fetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
 import JudgeProgress from './JudgeProgress';
 import Error from '../Error/Error';
 import _handleFetchRes from '../Error/utils';
 
-const StyledGrid = withStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: 'white',
-    margin: '0 auto',
-    padding: '0 15%',
+    [theme.breakpoints.down('xs')]: {
+      margin: '0 0',
+      padding: '0 1%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 0',
+      padding: '0 15%',
+    },
   },
-})(Grid);
+  children: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '1% 0',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: '1% 0',
+    },
+  },
+}));
 
 const StyledButton = withStyles({
   root: {
@@ -41,10 +54,13 @@ const fetchLanguages = async () => {
 };
 
 const Form = (props) => {
-  const { problemKey, problemTitle } = props.match.params;
+  const classes = useStyles();
+
+  const { problemKey } = props.match.params;
   const { history } = props;
 
   const [isLoaded, setIsLoaded] = useState(false);
+  const [title, setTitle] = useState('');
   const [languages, setLanguages] = useState([]);
 
   const [selectedLanguage, setSelectedLanguage] = useState('');
@@ -63,7 +79,7 @@ const Form = (props) => {
     if (result.solution.state > 1) {
       setTimeout(() => {
         setOpen(false);
-        history.push(`/solutions/${problemKey}/${problemTitle}/1`);
+        history.push(`/solutions/${problemKey}/1`);
       }, 2000);
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
@@ -75,33 +91,36 @@ const Form = (props) => {
       const loginData = await fetchAndJson('/api/auth');
       console.log(loginData);
       if (!loginData.isAuthenticated) {
-        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${problemTitle}`);
+        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${title}`);
         return;
       }
       const fetchedLanguages = await fetchLanguages();
       setLanguages(fetchedLanguages);
+
+      const result = await fetchAndJson(`/api/problems/${problemKey}`);
+      setTitle(result.problem.title);
       setIsLoaded(true);
     })();
   }, []);
 
   if (error) {
-    <Error error={error}/>;
+    return <Error error={error}/>;
   }
 
   return (
-    <StyledGrid container direction='column' spacing={3}>
-      <Grid container item direction='column' spacing={1}>
-        <Grid container item>
-        <h3 style={{ margin: '0 0' }}>{`${problemKey}번 ${problemTitle}`}</h3>
-        </Grid>
+    <Grid className={classes.root} container>
+      <Grid className={classes.children} item xs={12}>
+        <h3 style={{ margin: '0 0' }}>{`${problemKey}. ${title}`}</h3>
+      </Grid>
+      <Grid className={classes.children} container item direction='column' xs={12}>
         {isLoaded ? (<div style={{
           backgroundColor: '#F8F8F8', padding: '1%' }}>
-          <Grid container item>
+          <Grid item>
             <FormLabel component="legend">
               <strong>언어 선택</strong>
-              </FormLabel>
+            </FormLabel>
           </Grid>
-          <Grid container item>
+          <Grid item>
             <RadioGroup aria-label="language" name="language"
                       onChange={(event) => { setSelectedLanguage(event.target.value); }}>
             {languages.map((language) => (
@@ -111,13 +130,14 @@ const Form = (props) => {
             </RadioGroup>
           </Grid>
         </div>)
-          : (<Grid container item>Loading...</Grid>)
+          : (<Grid item>Loading...</Grid>)
         }
       </Grid>
-      <Grid container item>
+      <Grid className={classes.children} container item xs={12}
+      style={{ border: '1px solid #E0E0E0' }}>
         <CodeEditor language={selectedLanguage} updateCode={setSourceCode} />
       </Grid>
-      <Grid container item direction='row-reverse'>
+      <Grid className={classes.children} container item direction='row-reverse' xs={12}>
         <StyledButton variant='contained'
             size='medium' onClick={async () => {
               if (!selectedLanguage) {
@@ -153,7 +173,7 @@ const Form = (props) => {
               <JudgeProgress progress={progress} />
             </Backdrop>
         </Grid>
-    </StyledGrid>
+    </Grid>
   );
 };
 

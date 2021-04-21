@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  makeStyles,
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -31,12 +32,26 @@ import './reset.css';
 
 const pColor = '#F8F8F8';
 
-const StyledGrid = withStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    padding: '1% 20%',
-    backgroundColor: 'white',
+    [theme.breakpoints.down('xs')]: {
+      margin: '0 0',
+      padding: '0 1%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 0',
+      padding: '0 15%',
+    },
   },
-})(Grid);
+  children: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '1% 0',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: '1% 0',
+    },
+  },
+}));
 
 const StyledItemTitle = styled.span`
   font-weight: 700;
@@ -94,6 +109,7 @@ const StyledTextField = withStyles({
 })(TextField);
 
 const Problem = (props) => {
+  const classes = useStyles();
   const { problemKey } = props;
 
   const [problem, setProblem] = useState({});
@@ -136,8 +152,8 @@ const Problem = (props) => {
   }
 
   return isLoaded ? (
-    <StyledGrid container direction="column" spacing={2}>
-      <Grid item>
+    <Grid className={classes.root} container direction="column">
+      <Grid className={classes.children} item>
         <Grid container justify='flex-end'>
           {isOwners
             ? <>
@@ -169,7 +185,6 @@ const Problem = (props) => {
                         props.history.push('/problems');
                       });
                     })();
-                    // 뒤로가기 할 때 없는 문제임을 처리해야함.
                   }} color="primary">
                     삭제
                   </Button>
@@ -183,7 +198,7 @@ const Problem = (props) => {
           }
         </Grid>
       </Grid>
-<Grid container item justify='space-between' alignItems='center' spacing={3}>
+      <Grid className={classes.children} container item justify='space-between' alignItems='center'>
         <Grid item>
           <Grid container direction="column" spacing={0}>
             <Grid item>
@@ -223,7 +238,7 @@ const Problem = (props) => {
               </span>
               </Grid>
             </Grid>
-            <Grid item>
+            <Grid className={classes.children} item>
               <StyledChipContainer>
                   <ul>
                     <Grid container direction='row' spacing={1}>
@@ -241,20 +256,19 @@ const Problem = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item>
+      <Grid className={classes.children} item>
           <Grid container direction="row" justify="flex-end" spacing={1}>
             <Grid item>
-              <OurLink to={`/solutions/${problemKey}/${problem.title}/1`}>
+              <OurLink to={`/solutions/${problemKey}/1`}>
                 <Button color='primary' variant='outlined' size='large'>
                   제출 현황
                 </Button>
               </OurLink>
             </Grid>
             <Grid item>
-              {/* <OurLink to={`/solutionForm/${problemKey}/${problem.title}`}> */}
-                <Button color='primary' variant='outlined' size='large'
+              <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
-                  props.history.push(`/solutionForm/${problemKey}/${problem.title}`);
+                  props.history.push(`/solutionForm/${problemKey}`);
                 }
                 }>
                   문제 풀기
@@ -300,9 +314,8 @@ const Problem = (props) => {
             </Table>
           </TableContainer>
       </Grid>
-
-    <Grid item container direction="column" spacing={3}>
-      <Grid container item direction="column" spacing={2}>
+    <Grid item container direction="column">
+      <Grid className={classes.children} container item direction="column">
         <Grid item>
           <StyledItemTitle>문제 설명</StyledItemTitle>
           <Paper
@@ -314,7 +327,7 @@ const Problem = (props) => {
         </Grid>
         {
           problem.inputDescription && (
-            <Grid item>
+            <Grid className={classes.children} item>
               <StyledItemTitle>입력 형식</StyledItemTitle>
               <Paper
                 className="ck-content"
@@ -327,7 +340,7 @@ const Problem = (props) => {
         }
         {
           problem.outputDescription && (
-            <Grid item>
+            <Grid className={classes.children} item>
               <StyledItemTitle>출력 형식</StyledItemTitle>
               <Paper
                 className="ck-content"
@@ -339,14 +352,12 @@ const Problem = (props) => {
           )
         }
       </Grid>
-      <Grid item>
-        <Divider />
-      </Grid>
-      <Grid container item direction="column" spacing={2}>
+      <Divider />
+      <Grid container item direction="column">
         {problem.examples.map((example, index) => (
           <Grid key={index + 1} container item direction="row" justify="space-between">
-            <Grid item container sm={6} spacing={1} direction="column">
-              <Grid item container alignItems='center' spacing={2}>
+            <Grid className={classes.children} item container sm={5} direction="column">
+              <Grid className={classes.children} item container alignItems='center'>
                 <Grid item>
                   <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
                 </Grid>
@@ -365,14 +376,14 @@ const Problem = (props) => {
                 />
                </Grid>
             </Grid>
-            <Grid item container sm={6} spacing={1} direction='column'>
-            <Grid item container alignItems='center' spacing={2}>
-                <Grid item>
-                  <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
-                </Grid>
-                <CopyToClipboard text={example.output}>
-                  <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
-                </CopyToClipboard>
+            <Grid className={classes.children} item container sm={5} direction='column'>
+              <Grid className={classes.children} item container alignItems='center'>
+                  <Grid item>
+                    <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
+                  </Grid>
+                  <CopyToClipboard text={example.output}>
+                    <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
+                  </CopyToClipboard>
               </Grid>
               <Grid item>
                 <StyledTextField
@@ -389,7 +400,7 @@ const Problem = (props) => {
         ))}
       </Grid>
     </Grid>
-    </StyledGrid>
+    </Grid>
   ) : (
     <div>Loading...</div>
   );

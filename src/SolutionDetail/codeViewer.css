@@ -1,0 +1,20 @@
+@media (min-width: 600px) { /* 600px ~ infinite */
+  .CodeViewer .CodeMirror {
+    font-size: 18px !important;
+    line-height: 2em;
+  }
+  .CodeViewer .CodeMirror-scroll {
+    overflow-y: hidden !important;
+  }
+}
+
+@media (max-width: 599.95px) { /* 600px ~ infinite */
+  .CodeViewer .CodeMirror {
+    font-size: 15px !important;
+    line-height: 2em;
+  }
+  .CodeViewer .CodeMirror-scroll {
+    height: auto !important;
+    overflow-x: auto !important;
+  }
+}

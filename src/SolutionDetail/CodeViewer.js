@@ -1,19 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import 'codemirror/keymap/sublime';
 
-const CodeEditor = ({ code }) => {
-  useEffect(() => {
-    document.querySelector('.CodeMirror').style.lineHeight = '2em';
-    document.querySelector('.CodeMirror').style.fontSize = '17px';
-  }, []);
-
-  return (<CodeMirror value={code}
-   options={{ mode: 'python',
-     keyMap: 'sublime',
-     scrollbarStyle: 'null',
-     readOnly: true }}/>
-  );
-};
+const CodeEditor = ({ code }) => (
+  <CodeMirror value={code}
+    width='100%'
+    options={{ mode: 'python',
+      keyMap: 'sublime',
+      readOnly: true }}/>
+);
 
 export default CodeEditor;
