@@ -26,23 +26,25 @@ const validatePositiveInteger = (anything) => {
 };
 
 const SolutionListApp = (props) => {
-  const { problemNo, problemTitle, page } = props;
+  const { problemNo, page } = props;
   const problemKey = problemNo;
 
-  console.log(props.location);
   const query = queryString.parse(props.location.search);
   // const page = validatePositiveInteger(query.page);
   const limitCount = validatePositiveInteger(query.limitCount || 15);
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [title, setTitle] = useState('');
   const [solutions, setSolutions] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     (async () => {
-      const result = await fetchAndJson(`/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
-      console.log(result);
+      let result = await fetchAndJson(`/api/problems/${problemKey}`);
+      setTitle(result.problem.title); // 중간에 set State하면 어떻게 되는지 함 보자
+      result = await fetchAndJson(`/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
+
       _handleFetchRes(result.status, setError, () => {
         setIsLoaded(true);
         setSolutions(result.solutions);
@@ -68,7 +70,7 @@ const SolutionListApp = (props) => {
           <Grid container direction='column' alignItems='center' spacing={1}>
             <Grid item container justify='space-around' spacing={10}>
               <Grid item>
-                <Typography variant='h4'>{problemNo}. {problemTitle}</Typography>
+                <Typography variant='h4'>{problemNo}. {title}</Typography>
               </Grid>
               <Grid item>
                 <Button color='primary' variant='outlined'
@@ -139,7 +141,7 @@ const SolutionListApp = (props) => {
                 count={Math.ceil(totalCount / limitCount)}
                 page={Number.parseInt(page, 10)}
                 onChange={(event, p) => {
-                  props.history.push(`/solutions/${problemKey}/${problemTitle}/${p}?${queryString.stringify({ ...query, page: p })}`);
+                  props.history.push(`/solutions/${problemKey}/${p}?${queryString.stringify({ ...query, page: p })}`);
                 }}
               />
             </Grid>
@@ -150,7 +152,7 @@ const SolutionListApp = (props) => {
           <Grid container direction='column' alignItems='center' spacing={4}>
             <Grid item container justify='space-around' spacing={10}>
               <Grid item>
-                <Typography variant='h4'>{problemNo}. {problemTitle}</Typography>
+                <Typography variant='h4'>{problemNo}. {title}</Typography>
               </Grid>
               <Grid item>
               </Grid>

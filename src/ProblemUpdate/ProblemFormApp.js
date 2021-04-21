@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, TextField, Divider, Grid } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import { isValid } from './utils';
 import Testcases from './Testcases';
@@ -11,6 +11,27 @@ import { fetchAndJson } from '../OurLink';
 import Error from '../Error/Error';
 import './reset.css';
 import _handleFetchRes from '../Error/utils';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '0 0',
+      padding: '0 1%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 0',
+      padding: '0 15%',
+    },
+  },
+  children: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '1% 0',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: '1% 0',
+    },
+  },
+}));
 
 const StyledButton = withStyles({
   root: {
@@ -42,13 +63,9 @@ const StyledTextField = withStyles({
   },
 })(TextField);
 
-const StyledDivider = withStyles({
-  root: {
-    margin: '1% 0',
-  },
-})(Divider);
-
 const Form = (props) => {
+  const classes = useStyles();
+
   const { problemKey } = props.match.params;
   const [isLoaded, setIsLoaded] = useState(false);
   const [problem, setProblem] = useState({});
@@ -190,9 +207,9 @@ const Form = (props) => {
   }
 
   return (
-  <Grid container style={{ padding: '10% 15%' }}>
-    <Grid container item direction='column' spacing={1}>
-      <Grid item>
+  <Grid className={classes.root} container>
+    <Grid container item direction='column'>
+      <Grid className={classes.children} item>
           <StyledTextField
             name='title'
             label='문제명'
@@ -201,53 +218,49 @@ const Form = (props) => {
             variant="outlined"
             onChange={(event) => onChange(event)} inputRef={inputsRef.current[0]} />
       </Grid>
-      <Grid container item direction='row' spacing={2}>
-        <Grid item>
+      <Grid className={classes.children} container item>
+        <Grid container item justify="space-between" xs={5}>
           <StyledTextField
           name='timeLimit'
           label='시간 제한 (ms)'
-          margin="normal"
           type="number"
           variant="outlined"
           defaultValue={timeLimit}
           onChange={(event) => onChange(event)} inputRef={inputsRef.current[1]} />
-        </Grid>
-        <Grid item>
           <StyledTextField
           name='memoryLimit'
           label='메모리 제한 (MB)'
-          margin="normal"
           type="number"
           variant="outlined"
           defaultValue={memoryLimit}
           onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
         </Grid>
       </Grid>
-      <Grid item style={{ margin: '2% 0' }}>
+      <Grid className={classes.children} item>
         <p>문제 설명</p>
         <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
       </Grid>
-      <Grid item style={{ margin: '2% 0' }}>
+      <Grid className={classes.children} item>
         <p>입력 형식 설명(선택)</p>
         <MyEditor value={inputDescription} onChange={(res) => { setInputDescription(res); }} />
       </Grid>
-      <Grid item style={{ margin: '2% 0' }}>
+      <Grid className={classes.children} item>
         <p>출력 형식 설명(선택)</p>
         <MyEditor value={outputDescription} onChange={(res) => { setOutputDescription(res); }} />
       </Grid>
-      <Grid item>
+      <Grid className={classes.children} item>
         <Hashtags hashtags={hashtags} updateHashtags={setHashtags}/>
       </Grid>
-      <Grid item>
+      <Grid className={classes.children} item>
         <Examples examples={examples} updateExamples={setExamples}/>
       </Grid>
-      <Grid item>
+      <Grid className={classes.children} item>
         <Testcases testcases={testcases} updateTestcases={setTestcases} />
       </Grid>
-      <Grid item>
-        <StyledDivider variant="fullWidth"/>
+      <Grid className={classes.children} item>
+        <Divider variant="fullWidth"/>
       </Grid>
-      <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
+      <Grid className={classes.children} item style={{ textAlign: 'right' }}>
         <StyledButton onClick={(event) => submit(event)}>확인</StyledButton>
       </Grid>
     </Grid>
