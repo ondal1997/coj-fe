@@ -17,6 +17,9 @@ const theme = createMuiTheme({
     primary: {
       main: '#4995F2',
     },
+    secondary: {
+      main: '#F8F8F8',
+    },
   },
 });
 
@@ -31,8 +34,8 @@ const App = () => (
           <Route path="/problems" exact component={ProblemListApp} />
           <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
-          <Route path="/solutionForm/:problemKey/:problemTitle" exact component={SolutionFormApp} />
-          <Route path="/solutions/:problemNo/:problemTitle/:pageNum" exact component={SolutionListAppWrapper} />
+          <Route path="/solutionForm/:problemKey" exact component={SolutionFormApp} />
+          <Route path="/solutions/:problemNo/:pageNum" exact component={SolutionListAppWrapper} />
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
 
           <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
