@@ -20,7 +20,18 @@ const ProblemTable = (props) => {
         <TableRow key={problem.key}>
           <TableData>{problem.key}</TableData>
           <TableData align="left">
-            <Link style={{ color: '#444444' }} to={`/problem/${problem.key}`}>{problem.title}</Link>
+            {
+              problem.challengeCode === 0 && (
+              <Link style={{ color: '#444444' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
+            }
+            {
+              problem.challengeCode === 1 && (
+              <Link style={{ color: '#2950F2' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
+            }
+            {
+              problem.challengeCode === -1 && (
+              <Link style={{ color: '#CE2727' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
+            }
           </TableData>
           <TableData>
             {problem.categories.length === 0 ? (
