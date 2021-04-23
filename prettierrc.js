@@ -12,5 +12,5 @@ module.exports = {
   // 객체나 배열을 작성 할 때, 원소 혹은 key-value의 맨 뒤에 있는 것에도 쉼표를 붙임
   trailingComma: 'all',
   // 코드 한줄이 maximum 80칸
-  printWidth: 120,
+  printWidth: 80,
 };

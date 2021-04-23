@@ -1,0 +1,10 @@
+input[type=text]:focus, textarea:focus,select:focus {
+    -webkit-box-shadow:0 0!important;
+    -moz-box-shadow:0 0!important;
+    box-shadow:0 0!important;
+    border: 0!important;
+  }
+
+.ck-editor__editable {
+    min-height: 100px !important;
+}
