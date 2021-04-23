@@ -41,7 +41,7 @@ const ProblemListApp = (props) => {
   }, [props]);
 
   if (error) {
-    return <Error error={error}/>;
+    return <Error error={error} />;
   }
 
   if (!isLoaded) {
@@ -50,14 +50,11 @@ const ProblemListApp = (props) => {
 
   return (
     <>
-      <Grid container direction='column' alignItems='center' spacing={2}>
-
+      <Grid container direction='column' alignItems='center' spacing={2}>\
         <Grid item container justify='space-between' alignItems='center' lg={9} spacing={10}>
-
           <Grid item>
             <Typography variant='h4'>문제 리스트</Typography>
           </Grid>
-
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
@@ -71,7 +68,6 @@ const ProblemListApp = (props) => {
                       value={'title'}
                     />
                   </Grid>
-
                   <Grid item>
                     <Typography
                       onClick={() => { setSelectedSearchType('title'); }}
@@ -81,9 +77,7 @@ const ProblemListApp = (props) => {
                   </Grid>
                 </Grid>
               </Grid>
-
               <Grid item>
-
                 <Grid container container alignItems='center'>
                   <Grid item>
                     <Radio
@@ -103,9 +97,7 @@ const ProblemListApp = (props) => {
                   </Grid>
                 </Grid>
               </Grid>
-
             </Grid>
-
             <Grid item>
               <TextField
                 placeholder='검색어를 입력하세요'
@@ -119,7 +111,6 @@ const ProblemListApp = (props) => {
                 onKeyPress={(e) => { if (e.charCode === 13) props.history.push(`/problems?${selectedSearchType}=${e.target.value.replace(/\+/g, '%2B')}`); }}
               ></TextField>
             </Grid>
-
           </Grid>
         </Grid>
 
