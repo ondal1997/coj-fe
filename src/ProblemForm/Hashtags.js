@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 const StyledChipContainer = withStyles({
   root: {
+    margin: '0',
     padding: '0',
     '& ul': {
       listStyle: 'none',
