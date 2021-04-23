@@ -26,11 +26,11 @@ const ProblemTable = (props) => {
             }
             {
               problem.challengeCode === 1 && (
-              <Link style={{ color: '#2950F2' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
+              <Link style={{ color: '#0057FF' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
             }
             {
               problem.challengeCode === -1 && (
-              <Link style={{ color: '#CE2727' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
+              <Link style={{ color: '#E94D00' }} to={`/problem/${problem.key}`}>{problem.title}</Link>)
             }
           </TableData>
           <TableData>
