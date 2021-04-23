@@ -2,6 +2,7 @@ import { CircularProgress, InputAdornment, TextField } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Pagination } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
+import Error from '../../Error/Error';
 import _handleFetchRes from '../../Error/utils';
 import { fetchAndJson } from '../../OurLink';
 import ProblemTable from './problemTable';
@@ -10,21 +11,16 @@ const ProblemsPage = (props) => {
   const urlSearchParams = new URLSearchParams(props.location.search);
 
   const query = urlSearchParams.get('query') || '';
-  console.log(query);
 
   const limit = 20;
-  console.log(limit);
 
   const unparsedPage = urlSearchParams.get('page');
   const page = /^[1-9]\d*$/.test(unparsedPage) ? Number.parseInt(unparsedPage, 10) : 1;
-  console.log(page);
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [problems, setProblems] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  console.log(isLoaded);
-  console.log(totalCount);
 
   const [mutable] = useState({
     lastFetch: null,
@@ -32,13 +28,6 @@ const ProblemsPage = (props) => {
 
   useEffect(() => {
     setIsLoaded(false);
-    console.log(
-      new URLSearchParams({
-        query,
-        pos: (page - 1) * limit,
-        count: limit,
-      }).toString(),
-    );
     const promise = fetchAndJson(
       `/api/problems?${new URLSearchParams({
         title: query,
@@ -94,7 +83,7 @@ const ProblemsPage = (props) => {
         }
 
         if (totalCount === 0) {
-          return <p>해당하는 문제가 존재하지 않습니다.</p>;
+          return <p>대응하는 문제가 존재하지 않습니다.</p>;
         }
 
         return (

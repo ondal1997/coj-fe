@@ -12,6 +12,7 @@ import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
 import ProblemUpdateApp from './ProblemUpdate/ProblemFormApp';
 import Error from './Error/Error';
 import ProblemsPage from './Problems_new/page/problems';
+import SolutionsPage from './Solutions_new/page/solutions';
 
 const theme = createMuiTheme({
   palette: {
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
           <Route path="/solutionForm/:problemKey" exact component={SolutionFormApp} />
+          <Route path="/newSolutions" exact component={SolutionsPage} />
           <Route path="/solutions/:problemNo/:pageNum" exact component={SolutionListAppWrapper} />
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
 
