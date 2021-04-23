@@ -34,22 +34,24 @@ const SolutionInform = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableCell align="center">{`${solution.key}`}</TableCell>
-          <TableCell align="center">{`${solution.ownerId}`}</TableCell>
-          <TableCell align="center">{`${solution.problemKey}`}</TableCell>
-          <TableCell align="center">{solution.state === '2' ? `${solution.maxTime}ms` : '-'}</TableCell>
-          <TableCell align="center">{solution.state === '2' ? `${solution.maxMemory}MB` : '-'}</TableCell>
-          <TableCell align="center">
-            <StyledState color={judgeState[parseInt(solution.state, 10)].color}>
-              {judgeState[parseInt(solution.state, 10)].name}
-            </StyledState>
-          </TableCell>
-          <TableCell align="center">
-          {new Date(solution.uploadTime).toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}</TableCell>
+          <TableRow>
+            <TableCell align="center">{`${solution.key}`}</TableCell>
+            <TableCell align="center">{`${solution.ownerId}`}</TableCell>
+            <TableCell align="center">{`${solution.problemKey}`}</TableCell>
+            <TableCell align="center">{solution.state === '2' ? `${solution.maxTime}ms` : '-'}</TableCell>
+            <TableCell align="center">{solution.state === '2' ? `${solution.maxMemory}MB` : '-'}</TableCell>
+            <TableCell align="center">
+              <StyledState color={judgeState[parseInt(solution.state, 10)].color}>
+                {judgeState[parseInt(solution.state, 10)].name}
+              </StyledState>
+            </TableCell>
+            <TableCell align="center">
+            {new Date(solution.uploadTime).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}</TableCell>
+          </TableRow>
         </TableBody>
         </Table>
       </TableContainer>
