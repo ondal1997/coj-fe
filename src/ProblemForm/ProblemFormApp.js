@@ -78,6 +78,8 @@ const Form = (props) => {
 
   const inputsRef = useRef([]);
 
+  const [disabled, setDisabled] = useState(false);
+
   inputsRef.current = _.range(0, 3).map((index) => {
     inputsRef.current[index] = useRef(null);
     return inputsRef.current[index];
@@ -133,6 +135,8 @@ const Form = (props) => {
       return;
     }
 
+    setDisabled(true);
+
     const data = {
       title,
       description,
@@ -175,8 +179,8 @@ const Form = (props) => {
   }
 
   return (
-  <Grid container style={{ padding: '10% 15%' }}>
-    <Grid container item direction='column' spacing={1}>
+  <Grid container>
+    <Grid container item direction='column' spacing={3}>
       <Grid item>
           <StyledTextField
             name='title'
@@ -208,15 +212,15 @@ const Form = (props) => {
           onChange={(event) => onChange(event)} inputRef={inputsRef.current[2]} />
         </Grid>
       </Grid>
-      <Grid item style={{ margin: '2% 0' }}>
+      <Grid item>
         <p>문제 설명</p>
         <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
       </Grid>
-      <Grid item style={{ margin: '2% 0' }}>
+      <Grid item>
         <p>입력 형식 설명(선택)</p>
         <MyEditor value={inputDescription} onChange={(res) => { setInputDescription(res); }} />
       </Grid>
-      <Grid item style={{ margin: '2% 0' }}>
+      <Grid item>
         <p>출력 형식 설명(선택)</p>
         <MyEditor value={outputDescription} onChange={(res) => { setOutputDescription(res); }} />
       </Grid>
@@ -233,7 +237,8 @@ const Form = (props) => {
         <StyledDivider variant="fullWidth"/>
       </Grid>
       <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
-        <StyledButton onClick={() => submit()}>확인</StyledButton>
+        <StyledButton variant='contained'
+        disabled={disabled} onClick={() => submit()}>확인</StyledButton>
       </Grid>
     </Grid>
   </Grid>

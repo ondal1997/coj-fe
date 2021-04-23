@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, FormControlLabel,
-  FormLabel, RadioGroup, Radio, Backdrop } from '@material-ui/core';
+import {
+  Button, Grid, FormControlLabel,
+  FormLabel, RadioGroup, Radio, Backdrop,
+} from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { fetchAndJson } from '../OurLink';
 import CodeEditor from './CodeEditor';
@@ -10,20 +12,20 @@ import _handleFetchRes from '../Error/utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: '0 0',
       padding: '0 1%',
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       margin: '0 0',
       padding: '0 15%',
     },
   },
   children: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: '1% 0',
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       margin: '1% 0',
     },
   },
@@ -31,14 +33,13 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledButton = withStyles({
   root: {
+    width: '100px',
+    textAlign: 'center',
     color: 'white',
     backgroundColor: 'black',
-    padding: '1%',
+    padding: '2% 1%',
     '&:hover': {
       backgroundColor: '#CE2727',
-    },
-    '& a': {
-      fontSize: '20px',
     },
   },
 })(Button);
@@ -71,6 +72,8 @@ const Form = (props) => {
 
   const [error, setError] = useState(null);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const fetchJudgeResult = async (solutionKey) => {
     const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
     const { testcaseHitCount, testcaseSize } = result.solution;
@@ -84,6 +87,38 @@ const Form = (props) => {
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
     }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedLanguage) {
+      alert('언어를 선택해주세요');
+      return;
+    }
+
+    if (!sourceCode) {
+      alert('코드를 입력해주세요');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const result = await fetchAndJson('/api/solutions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        problemKey,
+        language: selectedLanguage,
+        sourceCode,
+      }),
+    });
+
+    _handleFetchRes(result.status, setError, () => {
+      setIsSubmitting(false);
+      setOpen(true);
+      fetchJudgeResult(result.solution.key);
+    });
   };
 
   useEffect(() => {
@@ -104,7 +139,7 @@ const Form = (props) => {
   }, []);
 
   if (error) {
-    return <Error error={error}/>;
+    return <Error error={error} />;
   }
 
   return (
@@ -114,7 +149,8 @@ const Form = (props) => {
       </Grid>
       <Grid className={classes.children} container item direction='column' xs={12}>
         {isLoaded ? (<div style={{
-          backgroundColor: '#F8F8F8', padding: '1%' }}>
+          backgroundColor: '#F8F8F8', padding: '1%',
+        }}>
           <Grid item>
             <FormLabel component="legend">
               <strong>언어 선택</strong>
@@ -122,57 +158,32 @@ const Form = (props) => {
           </Grid>
           <Grid item>
             <RadioGroup aria-label="language" name="language"
-                      onChange={(event) => { setSelectedLanguage(event.target.value); }}>
-            {languages.map((language) => (
-                      <FormControlLabel key={language} value={language} label={language}
-                      control={<Radio color="default" />} />
-            ))}
+              onChange={(event) => { setSelectedLanguage(event.target.value); }}>
+              {languages.map((language) => (
+                <FormControlLabel key={language} value={language} label={language}
+                  control={<Radio color="default" />} />
+              ))}
             </RadioGroup>
           </Grid>
         </div>)
           : (<Grid item>Loading...</Grid>)
         }
       </Grid>
-      <Grid className={classes.children} container item xs={12}
-      style={{ border: '1px solid #E0E0E0' }}>
+      <Grid className={classes.children} item xs={12}
+        style={{ border: '1px solid #E0E0E0' }}>
         <CodeEditor language={selectedLanguage} updateCode={setSourceCode} />
       </Grid>
-      <Grid className={classes.children} container item direction='row-reverse' xs={12}>
-        <StyledButton variant='contained'
-            size='medium' onClick={async () => {
-              if (!selectedLanguage) {
-                alert('언어를 선택해주세요');
-                return;
-              }
-
-              if (!sourceCode) {
-                alert('코드를 입력해주세요');
-                return;
-              }
-
-              const result = await fetchAndJson('/api/solutions', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  problemKey,
-                  language: selectedLanguage,
-                  sourceCode,
-                }),
-              });
-
-              _handleFetchRes(result.status, setError, () => {
-                setOpen(true);
-                fetchJudgeResult(result.solution.key);
-              });
-            }}>
-            풀이 제출하기
-            </StyledButton>
-            <Backdrop open={open} style={{ zIndex: 9999 }}>
-              <JudgeProgress progress={progress} />
-            </Backdrop>
+      <Grid className={classes.children} item container direction='row-reverse' xs={12}>
+        <Grid item>
+          <StyledButton variant='contained' disabled={isSubmitting}
+            size='medium' onClick={handleSubmit}>
+            {!isSubmitting ? '풀이 제출하기' : '제출 중'}
+          </StyledButton>
         </Grid>
+        <Backdrop open={open} style={{ zIndex: 9999 }}>
+          <JudgeProgress progress={progress} />
+        </Backdrop>
+      </Grid>
     </Grid>
   );
 };
