@@ -126,26 +126,7 @@ const ProblemListApp = (props) => {
         <Grid item container direction='column' lg={9}>
           <Grid item>
             <TableContainer>
-              <Table size="small" columns={[
-                {
-                  width: '500',
-                },
-                {
-                  width: '200',
-                },
-                {
-                  width: '200',
-                },
-                {
-                  width: '200',
-                },
-                {
-                  width: '200',
-                },
-                {
-                  width: '200',
-                },
-              ]}>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell align='right'><strong>번호</strong></TableCell>
