@@ -20,7 +20,7 @@ const ProblemTable = (props) => {
         <TableRow key={problem.key}>
           <TableData>{problem.key}</TableData>
           <TableData align="left">
-            <Link style={{ color: '#444444', textDecoration: 'none' }} to={`/problem/${problem.key}`}><strong>{problem.title}</strong></Link>
+            <Link style={{ color: '#444444' }} to={`/problem/${problem.key}`}>{problem.title}</Link>
           </TableData>
           <TableData>
             {problem.categories.length === 0 ? (
