@@ -15,20 +15,20 @@ import './codeViewer.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: '0 0',
       padding: '0 1%',
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       margin: '0 0',
       padding: '0 15%',
     },
   },
   children: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: '1% 0',
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       margin: '1% 0',
     },
   },
@@ -58,7 +58,7 @@ const SolutionDetailApp = (props) => {
   if (error) return <Error error={error}/>;
 
   return isLoaded
-    ? (<Grid className={classes.root} container direction='column' xs={12}>
+    ? (<Grid className={classes.root} container direction='column'>
         <Grid className={classes.children} container item xs={12} justify='flex-end'>
           <Grid item>
             <Button color='primary' variant='outlined' size='large'
@@ -73,29 +73,35 @@ const SolutionDetailApp = (props) => {
           </Typography>
           <SolutionInform solution={solution}/>
         </Grid>
-        <Grid className={classes.children} item xs={12}>
+        {
+          solution.sourceCode && (
+            <Grid className={classes.children} item xs={12}>
           <Typography variant='h3'>
             제출 코드
           </Typography>
           <Grid className='CodeViewer' item
             style={{ border: '1px solid #E0E0E0' }}>
             <CodeViewer
-            code={solution.sourceCode || '이 정보를 조회할 수 있는 조건이 만족되지 않았습니다.'} />
+            code={solution.sourceCode} />
           </Grid>
         </Grid>
+          )
+        }
         {(() => {
           if (solution.state === '6' || solution.state === '7') {
-            return (<Grid className={classes.children} item xs={12}>
+            if (solution.judgeError) {
+              return (<Grid className={classes.children} item xs={12}>
                   <Typography variant='h6' style={{ color: '#858585' }}>
                     {judgeState[parseInt(solution.state, 10)].name}
                   </Typography>
                   <Paper elevation={0} xs={12}
                     style={{ backgroundColor: '#F8F8F8', padding: '10px', fontSize: 'large' }}>
                     <pre style={{ whiteSpace: 'pre-wrap' }}>
-                      {solution.judgeError || '이 정보를 조회할 수 있는 조건이 만족되지 않았습니다.'}
+                      {solution.judgeError}
                     </pre>
                   </Paper>
                   </Grid>);
+            }
           }
           return null;
         })()
