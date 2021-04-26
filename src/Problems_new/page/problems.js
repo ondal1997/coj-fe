@@ -57,6 +57,7 @@ const ProblemsPage = (props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
       <TextField
+        type='search'
         placeholder="검색"
         InputProps={{
           startAdornment: (
@@ -69,7 +70,7 @@ const ProblemsPage = (props) => {
         onChange={(event) => {
           urlSearchParams.set('query', event.target.value);
           urlSearchParams.set('page', 1);
-          props.history.push(`?${urlSearchParams.toString()}`);
+          props.history.replace(`?${urlSearchParams.toString()}`);
         }}
       ></TextField>
 
