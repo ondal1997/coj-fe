@@ -1,4 +1,9 @@
-const isProblemInputValid = (...param) => { // name, value // 유효성 검사
+/**
+ * 문제 제출 시 입력 폼 유효성 검사
+ * @param  {...any} param name, value
+ * @returns 유효성 검사 결과
+ */
+const isProblemInputValid = (...param) => {
   let res = true;
 
   if (param[0] === '' || param[1] === '') {
@@ -16,4 +21,17 @@ const isProblemInputValid = (...param) => { // name, value // 유효성 검사
   return res;
 };
 
-module.exports = { isProblemInputValid };
+/**
+ * code editor의 언어 설정을 위한 함수
+ * @param {*} language 
+ * @returns 
+ */
+const getMode = (language) => {
+  if (language.includes('python')) return 'python';
+  if (language.includes('c++')) return 'c++';
+  if (language.includes('c')) return 'c';
+  if (language.includes('c#')) return 'c#';
+  return 'python';
+};
+
+module.exports = { isProblemInputValid, getMode };

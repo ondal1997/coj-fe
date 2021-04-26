@@ -7,7 +7,7 @@ import { isProblemInputValid } from '../utils';
 import Testcases from '../components/organisms/Testcases';
 import Examples from '../components/organisms/Examples';
 import Categories from '../components/organisms/Categories';
-import MyEditor from '../components/organisms/MyEditor';
+import MyEditor from '../components/atoms/MyEditor';
 import BasicButton from '../components/atoms/BasicButton';
 import TextField from '../components/atoms/TextField';
 

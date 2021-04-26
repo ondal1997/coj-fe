@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { getMode } from './utils';
+import { getMode } from '../../utils';
 import 'codemirror/keymap/sublime';
-import './reset.css';
+import '../reset_solutionform.css';
 
-const CodeEditor = ({ language, updateCode }) => {
+const CodeEditor = ({ defaultValue, language, updateCode }) => {
   const onWriteCode = () => {
     const cmInst = document.querySelector('.CodeMirror').CodeMirror;
     const cs = cmInst.lineCount();
@@ -20,7 +20,7 @@ const CodeEditor = ({ language, updateCode }) => {
     document.querySelector('.CodeMirror').style.fontSize = '17px';
   }, []);
 
-  return <CodeMirror value=''
+  return <CodeMirror value={defaultValue}
         width='100%'
         options={{
           keyMap: 'sublime',

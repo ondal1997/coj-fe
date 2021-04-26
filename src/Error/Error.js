@@ -6,7 +6,7 @@ const Error = (props) => {
   const { status } = props.error;
   return (<Grid style={{ textAlign: 'center' }}>
       <Typography variant='h2'>
-        {status}
+        {status === -1 ? '😓' : status}
       </Typography>
       <Typography variant='h2'>
         {(() => {

@@ -6,10 +6,9 @@ import { SnackbarProvider } from 'notistack';
 // import ProblemListApp from './ProblemList/ProblemListApp';
 // import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
 import ProblemCreateForm from './pages/ProblemCreateForm';
-import SolutionFormApp from './templates/SolutionForm';
+import SolutionCreateForm from './pages/SolutionCreateForm';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
-// import ProblemUpdateApp from './ProblemUpdate/ProblemFormApp';
 import ProblemUpdateForm from './pages/ProblemUpdateForm';
 import Error from './Error/Error';
 import ProblemsPage from './Problems_new/page/problems';
@@ -36,7 +35,7 @@ const App = () => (
           <Route path="/edit/:problemKey" exact component={ProblemUpdateForm} />
           <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
-          <Route path="/submit/:problemKey" exact component={SolutionFormApp} />
+          <Route path="/submit/:problemKey" exact component={SolutionCreateForm} />
           <Route path="/solutions" exact component={SolutionsPage} />
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
           <Route render={({ location }) => (

@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button, Grid, FormControlLabel,
   FormLabel, RadioGroup, Radio, Backdrop,
 } from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { fetchAndJson } from '../OurLink';
-import CodeEditor from '../SolutionForm/CodeEditor';
-import JudgeProgress from '../SolutionForm/JudgeProgress';
-import Error from '../Error/Error';
-import _handleFetchRes from '../Error/utils';
+import CodeEditor from '../components/atoms/CodeEditor';
+import JudgeProgress from '../components/organisms/JudgeProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,50 +41,17 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-const fetchLanguages = async () => {
-  try {
-    const json = await fetchAndJson('/api/availableLanguages');
-    return json;
-  } catch (error) {
-    console.error(error);
-  }
-  return {};
-};
-
-const Form = (props) => {
+const SolutionForm = (props) => {
   const classes = useStyles();
 
-  const { problemKey } = props.match.params;
-  const { history } = props;
+  const { problem, solution, languages, fetchSolution } = props;
 
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [title, setTitle] = useState('');
-  const [languages, setLanguages] = useState([]);
-
-  const [selectedLanguage, setSelectedLanguage] = useState('');
-  const [sourceCode, setSourceCode] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState(solution.language);
+  const [sourceCode, setSourceCode] = useState(solution.sourceCode);
 
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
-
-  const [error, setError] = useState(null);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const fetchJudgeResult = async (solutionKey) => {
-    const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
-    const { testcaseHitCount, testcaseSize } = result.solution;
-    setProgress((testcaseHitCount / testcaseSize) * 100);
-
-    if (result.solution.state > 1) {
-      setTimeout(() => {
-        setOpen(false);
-        history.push(`/solutions?problemNo=${problemKey}&page=1`);
-      }, 2000);
-    } else {
-      setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
-    }
-  };
 
   const handleSubmit = async () => {
     if (!selectedLanguage) {
@@ -100,55 +64,22 @@ const Form = (props) => {
       return;
     }
 
-    setIsSubmitting(true);
+    const data = {
+      problemKey: problem.key,
+      language: selectedLanguage,
+      sourceCode,
+    };
 
-    const result = await fetchAndJson('/api/solutions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        problemKey,
-        language: selectedLanguage,
-        sourceCode,
-      }),
-    });
-
-    _handleFetchRes(result.status, setError, () => {
-      setIsSubmitting(false);
-      setOpen(true);
-      fetchJudgeResult(result.solution.key);
-    });
+    fetchSolution(data, setIsSubmitting, setOpen, setProgress);
   };
-
-  useEffect(() => {
-    (async () => {
-      const loginData = await fetchAndJson('/api/auth');
-      console.log(loginData);
-      if (!loginData.isAuthenticated) {
-        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`);
-        return;
-      }
-      const fetchedLanguages = await fetchLanguages();
-      setLanguages(fetchedLanguages);
-
-      const result = await fetchAndJson(`/api/problems/${problemKey}`);
-      setTitle(result.problem.title);
-      setIsLoaded(true);
-    })();
-  }, []);
-
-  if (error) {
-    return <Error error={error} />;
-  }
 
   return (
     <Grid className={classes.root} container>
       <Grid className={classes.children} item xs={12}>
-        <h3 style={{ margin: '0 0' }}>{`${problemKey}. ${title}`}</h3>
+        <h3 style={{ margin: '0 0' }}>{`${problem.key}. ${problem.title}`}</h3>
       </Grid>
       <Grid className={classes.children} container item direction='column' xs={12}>
-        {isLoaded ? (<div style={{
+        <div style={{
           backgroundColor: '#F8F8F8', padding: '1%',
         }}>
           <Grid item>
@@ -158,20 +89,24 @@ const Form = (props) => {
           </Grid>
           <Grid item>
             <RadioGroup aria-label="language" name="language"
-              onChange={(event) => { setSelectedLanguage(event.target.value); }}>
+              value={selectedLanguage}
+              onChange={(event) => {
+                setSelectedLanguage(event.target.value);
+              }}>
               {languages.map((language) => (
                 <FormControlLabel key={language} value={language} label={language}
                   control={<Radio color="default" />} />
               ))}
             </RadioGroup>
           </Grid>
-        </div>)
-          : (<Grid item>Loading...</Grid>)
-        }
+        </div>
       </Grid>
       <Grid className={classes.children} item xs={12}
         style={{ border: '1px solid #E0E0E0' }}>
-        <CodeEditor language={selectedLanguage} updateCode={setSourceCode} />
+        <CodeEditor
+        defaultValue={sourceCode}
+        language={selectedLanguage}
+        updateCode={setSourceCode} />
       </Grid>
       <Grid className={classes.children} item container direction='row-reverse' xs={12}>
         <Grid item>
@@ -188,4 +123,4 @@ const Form = (props) => {
   );
 };
 
-export default Form;
+export default SolutionForm;
