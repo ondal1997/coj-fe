@@ -135,7 +135,6 @@ const Form = ({ problem, handleSubmit }) => {
               name='timeLimit'
               label='시간 제한 (ms)'
               margin="normal"
-              type="number"
               variant="outlined"
               defaultValue={timeLimit}
               handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[1]} />
@@ -145,7 +144,6 @@ const Form = ({ problem, handleSubmit }) => {
               name='memoryLimit'
               label='메모리 제한 (MB)'
               margin="normal"
-              type="number"
               variant="outlined"
               defaultValue={memoryLimit}
               handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[2]} />

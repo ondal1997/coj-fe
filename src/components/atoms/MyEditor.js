@@ -60,6 +60,7 @@ const MyEditor = ({ value, onChange }) => {
 
   useEffect(() => {
     if (isLoaded) {
+      value = value || '';
       if (value !== ref.current.editor.getData()) {
         ref.current.editor.setData(value);
       }

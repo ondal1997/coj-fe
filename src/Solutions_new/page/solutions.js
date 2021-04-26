@@ -27,7 +27,7 @@ const SolutionsPage = (props) => {
 
   // userId
   const [userId, setUserId] = useState(null);
-  urlSearchParams.append('highlight', userId);
+  urlSearchParams.set('highlight', userId);
   //
 
   useEffect(async () => {

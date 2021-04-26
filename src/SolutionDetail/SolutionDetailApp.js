@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -59,14 +59,6 @@ const SolutionDetailApp = (props) => {
 
   return isLoaded
     ? (<Grid className={classes.root} container direction='column'>
-        <Grid className={classes.children} container item xs={12} justify='flex-end'>
-          <Grid item>
-            <Button color='primary' variant='outlined' size='large'
-              onClick={() => { props.history.push(`/problem/${solution.problemKey}`); }}>
-            문제로 이동
-            </Button>
-          </Grid>
-        </Grid>
         <Grid className={classes.children} item xs={12}>
           <Typography variant='h3'>
             제출 정보

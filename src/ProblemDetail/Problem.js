@@ -362,7 +362,7 @@ const Problem = (props) => {
                   <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
                 </Grid>
                 <CopyToClipboard text={example.input}>
-                  <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
+                  <Button color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
                 </CopyToClipboard>
               </Grid>
               <Grid item>
@@ -382,7 +382,7 @@ const Problem = (props) => {
                     <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
                   </Grid>
                   <CopyToClipboard text={example.output}>
-                    <Button variant='outlined' color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
+                    <Button color='primary' onClick={() => { enqueueSnackbar('복사되었습니다!', { variant: 'info', autoHideDuraion: 3000 }); }}>copy</Button>
                   </CopyToClipboard>
               </Grid>
               <Grid item>

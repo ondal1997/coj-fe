@@ -46,7 +46,7 @@ const fetchAndJson = async (url, meta) => {
   }
 
   try {
-    const res = await fetch(`http://192.168.0.100:3000${url}${(url.includes('?') ? '&' : '?')}userId=migu554`, meta);
+    const res = await fetch(`http://192.168.0.100:3000${url}${(url.includes('?') ? '&' : '?')}userId=tempUserId`, meta);
     const json = await res.json();
     return json;
   } catch (err) {
