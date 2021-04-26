@@ -29,7 +29,7 @@ const Table = (props) => (
   </div>
 );
 
-const TableRow = (props) => <Tr>{props.children}</Tr>;
+const TableRow = (props) => <Tr style={props.style}>{props.children}</Tr>;
 
 const TableHeader = (props) => (
   <Th style={{ width: props.width }}>{props.children}</Th>

@@ -9,7 +9,7 @@ import SolutionTable from './solutionTable';
 const SolutionsPage = (props) => {
   const urlSearchParams = new URLSearchParams(props.location.search);
 
-  const problemKey = urlSearchParams.get('problemKey'); // 못 받으면 전체 조회로 하고 싶다.
+  const problemKey = urlSearchParams.get('problemKey');
 
   const limit = 20;
 
@@ -25,14 +25,35 @@ const SolutionsPage = (props) => {
     lastFetch: null,
   });
 
-  useEffect(() => {
+  // userId
+  const [userId, setUserId] = useState(null);
+  urlSearchParams.append('highlight', userId);
+  //
+
+  useEffect(async () => {
     setIsLoaded(false);
-    const promise = fetchAndJson(
-      `/api/problems/${problemKey}/solutions?${new URLSearchParams({
-        pos: (page - 1) * limit,
-        count: limit,
-      }).toString()}`,
-    );
+
+    // userId
+    const res = await fetchAndJson('/api/auth');
+    setUserId(res.id);
+    //
+
+    let promise;
+    if (problemKey) {
+      promise = fetchAndJson(
+        `/api/problems/${problemKey}/solutions?${new URLSearchParams({
+          pos: (page - 1) * limit,
+          count: limit,
+        }).toString()}`,
+      );
+    } else {
+      promise = fetchAndJson(
+        `/api/solutions?${new URLSearchParams({
+          pos: (page - 1) * limit,
+          count: limit,
+        }).toString()}`,
+      );
+    }
     mutable.lastFetch = promise;
     promise.then((result) => {
       if (mutable.lastFetch !== promise) {

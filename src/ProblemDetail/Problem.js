@@ -259,7 +259,7 @@ const Problem = (props) => {
       <Grid className={classes.children} item>
           <Grid container direction="row" justify="flex-end" spacing={1}>
             <Grid item>
-              <OurLink to={`/solutions/${problemKey}/1`}>
+              <OurLink to={`/solutions?problemKey=${problemKey}`}>
                 <Button color='primary' variant='outlined' size='large'>
                   제출 현황
                 </Button>

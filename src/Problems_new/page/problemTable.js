@@ -9,7 +9,7 @@ const ProblemTable = (props) => {
   return (
     <Table>
       <TableRow>
-        <TableHeader width="4%">식별자</TableHeader>
+        <TableHeader width="4%">번호</TableHeader>
         <TableHeader width="40%">제목</TableHeader>
         <TableHeader width="40%">분류</TableHeader>
         <TableHeader width="4%">AC</TableHeader>
