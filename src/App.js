@@ -12,7 +12,7 @@ import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
 // import ProblemUpdateApp from './ProblemUpdate/ProblemFormApp';
 import ProblemUpdateForm from './pages/ProblemUpdateForm';
 import Error from './Error/Error';
-import ProblemsPage from './Problems_new/page/problems';
+// import ProblemsPage from './Problems_new/page/problems';
 import SolutionsPage from './Solutions_new/page/solutions';
 
 const theme = createMuiTheme({
@@ -31,15 +31,14 @@ const App = () => (
     <SnackbarProvider content={(key, message) => (<Button id={key} variant='contained' color='primary' size='large'>{message}</Button>)}>
       <Router basename="/oj">
         <Switch>
-          <Route path="/" exact component={ProblemListApp} />
+          <Route path={['/', '/problems']} exact component={ProblemListApp} />
           <Route path="/new" exact component={ProblemCreateForm} />
-          <Route path="/update/:problemKey" exact component={ProblemUpdateForm} />
-          <Route path="/problems" exact component={ProblemListApp} />
+          <Route path="/edit/:problemKey" exact component={ProblemUpdateForm} />
           <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
-          <Route path="/solutionForm/:problemKey" exact component={SolutionFormApp} />
+          <Route path="/submit/:problemKey" exact component={SolutionFormApp} />
           <Route path="/newSolutions" exact component={SolutionsPage} />
-          <Route path="/solutions/:problemNo/:pageNum" exact component={SolutionListAppWrapper} />
+          <Route path="/solutions" exact component={SolutionListAppWrapper} />
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
 
           <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
