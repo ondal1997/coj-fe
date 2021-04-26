@@ -25,18 +25,8 @@ const SolutionsPage = (props) => {
     lastFetch: null,
   });
 
-  // userId
-  const [userId, setUserId] = useState(null);
-  urlSearchParams.append('highlight', userId);
-  //
-
   useEffect(async () => {
     setIsLoaded(false);
-
-    // userId
-    const res = await fetchAndJson('/api/auth');
-    setUserId(res.id);
-    //
 
     let promise;
     if (problemKey) {

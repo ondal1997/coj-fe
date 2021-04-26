@@ -82,7 +82,7 @@ const Form = (props) => {
     if (result.solution.state > 1) {
       setTimeout(() => {
         setOpen(false);
-        history.push(`/solutions?problemNo=${problemKey}&page=1`);
+        history.push(`/solutions?problemKey=${problemKey}&page=1`);
       }, 2000);
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
