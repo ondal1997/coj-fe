@@ -5,8 +5,8 @@ import {
 } from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { fetchAndJson } from '../OurLink';
-import CodeEditor from './CodeEditor';
-import JudgeProgress from './JudgeProgress';
+import CodeEditor from '../SolutionForm/CodeEditor';
+import JudgeProgress from '../SolutionForm/JudgeProgress';
 import Error from '../Error/Error';
 import _handleFetchRes from '../Error/utils';
 

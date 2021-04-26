@@ -1,4 +1,4 @@
-const isValid = (...param) => { // name, value // 유효성 검사
+const isProblemInputValid = (...param) => { // name, value // 유효성 검사
   let res = true;
 
   if (param[0] === '' || param[1] === '') {
@@ -16,4 +16,4 @@ const isValid = (...param) => { // name, value // 유효성 검사
   return res;
 };
 
-module.exports = { isValid };
+module.exports = { isProblemInputValid };
