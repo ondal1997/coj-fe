@@ -6,6 +6,7 @@ import { Table,
   TableRow,
   TableContainer } from '@material-ui/core';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import judgeState from '../SolutionList/judgeState';
 
 const StyledState = styled.span`
@@ -37,7 +38,11 @@ const SolutionInform = (props) => {
           <TableRow>
             <TableCell align="center">{`${solution.key}`}</TableCell>
             <TableCell align="center">{`${solution.ownerId}`}</TableCell>
-            <TableCell align="center">{`${solution.problemKey}`}</TableCell>
+            <TableCell align="center">
+              <Link style={{ color: '#444444' }} to={`/problem/${solution.problemKey}`}>
+                {`${solution.problemKey}`}
+              </Link>
+            </TableCell>
             <TableCell align="center">{solution.state === '2' ? `${solution.maxTime}ms` : '-'}</TableCell>
             <TableCell align="center">{solution.state === '2' ? `${solution.maxMemory}MB` : '-'}</TableCell>
             <TableCell align="center">
