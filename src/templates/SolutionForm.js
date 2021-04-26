@@ -47,7 +47,7 @@ const StyledButton = withStyles({
 const fetchLanguages = async () => {
   try {
     const json = await fetchAndJson('/api/availableLanguages');
-    return json;
+    return json.availableLanguages;
   } catch (error) {
     console.error(error);
   }
@@ -144,9 +144,13 @@ const Form = (props) => {
 
   return (
     <Grid className={classes.root} container>
-      <Grid className={classes.children} item xs={12}>
-        <h3 style={{ margin: '0 0' }}>{`${problemKey}. ${title}`}</h3>
-      </Grid>
+      {
+        isLoaded && (
+          <Grid className={classes.children} item xs={12}>
+            <h3 style={{ margin: '0 0' }}>{`${problemKey}. ${title}`}</h3>
+          </Grid>
+        )
+      }
       <Grid className={classes.children} container item direction='column' xs={12}>
         {isLoaded ? (<div style={{
           backgroundColor: '#F8F8F8', padding: '1%',
