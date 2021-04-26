@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 // import ProblemListApp from './ProblemList/ProblemListApp';
-import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
+// import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
 import ProblemCreateForm from './pages/ProblemCreateForm';
 import SolutionFormApp from './templates/SolutionForm';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
@@ -31,17 +31,14 @@ const App = () => (
     <SnackbarProvider content={(key, message) => (<Button id={key} variant='contained' color='primary' size='large'>{message}</Button>)}>
       <Router basename="/oj">
         <Switch>
-          <Route path="/" exact component={ProblemsPage} />
+          <Route path={['/', '/problems']} exact component={ProblemsPage} />
           <Route path="/new" exact component={ProblemCreateForm} />
-          <Route path="/update/:problemKey" exact component={ProblemUpdateForm} />
-          <Route path="/problems" exact component={ProblemsPage} />
+          <Route path="/edit/:problemKey" exact component={ProblemUpdateForm} />
           <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
-          <Route path="/solutionForm/:problemKey" exact component={SolutionFormApp} />
+          <Route path="/submit/:problemKey" exact component={SolutionFormApp} />
           <Route path="/solutions" exact component={SolutionsPage} />
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
-
-          <Route path="/allSolutions/:pageNum" exact component={SolutionListAppWrapper} />
           <Route render={({ location }) => (
             <Error error={{ status: 404 }} path={location.pathname} />
           )} />

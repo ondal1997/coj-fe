@@ -158,7 +158,7 @@ const Problem = (props) => {
           {isOwners
             ? <>
                 <Grid item>
-                  <OurLink to={`/update/${problemKey}`}>수정</OurLink>
+                  <OurLink to={`/edit/${problemKey}`}>수정</OurLink>
                   <a onClick={handleClickOpen}>삭제</a>
                 </Grid>
               <Dialog
@@ -268,7 +268,7 @@ const Problem = (props) => {
             <Grid item>
               <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
-                  props.history.push(`/solutionForm/${problemKey}`);
+                  props.history.push(`/submit/${problemKey}`);
                 }
                 }>
                   문제 풀기

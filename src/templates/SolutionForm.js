@@ -82,7 +82,7 @@ const Form = (props) => {
     if (result.solution.state > 1) {
       setTimeout(() => {
         setOpen(false);
-        history.push(`/solutions/${problemKey}/1`);
+        history.push(`/solutions?problemNo=${problemKey}&page=1`);
       }, 2000);
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey); }, 16);
@@ -126,7 +126,7 @@ const Form = (props) => {
       const loginData = await fetchAndJson('/api/auth');
       console.log(loginData);
       if (!loginData.isAuthenticated) {
-        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/solutionForm/${problemKey}/${title}`);
+        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`);
         return;
       }
       const fetchedLanguages = await fetchLanguages();

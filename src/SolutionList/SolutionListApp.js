@@ -26,11 +26,9 @@ const validatePositiveInteger = (anything) => {
 };
 
 const SolutionListApp = (props) => {
-  const { problemNo, page } = props;
-  const problemKey = problemNo;
-
   const query = queryString.parse(props.location.search);
-  // const page = validatePositiveInteger(query.page);
+  const problemKey = query.problemNo;
+  const page = validatePositiveInteger(query.page);
   const limitCount = validatePositiveInteger(query.limitCount || 15);
 
   const [error, setError] = useState(null);
@@ -43,6 +41,7 @@ const SolutionListApp = (props) => {
     (async () => {
       let result = await fetchAndJson(`/api/problems/${problemKey}`);
       setTitle(result.problem.title); // 중간에 set State하면 어떻게 되는지 함 보자
+
       result = await fetchAndJson(`/api/problems/${problemKey}/solutions?pos=${(page - 1) * limitCount}&count=${limitCount}`);
 
       _handleFetchRes(result.status, setError, () => {
@@ -70,7 +69,7 @@ const SolutionListApp = (props) => {
           <Grid container direction='column' alignItems='center' spacing={1}>
             <Grid item container justify='space-around' spacing={10}>
               <Grid item>
-                <Typography variant='h4'>{problemNo}. {title}</Typography>
+                <Typography variant='h4'>{problemKey}. {title}</Typography>
               </Grid>
               <Grid item>
                 <Button color='primary' variant='outlined'
@@ -141,7 +140,7 @@ const SolutionListApp = (props) => {
                 count={Math.ceil(totalCount / limitCount)}
                 page={Number.parseInt(page, 10)}
                 onChange={(event, p) => {
-                  props.history.push(`/solutions/${problemKey}/${p}?${queryString.stringify({ ...query, page: p })}`);
+                  props.history.push(`/solutions?problemNo=${problemKey}&page=${p}`);
                 }}
               />
             </Grid>
@@ -152,7 +151,7 @@ const SolutionListApp = (props) => {
           <Grid container direction='column' alignItems='center' spacing={4}>
             <Grid item container justify='space-around' spacing={10}>
               <Grid item>
-                <Typography variant='h4'>{problemNo}. {title}</Typography>
+                <Typography variant='h4'>{problemKey}. {title}</Typography>
               </Grid>
               <Grid item>
               </Grid>
