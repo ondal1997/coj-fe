@@ -7,13 +7,14 @@ const SolutionTable = (props) => {
   return (
     <Table>
       <TableRow>
-        <TableHeader width="10%">식별자</TableHeader>
-        <TableHeader width="10%">제출자</TableHeader>
-        <TableHeader width="10%">문제</TableHeader>
-        <TableHeader width="20%">상태</TableHeader>
+        <TableHeader width="7%">번호</TableHeader>
+        <TableHeader width="13%">제출자</TableHeader>
+        <TableHeader width="7%">문제</TableHeader>
+        <TableHeader width="13%">상태</TableHeader>
         <TableHeader width="10%">언어</TableHeader>
         <TableHeader width="10%">시간</TableHeader>
         <TableHeader width="10%">메모리</TableHeader>
+        <TableHeader width="10%">코드</TableHeader>
         <TableHeader width="20%">제출 시간</TableHeader>
       </TableRow>
       {solutions.map((solution) => (
@@ -25,6 +26,7 @@ const SolutionTable = (props) => {
           <TableData>{solution.language}</TableData>
           <TableData>{`${solution.maxTime}ms`}</TableData>
           <TableData>{`${solution.maxMemory}MB`}</TableData>
+          <TableData>{`${'hi'}B`}</TableData>
           <TableData>{new Date(solution.uploadTime).toLocaleTimeString('ko-KR', {
             year: 'numeric',
             month: 'long',
