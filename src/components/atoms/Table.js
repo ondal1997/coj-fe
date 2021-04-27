@@ -34,7 +34,6 @@ const TableRow = (props) => <Tr style={props.style}>{props.children}</Tr>;
 const TableHeader = (props) => (
   <Th style={{ width: props.width }}>{props.children}</Th>
 );
-
 const TableData = (props) => (
   <Td style={{ textAlign: props.align }}>{props.children}</Td>
 );
