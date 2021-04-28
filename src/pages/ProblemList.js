@@ -2,12 +2,12 @@ import { CircularProgress, InputAdornment, TextField } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Pagination } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
-import Error from '../../Error/Error';
-import _handleFetchRes from '../../Error/utils';
-import { fetchAndJson } from '../../OurLink';
-import ProblemTable from './problemTable';
+import Error from '../Error/Error';
+import _handleFetchRes from '../Error/utils';
+import { fetchAndJson } from '../OurLink';
+import ProblemTable from '../components/organisms/ProblemTable';
 
-const ProblemsPage = (props) => {
+const ProblemList = (props) => {
   const urlSearchParams = new URLSearchParams(props.location.search);
 
   const query = urlSearchParams.get('query') || '';
@@ -120,4 +120,4 @@ const ProblemsPage = (props) => {
   );
 };
 
-export default ProblemsPage;
+export default ProblemList;

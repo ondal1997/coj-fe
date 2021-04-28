@@ -10,8 +10,8 @@ import SolutionForm from './pages/SolutionForm';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
 import Error from './Error/Error';
-import ProblemsPage from './Problems_new/page/problems';
-import SolutionsPage from './Solutions_new/page/solutions';
+import ProblemList from './pages/ProblemList';
+import SolutionList from './pages/SolutionList';
 
 const theme = createMuiTheme({
   palette: {
@@ -29,14 +29,14 @@ const App = () => (
     <SnackbarProvider content={(key, message) => (<Button id={key} variant='contained' color='primary' size='large'>{message}</Button>)}>
       <Router basename="/oj">
         <Switch>
-          <Route path={['/', '/problems']} exact component={ProblemsPage} />
+          <Route path={['/', '/problems']} exact component={ProblemList} />
           <Route path="/new" exact component={ProblemForm} />
           <Route path="/edit/:problemKey" exact component={ProblemForm} />
-          <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
+          <Route path="/problems/:problemKey" exact component={ProblemDetailApp} />
 
           <Route path="/submit/:problemKey" exact component={SolutionForm} />
-          <Route path="/solutions" exact component={SolutionsPage} />
-          <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
+          <Route path="/solutions" exact component={SolutionList} />
+          <Route path="/solutions/:solutionKey" exact component={SolutionDetailApp} />
           <Route render={({ location }) => (
             <Error error={{ status: 404 }} path={location.pathname} />
           )} />

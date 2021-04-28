@@ -7,7 +7,7 @@ import { Table,
   TableContainer } from '@material-ui/core';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import judgeState from '../SolutionList/judgeState';
+import judgeState from '../judgeState';
 
 const StyledState = styled.span`
   font-weight: 600;
@@ -39,7 +39,7 @@ const SolutionInform = (props) => {
             <TableCell align="center">{`${solution.key}`}</TableCell>
             <TableCell align="center">{`${solution.ownerId}`}</TableCell>
             <TableCell align="center">
-              <Link style={{ color: '#444444' }} to={`/problem/${solution.problemKey}`}>
+              <Link style={{ color: '#444444' }} to={`/problems/${solution.problemKey}`}>
                 {`${solution.problemKey}`}
               </Link>
             </TableCell>

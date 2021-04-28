@@ -1,9 +1,9 @@
 import { Tooltip } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, TableData, TableHeader, TableRow } from '../../components/atoms/Table';
-import judgeState from './judgeState';
+import { Table, TableData, TableHeader, TableRow } from '../atoms/Table';
 import { fetchAndJson } from '../../OurLink';
+import judgeState from '../../judgeState';
 
 function ProblemRepo() {
   this.subscribers = {};
@@ -69,7 +69,7 @@ const ProblemLabel = ({ problemKey }) => {
   }, []);
 
   return (<Tooltip title={title}>
-    <Link style={{ color: '#444444' }} to={`/problem/${problemKey}`}>{problemKey}</Link>
+    <Link style={{ color: '#444444' }} to={`/problems/${problemKey}`}>{problemKey}</Link>
   </Tooltip>);
 };
 
@@ -125,7 +125,7 @@ const SolutionTable = (props) => {
           <TableData>
             {
               solution.accessable ? (
-                <Link style={{ color: '#0057FF' }} to={`/solution/${solution.key}`}>
+                <Link style={{ color: '#0057FF' }} to={`/solutions/${solution.key}`}>
                   {solution.byteLength}B
                 </Link>
               ) : (

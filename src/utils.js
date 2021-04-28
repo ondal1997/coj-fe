@@ -23,8 +23,8 @@ const isProblemInputValid = (...param) => {
 
 /**
  * code editor의 언어 설정을 위한 함수
- * @param {*} language 
- * @returns 
+ * @param {*} language
+ * @returns
  */
 const getMode = (language) => {
   if (language.includes('python')) return 'python';
