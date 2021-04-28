@@ -5,11 +5,10 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 // import ProblemListApp from './ProblemList/ProblemListApp';
 // import SolutionListAppWrapper from './SolutionList/SolutionListAppWrapper';
-import ProblemCreateForm from './pages/ProblemCreateForm';
-import SolutionCreateForm from './pages/SolutionCreateForm';
+import ProblemForm from './pages/ProblemForm';
+import SolutionForm from './pages/SolutionForm';
 import ProblemDetailApp from './ProblemDetail/ProblemDetailApp';
 import SolutionDetailApp from './SolutionDetail/SolutionDetailApp';
-import ProblemUpdateForm from './pages/ProblemUpdateForm';
 import Error from './Error/Error';
 import ProblemsPage from './Problems_new/page/problems';
 import SolutionsPage from './Solutions_new/page/solutions';
@@ -31,11 +30,11 @@ const App = () => (
       <Router basename="/oj">
         <Switch>
           <Route path={['/', '/problems']} exact component={ProblemsPage} />
-          <Route path="/new" exact component={ProblemCreateForm} />
-          <Route path="/edit/:problemKey" exact component={ProblemUpdateForm} />
+          <Route path="/new" exact component={ProblemForm} />
+          <Route path="/edit/:problemKey" exact component={ProblemForm} />
           <Route path="/problem/:problemKey" exact component={ProblemDetailApp} />
 
-          <Route path="/submit/:problemKey" exact component={SolutionCreateForm} />
+          <Route path="/submit/:problemKey" exact component={SolutionForm} />
           <Route path="/solutions" exact component={SolutionsPage} />
           <Route path="/solution/:solutionKey" exact component={SolutionDetailApp} />
           <Route render={({ location }) => (
