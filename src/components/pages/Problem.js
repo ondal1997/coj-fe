@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Container,
   Paper,
-  Chip,
   Divider,
-  TextField,
-  withStyles,
   Table,
   TableBody,
   TableCell,
@@ -21,14 +17,17 @@ import {
   DialogContentText,
   DialogTitle,
   makeStyles,
+  CircularProgress,
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
-import { OurLink, fetchAndJson } from '../OurLink';
-import Error from '../Error/Error';
-import _handleFetchRes from '../Error/utils';
-import './reset.css';
+import TextField from '../atoms/TextField';
+import ChipContainer from '../molecules/ChipContainer';
+import { OurLink, fetchAndJson } from '../../OurLink';
+import Error from '../atoms/Error';
+import { _handleFetchRes } from '../../utils';
+import '../../css/reset_problemdetail.css';
 
 const pColor = '#F8F8F8';
 
@@ -65,52 +64,9 @@ const StyledChallengeResult = styled.span`
   font-size: larger;
 `;
 
-const StyledChipContainer = withStyles({
-  root: {
-    padding: '0',
-    '& ul': {
-      listStyle: 'none',
-      padding: '0',
-      margin: '0 0',
-    },
-    '& ul > li': {
-      listStyle: 'none',
-      display: 'inline',
-    },
-  },
-})(Container);
-
-const StyledChip = withStyles({
-  root: {
-    fontSize: 'medium',
-    backgroundColor: '#4995F2',
-    '&:focus': {
-      backgroundColor: '#4995F2',
-    },
-  },
-})(Chip);
-
-const StyledTextField = withStyles({
-  root: {
-    width: '100%',
-    marginTop: '1%',
-    '& label.Mui-focused': {
-      color: '#4995F2',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#4995F2',
-    },
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: '#4995F2',
-      },
-    },
-  },
-})(TextField);
-
 const Problem = (props) => {
   const classes = useStyles();
-  const { problemKey } = props;
+  const { problemKey } = props.match.params;
 
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
@@ -133,7 +89,6 @@ const Problem = (props) => {
 
     _handleFetchRes(result.status, setError, async () => {
       const loginData = await fetchAndJson('/api/auth');
-      // ownerId와 현재 사용자 아이디가 같으면
       if (loginData.id === result.problem.ownerId) {
         setIsOwners(true);
       }
@@ -143,7 +98,6 @@ const Problem = (props) => {
   };
 
   useEffect(() => {
-    // setIsOwners(true); // 접속자의 아이디와 제출자의 아이디의 동일 여부에 따라
     fetchProblem();
   }, []);
 
@@ -239,19 +193,7 @@ const Problem = (props) => {
               </Grid>
             </Grid>
             <Grid className={classes.children} item>
-              <StyledChipContainer>
-                  <ul>
-                    <Grid container direction='row' spacing={1}>
-                    {problem.categories.map((category, index) => (
-                      <Grid item key={index + 1}>
-                        <li>
-                          <StyledChip label={category} color="primary" />
-                        </li>
-                      </Grid>
-                    ))}
-                    </Grid>
-                  </ul>
-              </StyledChipContainer>
+              <ChipContainer categories={problem.categories} />
             </Grid>
           </Grid>
         </Grid>
@@ -366,9 +308,10 @@ const Problem = (props) => {
                 </CopyToClipboard>
               </Grid>
               <Grid item>
-                <StyledTextField
+                <TextField
                   variant="outlined"
                   multiline
+                  fullWidth
                   value={example.input}
                   InputProps={{
                     readOnly: true,
@@ -386,9 +329,10 @@ const Problem = (props) => {
                   </CopyToClipboard>
               </Grid>
               <Grid item>
-                <StyledTextField
+                <TextField
                   variant="outlined"
                   multiline
+                  fullWidth
                   value={example.output}
                   InputProps={{
                     readOnly: true,
@@ -402,7 +346,11 @@ const Problem = (props) => {
     </Grid>
     </Grid>
   ) : (
-    <div>Loading...</div>
+    <Grid container direction='row' justify='center' alignItems='center'>
+      <Grid item>
+        <CircularProgress />
+      </Grid>
+    </Grid>
   );
 };
 

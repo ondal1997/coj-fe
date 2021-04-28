@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import errorMessage from './errorMessage';
+import errorMessage from '../../errorMessage';
 
 const Error = (props) => {
   const { status } = props.error;

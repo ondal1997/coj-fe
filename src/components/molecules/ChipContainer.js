@@ -1,6 +1,6 @@
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
-import Category from '../atoms/Category';
+import BasicChip from '../atoms/BasicChip';
 
 const StyledChipContainer = withStyles({
   root: {
@@ -26,8 +26,10 @@ const Categories = ({ categories, handleDeleteCategory }) => (
     <ul>
       {categories.map((category, index) => (
         <li key={index}>
-          <Category category={category}
-            handleDelete={() => { handleDeleteCategory(index); }} />
+          {handleDeleteCategory ? (<BasicChip label={category}
+            handleDelete={() => { handleDeleteCategory(index); }} />)
+            : (<BasicChip label={category} />)
+          }
         </li>
       ))
       }

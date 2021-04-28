@@ -2,10 +2,10 @@ import { CircularProgress, InputAdornment, TextField } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Pagination } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
-import Error from '../Error/Error';
-import _handleFetchRes from '../Error/utils';
-import { fetchAndJson } from '../OurLink';
-import ProblemTable from '../components/organisms/ProblemTable';
+import Error from '../atoms/Error';
+import { _handleFetchRes } from '../../utils';
+import { fetchAndJson } from '../../OurLink';
+import ProblemTable from '../organisms/ProblemTable';
 
 const ProblemList = (props) => {
   const urlSearchParams = new URLSearchParams(props.location.search);

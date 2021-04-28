@@ -1,19 +1,15 @@
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 
-const StyledButton = withStyles({
-  root: {
-    color: 'white',
-    backgroundColor: 'black',
-    padding: '1%',
-    '&:hover': {
-      backgroundColor: '#CE2727',
-    },
-  },
-  label: {
-    fontSize: '17px',
-  },
-})(Button);
+const StyledButton = styled(Button)`
+  color: ${(props) => (props.color ? props.color : 'white')};
+  background-color: ${(props) => (props.bgColor ? props.bgColor : 'black')};
+  padding: 1%;
+  &:hover {
+    background-color: ${(props) => (props.hoverBgColor ? props.hoverBgColor : '#CE2727')};
+  };
+  font-size: 17px;
+`;
 
 const BasicButton = ({ variant, disabled, label, handleClick }) => (
   <StyledButton variant={variant} disabled={disabled}

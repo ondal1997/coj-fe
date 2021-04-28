@@ -1,10 +1,10 @@
 import { CircularProgress } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useEffect, useState } from 'react';
-import Error from '../Error/Error';
-import _handleFetchRes from '../Error/utils';
-import { fetchAndJson } from '../OurLink';
-import SolutionTable from '../components/organisms/SolutionTable';
+import Error from '../atoms/Error';
+import { _handleFetchRes } from '../../utils';
+import { fetchAndJson } from '../../OurLink';
+import SolutionTable from '../organisms/SolutionTable';
 
 const SolutionList = (props) => {
   const urlSearchParams = new URLSearchParams(props.location.search);

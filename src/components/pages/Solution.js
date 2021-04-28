@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
-// import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import CodeViewer from './CodeViewer';
-import SolutionInform from './SolutionInform';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CodeViewer from '../atoms/CodeViewer';
+import SolutionInform from '../molecules/SolutionInform';
 import 'codemirror/keymap/sublime';
-import { fetchAndJson } from '../OurLink';
-import judgeState from '../SolutionList/judgeState';
-import Error from '../Error/Error';
-import _handleFetchRes from '../Error/utils';
-import './codeViewer.css';
+import { fetchAndJson } from '../../OurLink';
+import judgeState from '../../judgeState';
+import Error from '../atoms/Error';
+import { _handleFetchRes } from '../../utils';
+import '../../css/codeViewer.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SolutionDetailApp = (props) => {
+const Solution = (props) => {
   const classes = useStyles();
 
   const { solutionKey } = props.match.params;
@@ -98,9 +98,11 @@ const SolutionDetailApp = (props) => {
           return null;
         })()
         }
-      </Grid>) : (
-        <div>Loading...</div>
+      </Grid>) : ( // 높이가 지정되어야지 alignItems 먹힘. -> template 이용하기
+        <Grid container justify='center' alignItems='center' style={{ height: 500 }}>
+          <CircularProgress />
+        </Grid>
     );
 };
 
-export default SolutionDetailApp;
+export default Solution;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { getMode } from '../../utils';
 import 'codemirror/keymap/sublime';
-import '../reset_solutionform.css';
+import '../../css/reset_solutionform.css';
 
 const CodeEditor = ({ defaultValue, language, updateCode }) => {
   const onWriteCode = () => {
@@ -24,7 +24,7 @@ const CodeEditor = ({ defaultValue, language, updateCode }) => {
         width='100%'
         options={{
           keyMap: 'sublime',
-          mode: getMode(language),
+          mode: language === 'undefined' ? getMode(language) : 'python',
           scrollbarStyle: 'null',
         }} onChange={() => { onWriteCode(); }}/>;
 };

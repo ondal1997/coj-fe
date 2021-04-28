@@ -32,12 +32,12 @@ const Categories = ({ categories, updateCategories }) => {
     e.target.value = '';
   };
 
-  return <Grid container direction='column' spacing={1}>
-    <Grid item>
+  return <Grid container direction='column'>
+    <Grid item style={{ margin: '0.5% 0' }}>
       <StyledTextField label='카테고리' variant='outlined' placeholder='카테고리 작성 후 엔터를 입력하세요.'
         onKeyPress={(e) => { if (e.charCode === 13) handleEnterInput(e); }} />
     </Grid>
-    <Grid item container direction='row'>
+    <Grid item container direction='row' style={{ margin: '0.5% 0' }}>
       <ChipContainer categories={categories} handleDeleteCategory={handleDeleteCategory} />
     </Grid>
   </Grid>;

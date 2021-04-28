@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
 import { Divider, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import _ from 'lodash';
-import '../components/reset.css';
-import { isProblemInputValid } from '../utils';
-import Testcases from '../components/organisms/Testcases';
-import Examples from '../components/organisms/Examples';
-import Categories from '../components/organisms/Categories';
-import MyEditor from '../components/atoms/MyEditor';
-import BasicButton from '../components/atoms/BasicButton';
-import TextField from '../components/atoms/TextField';
+import { fetchAndJson } from '../../OurLink';
+import Error from '../atoms/Error';
+import { isProblemInputValid, _handleFetchRes } from '../../utils';
+import '../../css/reset.css';
+import Testcases from '../organisms/Testcases';
+import Examples from '../organisms/Examples';
+import Categories from '../organisms/Categories';
+import MyEditor from '../atoms/MyEditor';
+import BasicButton from '../atoms/BasicButton';
+import TextField from '../atoms/TextField';
 
 const StyledDivider = withStyles({
   root: {
@@ -17,23 +19,23 @@ const StyledDivider = withStyles({
   },
 })(Divider);
 
-const Form = ({ problem, handleSubmit }) => {
-  const [inputs, setInputs] = useState({
-    title: problem.title,
-    timeLimit: problem.timeLimit,
-    memoryLimit: problem.memoryLimit,
-  });
-  const [description, setDescription] = useState(problem.description);
-  const [inputDescription, setInputDescription] = useState(problem.inputDescription);
-  const [outputDescription, setOutputDescription] = useState(problem.outputDescription);
+const ProblemForm = (props) => {
+  const { problemKey } = props.match.params;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
 
-  const [examples, setExamples] = useState(problem.examples);
+  const [title, setTitle] = useState('');
+  const [timeLimit, setTimeLimit] = useState(2000);
+  const [memoryLimit, setMemoryLimit] = useState(512);
 
-  const [testcases, setTestcases] = useState(problem.testcases);
+  const [description, setDescription] = useState('');
+  const [inputDescription, setInputDescription] = useState('');
+  const [outputDescription, setOutputDescription] = useState('');
 
-  const [categories, setCategories] = useState(problem.categories);
+  const [examples, setExamples] = useState([]);
+  const [testcases, setTestcases] = useState([]);
 
-  const { title, timeLimit, memoryLimit } = inputs;
+  const [categories, setCategories] = useState([]);
 
   const inputsRef = useRef([]);
 
@@ -44,17 +46,34 @@ const Form = ({ problem, handleSubmit }) => {
     return inputsRef.current[index];
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
+  const fetchProblem = async (data) => { // 등록 수정 분기
+    let url = '/api/problems';
+    let method = '';
+    if (problemKey !== undefined) {
+      method = 'PUT';
+      url += `/${problemKey}`;
+    } else method = 'POST';
+
+    const result = await fetchAndJson(`${url}`, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    _handleFetchRes(result.status, setError, () => {
+      props.history.push('/problems');
     });
   };
 
-  const submit = async () => {
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'title') setTitle(value);
+    else if (name === 'timeLimit') setTimeLimit(value);
+    else setMemoryLimit(value);
+  };
+
+  const handleSubmit = async () => {
     let valid = true;
-    console.log(description);
     inputsRef.current.every(({ current }) => { // 유효 X가 하나라도 있으면 종료
       const { name, value } = current;
       const res = isProblemInputValid(name, value);
@@ -108,14 +127,44 @@ const Form = ({ problem, handleSubmit }) => {
       outputDescription,
     };
 
-    handleSubmit(data);
+    fetchProblem(data);
   };
 
-  useEffect(() => {
-    inputsRef.current[0].current.value = problem.title;
-    inputsRef.current[1].current.value = problem.timeLimit;
-    inputsRef.current[2].current.value = problem.memoryLimit;
+  useEffect(async () => {
+    const loginData = await fetchAndJson('/api/auth');
+    if (!loginData.isAuthenticated) {
+      window.location.replace('https://codersit.co.kr/bbs/login.php?url=%2Foj/new');
+      return;
+    }
+
+    if (problemKey === undefined) {
+      setIsLoaded(true);
+      return;
+    }
+    const result = await fetchAndJson(`/api/problems/${problemKey}/all`);
+    const { status, problem } = result;
+    _handleFetchRes(status, setError, () => {
+      setTitle(problem.title);
+      setTimeLimit(problem.timeLimit);
+      setMemoryLimit(problem.memoryLimit);
+      setDescription(problem.description);
+      setInputDescription(problem.inputDescription);
+      setOutputDescription(problem.outputDescription);
+      setCategories(problem.categories);
+      setExamples(problem.examples);
+      setTestcases(problem.testcases);
+
+      setIsLoaded(true);
+    });
   }, []);
+
+  if (error) {
+    return <Error error={error} />;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Grid container>
@@ -127,6 +176,7 @@ const Form = ({ problem, handleSubmit }) => {
             fullWidth
             margin="normal"
             variant="outlined"
+            value={title}
             handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[0]} />
         </Grid>
         <Grid container item direction='row' spacing={2}>
@@ -136,7 +186,7 @@ const Form = ({ problem, handleSubmit }) => {
               label='시간 제한 (ms)'
               margin="normal"
               variant="outlined"
-              defaultValue={timeLimit}
+              value={timeLimit}
               handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[1]} />
           </Grid>
           <Grid item>
@@ -145,7 +195,7 @@ const Form = ({ problem, handleSubmit }) => {
               label='메모리 제한 (MB)'
               margin="normal"
               variant="outlined"
-              defaultValue={memoryLimit}
+              value={memoryLimit}
               handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[2]} />
           </Grid>
         </Grid>
@@ -175,11 +225,11 @@ const Form = ({ problem, handleSubmit }) => {
         </Grid>
         <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
           <BasicButton label='확인' variant='contained'
-            disabled={disabled} handleClick={() => submit()} />
+            disabled={disabled} handleClick={handleSubmit} />
         </Grid>
       </Grid>
     </Grid>
   );
 };
 
-export default Form;
+export default ProblemForm;
