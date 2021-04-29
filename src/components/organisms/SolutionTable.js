@@ -36,7 +36,7 @@ ProblemRepo.prototype = { // prototype시 여러 객체를 만들 때 함수가 
     }
     this.isLoading[problemKey] = true;
     const result = await fetchAndJson(`/api/problems/${problemKey}`);
-    this.problems[problemKey] = result.problem;
+    this.problems[problemKey] = result.problem || {};
     this.isLoading[problemKey] = false;
     this.notify(problemKey);
   },
@@ -58,7 +58,7 @@ const ProblemLabel = ({ problemKey }) => {
 
   useEffect(() => {
     const handleProblemChange = (problem) => {
-      setTitle(problem.title);
+      setTitle(problem.title || '삭제된 문제');
     };
 
     problemRepo.subscribe(problemKey, handleProblemChange);
@@ -92,7 +92,12 @@ const SolutionTable = (props) => {
         <TableHeader width="20%">제출 시간</TableHeader>
       </TableRow>
       {solutions.map((solution) => (
-        <TableRow key={solution.key} style={ highlight === solution.ownerId ? { backgroundColor: '#DDEEFF' } : {}}>
+        <TableRow key={solution.key}
+          style={
+            highlight === solution.ownerId ? (
+              { backgroundColor: '#DDEEFF' }) : {}
+          }
+        >
           <TableData>{solution.key}</TableData>
           <TableData>{solution.ownerId}</TableData>
           <TableData>

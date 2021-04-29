@@ -50,51 +50,49 @@ const SolutionForm = (props) => {
   const { problemKey } = props.match.params;
   const { history } = props;
 
-  const [problem, setProblem] = useState({});
   // const [solution, setSolution] = useState({});
-  const [languages, setLanguages] = useState([]);
   const [error, setError] = useState(null);
+  const [problem, setProblem] = useState(null);
+  const [languages, setLanguages] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [sourceCode, setSourceCode] = useState('');
 
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [judgeState, setJudgeState] = useState(null);
 
   const fetchLanguages = async () => {
     const result = await fetchAndJson('/api/availableLanguages');
-    _handleFetchRes(result.status, setError, () => {
-      setLanguages(result.availableLanguages);
-    });
+    _handleFetchRes(result.status, setError, () => {});
+    return result.availableLanguages;
   };
 
   const fetchProblem = async () => {
     const result = await fetchAndJson(`/api/problems/${problemKey}`);
-
-    _handleFetchRes(result.status, setError, () => {
-      setProblem(result.problem);
-      setIsLoaded(true);
-    });
+    _handleFetchRes(result.status, setError, () => {});
+    return result.problem;
   };
 
   const fetchJudgeResult = async (solutionKey, updateOpen, updateProgress) => {
     const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
-    const { testcaseHitCount, testcaseSize } = result.solution;
+    const { testcaseHitCount, testcaseSize, state } = result.solution;
+    setJudgeState(state);
     updateProgress((testcaseHitCount / testcaseSize) * 100);
 
-    if (result.solution.state > 1) {
+    if (state > 1) {
       setTimeout(() => {
         updateOpen(false);
-        history.push(`/solutions?problemNo=${problem.key}&page=1`);
-      }, 2000);
+        history.push(`/solutions?problemKey=${problem.key}&page=1`);
+      }, 3000);
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey, updateOpen, updateProgress); }, 16);
     }
   };
 
-  const fetchSolution = async (data, updateSubmitting, updateOpen, updatProgress) => {
+  const fetchSolution = async (data, updateSubmitting, updateOpen, updateProgress) => {
     updateSubmitting(true);
 
     const result = await fetchAndJson('/api/solutions', {
@@ -108,7 +106,7 @@ const SolutionForm = (props) => {
     _handleFetchRes(result.status, setError, () => {
       updateSubmitting(false);
       updateOpen(true);
-      fetchJudgeResult(result.solution.key, updateOpen, updatProgress);
+      fetchJudgeResult(result.solution.key, updateOpen, updateProgress);
     });
   };
 
@@ -135,11 +133,11 @@ const SolutionForm = (props) => {
   useEffect(() => {
     (async () => {
       const loginData = await fetchAndJson('/api/auth');
-      console.log(loginData);
       if (!loginData.isAuthenticated) {
         window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`);
         return;
       }
+      setIsLoaded(true);
 
       // solution fetch 추가로 넣고 handleSubmit 시 fetch 추가로 구현하면
       // 풀이 수정도 가능.
@@ -149,8 +147,8 @@ const SolutionForm = (props) => {
       //   language: 'python', // language default value: python
       //   sourceCode: '',
       // });
-      fetchLanguages();
-      fetchProblem();
+      setLanguages(await fetchLanguages());
+      setProblem(await fetchProblem());
       // setSolution 관련은 나중에
     })();
   }, []);
@@ -159,43 +157,47 @@ const SolutionForm = (props) => {
     return <Error error={error} />;
   }
 
+  if (!isLoaded) {
+    return null;
+  }
+
   return (<Grid className={classes.root} container>
-    {isLoaded ? (<>
-    <Grid className={classes.children} item xs={12}>
-      <h3 style={{ margin: '0 0' }}>{isLoaded ? (`${problem.key}. ${problem.title}`) : null }</h3>
-    </Grid>
-    <Grid className={classes.children} container item direction='column' xs={12}>
-      <div style={{
-        backgroundColor: '#F8F8F8', padding: '1%',
-      }}>
-        <Grid item>
-          <FormLabel component="legend">
-            <strong>언어 선택</strong>
-          </FormLabel>
-        </Grid>
-        <Grid item>
-          <RadioGroup name="language"
-            value={selectedLanguage}
-            onChange={(event) => {
-              setSelectedLanguage(event.target.value);
-            }}>
-            {languages.map((language) => (
-                <FormControlLabel key={language} value={language} label={language}
-                  control={<Radio color="default" />} />
-            ))
-            }
-          </RadioGroup>
-        </Grid>
-      </div>
-    </Grid>
-  </>) : (<CircularProgress size={30} />)
-      }
+    {(problem === null || languages === null) ? (<CircularProgress size={30} />) : (<>
+      <Grid className={classes.children} item xs={12}>
+        <h3 style={{ margin: 0 }}>{`${problem.key}. ${problem.title}`}</h3>
+      </Grid>
+      <Grid className={classes.children} container item direction='column' xs={12}>
+        <div style={{
+          backgroundColor: '#F8F8F8', padding: '1%',
+        }}>
+          <Grid item>
+            <FormLabel component="legend">
+              <strong>언어 선택</strong>
+            </FormLabel>
+          </Grid>
+          <Grid item>
+            <RadioGroup name="language"
+              value={selectedLanguage}
+              onChange={(event) => {
+                setSelectedLanguage(event.target.value);
+              }}>
+              {languages.map((language) => (
+                  <FormControlLabel key={language} value={language} label={language}
+                    control={<Radio color="default" />} />
+              ))
+              }
+            </RadioGroup>
+          </Grid>
+        </div>
+      </Grid>
+    </>)}
     <Grid className={classes.children} item xs={12}
       style={{ border: '1px solid #E0E0E0' }}>
       <CodeEditor
-      defaultValue={sourceCode}
-      language={selectedLanguage}
-      updateCode={setSourceCode} />
+        defaultValue={sourceCode}
+        language={selectedLanguage}
+        updateCode={setSourceCode}
+      />
     </Grid>
     <Grid className={classes.children} item container direction='row-reverse' xs={12}>
       <Grid item>
@@ -204,8 +206,8 @@ const SolutionForm = (props) => {
           {!isSubmitting ? '풀이 제출하기' : '제출 중'}
         </StyledButton>
       </Grid>
-      <Backdrop open={open} style={{ zIndex: 9999 }}>
-        <JudgeProgress progress={progress} />
+      <Backdrop open={open} style={{ zIndex: 1 }}>
+        <JudgeProgress judgeState={judgeState} progress={progress} />
       </Backdrop>
     </Grid>
   </Grid>);
