@@ -197,88 +197,90 @@ const SolutionForm = (props) => {
   }, []);
 
   return (
-    <Grid className={classes.root} container>
-      {problem === null || languages === null ? (
-        <CircularProgress size={30} />
-      ) : (
-        <>
-          <Grid className={classes.children} item xs={12}>
-            <h3 style={{ margin: 0 }}>{`${problem.key}. ${problem.title}`}</h3>
-          </Grid>
-          <Grid
-            className={classes.children}
-            container
-            item
-            direction="column"
-            xs={12}
-          >
-            <div
-              style={{
-                backgroundColor: '#F8F8F8',
-                padding: '1%',
-              }}
+    <PageTemplate content={
+      <Grid className={classes.root} container>
+        {problem === null || languages === null ? (
+          <CircularProgress size={30} />
+        ) : (
+          <>
+            <Grid className={classes.children} item xs={12}>
+              <h3 style={{ margin: 0 }}>{`${problem.key}. ${problem.title}`}</h3>
+            </Grid>
+            <Grid
+              className={classes.children}
+              container
+              item
+              direction="column"
+              xs={12}
             >
-              <Grid item>
-                <FormLabel component="legend">
-                  <strong>언어 선택</strong>
-                </FormLabel>
-              </Grid>
-              <Grid item>
-                <RadioGroup
-                  name="language"
-                  value={selectedLanguage}
-                  onChange={(event) => {
-                    setSelectedLanguage(event.target.value);
-                  }}
-                >
-                  {languages.map((language) => (
-                    <FormControlLabel
-                      key={language}
-                      value={language}
-                      label={language}
-                      control={<Radio color="default" />}
-                    />
-                  ))}
-                </RadioGroup>
-              </Grid>
-            </div>
-          </Grid>
-        </>
-      )}
-      <Grid
-        className={classes.children}
-        item
-        xs={12}
-        style={{ border: '1px solid #E0E0E0' }}
-      >
-        <CodeEditor
-          defaultValue={sourceCode}
-          language={selectedLanguage}
-          updateCode={setSourceCode}
-        />
-      </Grid>
-      <Grid
-        className={classes.children}
-        item
-        container
-        direction="row-reverse"
-        xs={12}
-      >
-        <Grid item>
-          <StyledButton
-            variant="contained"
-            disabled={isSubmitting}
-            size="medium"
-            onClick={handleSubmit}
-          >
-            {!isSubmitting ? '풀이 제출하기' : '제출 중'}
-          </StyledButton>
+              <div
+                style={{
+                  backgroundColor: '#F8F8F8',
+                  padding: '1%',
+                }}
+              >
+                <Grid item>
+                  <FormLabel component="legend">
+                    <strong>언어 선택</strong>
+                  </FormLabel>
+                </Grid>
+                <Grid item>
+                  <RadioGroup
+                    name="language"
+                    value={selectedLanguage}
+                    onChange={(event) => {
+                      setSelectedLanguage(event.target.value);
+                    }}
+                  >
+                    {languages.map((language) => (
+                      <FormControlLabel
+                        key={language}
+                        value={language}
+                        label={language}
+                        control={<Radio color="default" />}
+                      />
+                    ))}
+                  </RadioGroup>
+                </Grid>
+              </div>
+            </Grid>
+          </>
+        )}
+        <Grid
+          className={classes.children}
+          item
+          xs={12}
+          style={{ border: '1px solid #E0E0E0' }}
+        >
+          <CodeEditor
+            defaultValue={sourceCode}
+            language={selectedLanguage}
+            updateCode={setSourceCode}
+          />
         </Grid>
-        <Backdrop open={open} style={{ zIndex: 1 }}>
-          <JudgeProgress judgeState={judgeState} progress={progress} />
-        </Backdrop>
-      </Grid>
-    </Grid>
+        <Grid
+          className={classes.children}
+          item
+          container
+          direction="row-reverse"
+          xs={12}
+        >
+          <Grid item>
+            <StyledButton
+              variant="contained"
+              disabled={isSubmitting}
+              size="medium"
+              onClick={handleSubmit}
+            >
+              {!isSubmitting ? '풀이 제출하기' : '제출 중'}
+            </StyledButton>
+          </Grid>
+          <Backdrop open={open} style={{ zIndex: 1 }}>
+            <JudgeProgress judgeState={judgeState} progress={progress} />
+          </Backdrop>
+        </Grid>
+      </Grid>}
+    />
   );
 };
 

@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
+    wordBreak: 'keep-all',
     [theme.breakpoints.down('md')]: {
       fontSize: '30px',
     },
@@ -263,7 +264,7 @@ const Problem = (props) => {
       <Grid container item direction="column">
         <Divider />
           <TableContainer>
-            <Table>
+            <Table style={{ whiteSpace: 'nowrap' }}>
               <TableHead>
                 <TableRow>
                   <TableCell align="center">시간 제한</TableCell>

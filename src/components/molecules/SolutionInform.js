@@ -24,7 +24,7 @@ const SolutionInform = (props) => {
   const { solution } = props;
 
   return (<TableContainer>
-      <Table>
+      <Table style={{ whiteSpace: 'nowrap' }}>
         <TableHead>
           <TableRow>
             <TableCell align="center">제출 번호</TableCell>
