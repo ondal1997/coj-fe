@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
@@ -20,18 +20,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const JudgeProgress = ({ progress }) => {
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#0057FF',
+    },
+    secondary: {
+      main: '#E94D00',
+    },
+  },
+});
+
+const JudgeProgress = ({ progress, judgeState }) => {
   const classes = useStyles();
 
-  return (<Grid className={classes.root}
-          container direction='column' justify='center'>
+  return (
+    <Grid className={classes.root} container direction="column" justify="center">
+      <ThemeProvider theme={theme}>
         <Grid item>
-          <Typography>채점 중입니다...{`${Math.ceil(progress)}%`}</Typography>
+          <Typography color={judgeState > 2 ? 'secondary' : 'primary'} variant="h4" align="center">{`${Math.ceil(
+            progress,
+          )}%`}</Typography>
         </Grid>
         <Grid item>
-          <LinearProgress variant="determinate" value={progress}/>
+          <LinearProgress
+            color={judgeState > 2 ? 'secondary' : 'primary'}
+            variant="determinate"
+            value={progress}
+          />
+          <LinearProgress
+            color={judgeState > 2 ? 'secondary' : 'primary'}
+            variant="determinate"
+            value={progress}
+          />
+          <LinearProgress
+            color={judgeState > 2 ? 'secondary' : 'primary'}
+            variant="determinate"
+            value={progress}
+          />
+          <LinearProgress
+            color={judgeState > 2 ? 'secondary' : 'primary'}
+            variant="determinate"
+            value={progress}
+          />
+          <LinearProgress
+            color={judgeState > 2 ? 'secondary' : 'primary'}
+            variant="determinate"
+            value={progress}
+          />
+          <LinearProgress
+            color={judgeState > 2 ? 'secondary' : 'primary'}
+            variant="determinate"
+            value={progress}
+          />
         </Grid>
-    </Grid>);
+      </ThemeProvider>
+    </Grid>
+  );
 };
 
 export default JudgeProgress;

@@ -41,14 +41,4 @@ const judgeState = [
   },
 ];
 
-// getStateByCode(code) {
-//   if (length code) {
-//     return [code]
-//   }
-//   color: defaultsDeep
-//   name: '미정의된 코드'
-// }
-// return
-// }
-
 export default judgeState;
