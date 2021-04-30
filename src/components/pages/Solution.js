@@ -15,16 +15,6 @@ import '../../css/codeViewer.css';
 import ErrorContext from '../../contexts/error';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.down('sm')]: {
-      margin: '0 0',
-      padding: '0 1%',
-    },
-    [theme.breakpoints.up('md')]: {
-      margin: '0 0',
-      padding: '0 15%',
-    },
-  },
   children: {
     [theme.breakpoints.down('sm')]: {
       margin: '1% 0',
@@ -66,7 +56,7 @@ const Solution = (props) => {
   }, []);
 
   return isLoaded
-    ? (<Grid className={classes.root} container direction='column'>
+    ? (<Grid container direction='column'>
         <Grid className={classes.children} item xs={12}>
           <Typography variant='h3'>
             제출 정보
