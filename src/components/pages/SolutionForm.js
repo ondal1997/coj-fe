@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-  Button, Grid, FormControlLabel,
-  FormLabel, RadioGroup, Radio, Backdrop, CircularProgress,
+  Button,
+  Grid,
+  FormControlLabel,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  Backdrop,
+  CircularProgress,
 } from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import CodeEditor from '../atoms/CodeEditor';
 import JudgeProgress from '../organisms/JudgeProgress';
-import { fetchAndJson } from '../../OurLink';
+import { pureFetchAndJson } from '../../OurLink';
 import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
+import AuthenticationContext from '../../contexts/authentication';
+import ErrorContext from '../../contexts/error';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,16 +53,17 @@ const StyledButton = withStyles({
 })(Button);
 
 const SolutionForm = (props) => {
+  const [error, setError] = useContext(ErrorContext);
+  const [userId, setUserId] = useContext(AuthenticationContext);
+
   const classes = useStyles();
 
   const { problemKey } = props.match.params;
   const { history } = props;
 
   // const [solution, setSolution] = useState({});
-  const [error, setError] = useState(null);
   const [problem, setProblem] = useState(null);
   const [languages, setLanguages] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [sourceCode, setSourceCode] = useState('');
@@ -65,19 +74,47 @@ const SolutionForm = (props) => {
   const [judgeState, setJudgeState] = useState(null);
 
   const fetchLanguages = async () => {
-    const result = await fetchAndJson('/api/availableLanguages');
-    _handleFetchRes(result.status, setError, () => {});
+    let result;
+    try {
+      result = await pureFetchAndJson('/api/availableLanguages');
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return [];
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return [];
+    }
     return result.availableLanguages;
   };
 
   const fetchProblem = async () => {
-    const result = await fetchAndJson(`/api/problems/${problemKey}`);
-    _handleFetchRes(result.status, setError, () => {});
+    let result;
+    try {
+      result = await pureFetchAndJson(`/api/problems/${problemKey}`);
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return null;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return null;
+    }
     return result.problem;
   };
 
   const fetchJudgeResult = async (solutionKey, updateOpen, updateProgress) => {
-    const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
+    let result;
+    try {
+      result = await pureFetchAndJson(`/api/solutions/${solutionKey}`);
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return;
+    }
     const { testcaseHitCount, testcaseSize, state } = result.solution;
     setJudgeState(state);
     updateProgress((testcaseHitCount / testcaseSize) * 100);
@@ -88,26 +125,41 @@ const SolutionForm = (props) => {
         history.push(`/solutions?problemKey=${problem.key}&page=1`);
       }, 3000);
     } else {
-      setTimeout(() => { fetchJudgeResult(solutionKey, updateOpen, updateProgress); }, 16);
+      setTimeout(async () => {
+        await fetchJudgeResult(solutionKey, updateOpen, updateProgress);
+      }, 16);
     }
   };
 
-  const fetchSolution = async (data, updateSubmitting, updateOpen, updateProgress) => {
+  const fetchSolution = async (
+    data,
+    updateSubmitting,
+    updateOpen,
+    updateProgress,
+  ) => {
     updateSubmitting(true);
 
-    const result = await fetchAndJson('/api/solutions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    let result;
+    try {
+      result = await pureFetchAndJson('/api/solutions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return;
+    }
 
-    _handleFetchRes(result.status, setError, () => {
-      updateSubmitting(false);
-      updateOpen(true);
-      fetchJudgeResult(result.solution.key, updateOpen, updateProgress);
-    });
+    updateSubmitting(false);
+    updateOpen(true);
+    await fetchJudgeResult(result.solution.key, updateOpen, updateProgress);
   };
 
   const handleSubmit = async () => {
@@ -132,12 +184,12 @@ const SolutionForm = (props) => {
 
   useEffect(() => {
     (async () => {
-      const loginData = await fetchAndJson('/api/auth');
-      if (!loginData.isAuthenticated) {
-        window.location.replace(`https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`);
+      if (!userId) {
+        window.location.replace(
+          `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`,
+        );
         return;
       }
-      setIsLoaded(true);
 
       // solution fetch 추가로 넣고 handleSubmit 시 fetch 추가로 구현하면
       // 풀이 수정도 가능.
@@ -153,64 +205,90 @@ const SolutionForm = (props) => {
     })();
   }, []);
 
-  if (error) {
-    return <Error error={error} />;
-  }
-
-  if (!isLoaded) {
-    return null;
-  }
-
-  return (<Grid className={classes.root} container>
-    {(problem === null || languages === null) ? (<CircularProgress size={30} />) : (<>
-      <Grid className={classes.children} item xs={12}>
-        <h3 style={{ margin: 0 }}>{`${problem.key}. ${problem.title}`}</h3>
-      </Grid>
-      <Grid className={classes.children} container item direction='column' xs={12}>
-        <div style={{
-          backgroundColor: '#F8F8F8', padding: '1%',
-        }}>
-          <Grid item>
-            <FormLabel component="legend">
-              <strong>언어 선택</strong>
-            </FormLabel>
+  return (
+    <Grid className={classes.root} container>
+      {problem === null || languages === null ? (
+        <CircularProgress size={30} />
+      ) : (
+        <>
+          <Grid className={classes.children} item xs={12}>
+            <h3 style={{ margin: 0 }}>{`${problem.key}. ${problem.title}`}</h3>
           </Grid>
-          <Grid item>
-            <RadioGroup name="language"
-              value={selectedLanguage}
-              onChange={(event) => {
-                setSelectedLanguage(event.target.value);
-              }}>
-              {languages.map((language) => (
-                  <FormControlLabel key={language} value={language} label={language}
-                    control={<Radio color="default" />} />
-              ))
-              }
-            </RadioGroup>
+          <Grid
+            className={classes.children}
+            container
+            item
+            direction="column"
+            xs={12}
+          >
+            <div
+              style={{
+                backgroundColor: '#F8F8F8',
+                padding: '1%',
+              }}
+            >
+              <Grid item>
+                <FormLabel component="legend">
+                  <strong>언어 선택</strong>
+                </FormLabel>
+              </Grid>
+              <Grid item>
+                <RadioGroup
+                  name="language"
+                  value={selectedLanguage}
+                  onChange={(event) => {
+                    setSelectedLanguage(event.target.value);
+                  }}
+                >
+                  {languages.map((language) => (
+                    <FormControlLabel
+                      key={language}
+                      value={language}
+                      label={language}
+                      control={<Radio color="default" />}
+                    />
+                  ))}
+                </RadioGroup>
+              </Grid>
+            </div>
           </Grid>
-        </div>
+        </>
+      )}
+      <Grid
+        className={classes.children}
+        item
+        xs={12}
+        style={{ border: '1px solid #E0E0E0' }}
+      >
+        <CodeEditor
+          defaultValue={sourceCode}
+          language={selectedLanguage}
+          updateCode={setSourceCode}
+        />
       </Grid>
-    </>)}
-    <Grid className={classes.children} item xs={12}
-      style={{ border: '1px solid #E0E0E0' }}>
-      <CodeEditor
-        defaultValue={sourceCode}
-        language={selectedLanguage}
-        updateCode={setSourceCode}
-      />
-    </Grid>
-    <Grid className={classes.children} item container direction='row-reverse' xs={12}>
-      <Grid item>
-        <StyledButton variant='contained' disabled={isSubmitting}
-          size='medium' onClick={handleSubmit}>
-          {!isSubmitting ? '풀이 제출하기' : '제출 중'}
-        </StyledButton>
+      <Grid
+        className={classes.children}
+        item
+        container
+        direction="row-reverse"
+        xs={12}
+      >
+        <Grid item>
+          <StyledButton
+            variant="contained"
+            disabled={isSubmitting}
+            size="medium"
+            onClick={handleSubmit}
+          >
+            {!isSubmitting ? '풀이 제출하기' : '제출 중'}
+          </StyledButton>
+        </Grid>
+        <Backdrop open={open} style={{ zIndex: 1 }}>
+          <JudgeProgress judgeState={judgeState} progress={progress} />
+        </Backdrop>
       </Grid>
-      <Backdrop open={open} style={{ zIndex: 1 }}>
-        <JudgeProgress judgeState={judgeState} progress={progress} />
-      </Backdrop>
     </Grid>
-  </Grid>);
+  );
 };
 
 export default SolutionForm;

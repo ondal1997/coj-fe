@@ -1,13 +1,15 @@
 import { CircularProgress, InputAdornment, TextField } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { Pagination } from '@material-ui/lab';
-import { useEffect, useState } from 'react';
-import Error from '../atoms/Error';
+import { useContext, useEffect, useState } from 'react';
 import { _handleFetchRes } from '../../utils';
-import { fetchAndJson } from '../../OurLink';
+import { pureFetchAndJson } from '../../OurLink';
 import ProblemTable from '../organisms/ProblemTable';
+import ErrorContext from '../../contexts/error';
 
 const ProblemList = (props) => {
+  const [error, setError] = useContext(ErrorContext);
+
   const urlSearchParams = new URLSearchParams(props.location.search);
 
   const query = urlSearchParams.get('query') || '';
@@ -15,9 +17,10 @@ const ProblemList = (props) => {
   const limit = 20;
 
   const unparsedPage = urlSearchParams.get('page');
-  const page = /^[1-9]\d*$/.test(unparsedPage) ? Number.parseInt(unparsedPage, 10) : 1;
+  const page = /^[1-9]\d*$/.test(unparsedPage)
+    ? Number.parseInt(unparsedPage, 10)
+    : 1;
 
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [problems, setProblems] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -28,7 +31,7 @@ const ProblemList = (props) => {
 
   useEffect(() => {
     setIsLoaded(false);
-    const promise = fetchAndJson(
+    const promise = pureFetchAndJson(
       `/api/problems?${new URLSearchParams({
         title: query,
         pos: (page - 1) * limit,
@@ -36,28 +39,39 @@ const ProblemList = (props) => {
       }).toString()}`,
     );
     mutable.lastFetch = promise;
-    promise.then((result) => {
-      if (mutable.lastFetch !== promise) {
-        return;
-      }
+    promise.then(
+      (result) => {
+        if (mutable.lastFetch !== promise) {
+          return;
+        }
 
-      _handleFetchRes(result.status, setError, () => {
+        if (result.status !== 200) {
+          setError({ status: result.status });
+          return;
+        }
+
         setProblems(result.problems);
         setTotalCount(result.totalCount);
         setIsLoaded(true);
         // window.scrollTo(0, 0);
-      });
-    });
+      },
+      () => {
+        setError({ message: 'Failed to connect with server' });
+      },
+    );
   }, [query, page]);
 
-  if (error) {
-    return <Error error={error} />;
-  }
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+      }}
+    >
       <TextField
-        type='search'
+        type="search"
         placeholder="검색"
         InputProps={{
           startAdornment: (
