@@ -23,33 +23,47 @@ import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
 import TextField from '../atoms/TextField';
-import ChipContainer from '../molecules/ChipContainer';
+import BasicChip from '../atoms/BasicChip';
 import { OurLink, pureFetchAndJson } from '../../OurLink';
 import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import '../../css/reset_problemdetail.css';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
+import PageTemplate from '../templates/PageTemplate';
 
 const pColor = '#F8F8F8';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       margin: '0 0',
-      padding: '0 1%',
+      padding: '0 0',
     },
-    [theme.breakpoints.up('md')]: {
-      margin: '0 0',
-      padding: '0 15%',
+    [theme.breakpoints.up('lg')]: {
+      margin: '0 auto',
     },
   },
   children: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
+      margin: '2% 0',
+    },
+    [theme.breakpoints.up('lg')]: {
       margin: '1% 0',
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('xl')]: {
       margin: '1% 0',
+    },
+  },
+  title: {
+    [theme.breakpoints.down('md')]: {
+      fontSize: '30px',
+    },
+    [theme.breakpoints.up('lg')]: {
+      fontSize: '40px',
+    },
+    [theme.breakpoints.up('xl')]: {
+      fontSize: '50px',
     },
   },
 }));
@@ -112,7 +126,7 @@ const Problem = (props) => {
     fetchProblem();
   }, []);
 
-  return isLoaded ? (
+  return <PageTemplate content={isLoaded ? (
     <Grid className={classes.root} container direction="column">
       <Grid className={classes.children} item>
         <Grid container justify='flex-end'>
@@ -120,6 +134,7 @@ const Problem = (props) => {
             ? <>
                 <Grid item>
                   <OurLink to={`/edit/${problemKey}`}>수정</OurLink>
+                  &nbsp;
                   <a onClick={handleClickOpen}>삭제</a>
                 </Grid>
               <Dialog
@@ -172,7 +187,7 @@ const Problem = (props) => {
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
                 <Grid item>
-                  <Typography style={{ fontSize: '50px' }}>
+                  <Typography className={classes.title}>
                     {`${problemKey}. ${problem.title}`}
                   </Typography>
                 </Grid>
@@ -191,10 +206,10 @@ const Problem = (props) => {
             </Grid>
             <Grid item container spacing={1}>
               <Grid item>
-              <strong>{problem.ownerId}</strong>
+                <strong>{problem.ownerId}</strong>
               </Grid>
               <Grid item>
-              <span>·</span>
+                <span>·</span>
               </Grid>
               <Grid item>
               <span>
@@ -206,8 +221,20 @@ const Problem = (props) => {
               </span>
               </Grid>
             </Grid>
-            <Grid className={classes.children} item>
-              <ChipContainer categories={problem.categories} />
+            <Grid className={classes.children} item container direction="row">
+              {
+                problem.categories.map((category, index) => (
+                  <Grid item style={{ marginRight: '1%' }}>
+                    <BasicChip
+                      key={index}
+                      label={category}
+                      color='primary'
+                      handleClick={() => {
+                        props.history.push(`/problems?query=${category}`);
+                      }} />
+                  </Grid>
+                ))
+              }
             </Grid>
           </Grid>
         </Grid>
@@ -270,23 +297,25 @@ const Problem = (props) => {
             </Table>
           </TableContainer>
       </Grid>
-    <Grid item container direction="column">
-      <Grid className={classes.children} container item direction="column">
-        <Grid item>
-          <StyledItemTitle>문제 설명</StyledItemTitle>
-          <Paper
-            className="ck-content"
-            elevation={0}
-            style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
-            dangerouslySetInnerHTML={{ __html: problem.description }}
-          />
-        </Grid>
+      <Grid item container direction="column">{
+          problem.description && (
+            <Grid className={classes.children} item>
+             <StyledItemTitle>문제 설명</StyledItemTitle>
+              <Paper
+                className={`${classes.children} ck-content`}
+                elevation={0}
+                style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
+                dangerouslySetInnerHTML={{ __html: problem.description }}
+              />
+            </Grid>
+          )
+        }
         {
           problem.inputDescription && (
             <Grid className={classes.children} item>
               <StyledItemTitle>입력 형식</StyledItemTitle>
               <Paper
-                className="ck-content"
+                className={`${classes.children} ck-content`}
                 elevation={0}
                 style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
                 dangerouslySetInnerHTML={{ __html: problem.inputDescription }}
@@ -299,7 +328,7 @@ const Problem = (props) => {
             <Grid className={classes.children} item>
               <StyledItemTitle>출력 형식</StyledItemTitle>
               <Paper
-                className="ck-content"
+                className={`${classes.children} ck-content`}
                 elevation={0}
                 style={{ backgroundColor: pColor, padding: '10px', fontSize: 'large' }}
                 dangerouslySetInnerHTML={{ __html: problem.outputDescription }}
@@ -308,12 +337,12 @@ const Problem = (props) => {
           )
         }
       </Grid>
-      <Divider />
+      <Divider className={classes.children}/>
       <Grid container item direction="column">
         {problem.examples.map((example, index) => (
           <Grid key={index + 1} container item direction="row" justify="space-between">
-            <Grid className={classes.children} item container sm={5} direction="column">
-              <Grid className={classes.children} item container alignItems='center'>
+            <Grid className={classes.children} item container lg={5} direction="column">
+              <Grid item container alignItems='center'>
                 <Grid item>
                   <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
                 </Grid>
@@ -333,8 +362,8 @@ const Problem = (props) => {
                 />
                </Grid>
             </Grid>
-            <Grid className={classes.children} item container sm={5} direction='column'>
-              <Grid className={classes.children} item container alignItems='center'>
+            <Grid className={classes.children} item container lg={5} direction='column'>
+              <Grid item container alignItems='center'>
                   <Grid item>
                     <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
                   </Grid>
@@ -358,14 +387,13 @@ const Problem = (props) => {
         ))}
       </Grid>
     </Grid>
-    </Grid>
   ) : (
-    <Grid container direction='row' justify='center' alignItems='center'>
+    <Grid style={{ height: '100vh' }} container direction='row' justify='center' alignItems='center'>
       <Grid item>
         <CircularProgress />
       </Grid>
     </Grid>
-  );
+  )}/>;
 };
 
 export default Problem;

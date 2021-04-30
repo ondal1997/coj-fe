@@ -1,10 +1,11 @@
-import { CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useContext, useEffect, useState } from 'react';
 import { _handleFetchRes } from '../../utils';
 import { pureFetchAndJson } from '../../OurLink';
 import SolutionTable from '../organisms/SolutionTable';
 import ErrorContext from '../../contexts/error';
+import PageTemplate from '../templates/PageTemplate';
 
 const SolutionList = (props) => {
   const [error, setError] = useContext(ErrorContext);
@@ -66,49 +67,48 @@ const SolutionList = (props) => {
   }, [problemKey, page]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-      {(() => {
-        if (!isLoaded) {
-          return (
-            <p>
-              <CircularProgress />
-            </p>
-          );
-        }
-
-        if (totalCount === 0) {
-          return <p>대응하는 솔루션이 존재하지 않습니다.</p>;
-        }
-
+    <PageTemplate content={<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+    {(() => {
+      if (!isLoaded) {
         return (
-          <>
-            <p>
-              총 <strong>{totalCount}</strong>개의 솔루션을 발견했습니다.
-            </p>
-
-            <SolutionTable
-              solutions={solutions}
-              history={props.history}
-            />
-
-            <Pagination
-              shape="rounded"
-              variant="outlined"
-              color="primary"
-              size="large"
-              siblingCount={2}
-              boundaryCount={2}
-              count={Math.ceil(totalCount / limit)}
-              page={page}
-              onChange={(event, p) => {
-                urlSearchParams.set('page', p);
-                props.history.push(`?${urlSearchParams.toString()}`);
-              }}
-            />
-          </>
+          (<Grid style={{ height: '100vh' }} container direction='row' justify='center' alignItems='center'>
+            <Grid item>
+              <CircularProgress />
+            </Grid>
+          </Grid>)
         );
-      })()}
-    </div>
+      }
+      if (totalCount === 0) {
+        return <p>대응하는 솔루션이 존재하지 않습니다.</p>;
+      }
+      return (
+        <>
+          <p>
+            총 <strong>{totalCount}</strong>개의 솔루션을 발견했습니다.
+          </p>
+          <SolutionTable
+            solutions={solutions}
+            urlSearchParams={urlSearchParams}
+            history={props.history}
+          />
+          <Pagination
+            shape="rounded"
+            variant="outlined"
+            color="primary"
+            size="large"
+            siblingCount={2}
+            boundaryCount={2}
+            count={Math.ceil(totalCount / limit)}
+            page={page}
+            onChange={(event, p) => {
+              urlSearchParams.set('page', p);
+              props.history.push(`?${urlSearchParams.toString()}`);
+            }}
+          />
+        </>
+      );
+    })()}
+  </div>} />
   );
 };
 

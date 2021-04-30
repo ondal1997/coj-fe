@@ -17,18 +17,9 @@ import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
+import PageTemplate from '../templates/PageTemplate';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.down('sm')]: {
-      margin: '0 0',
-      padding: '0 1%',
-    },
-    [theme.breakpoints.up('md')]: {
-      margin: '0 0',
-      padding: '0 15%',
-    },
-  },
   children: {
     [theme.breakpoints.down('sm')]: {
       margin: '1% 0',

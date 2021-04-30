@@ -1,6 +1,6 @@
-import { Chip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Table, TableData, TableHeader, TableRow } from '../atoms/Table';
+import BasicChip from '../atoms/BasicChip';
 
 const ProblemTable = (props) => {
   const { problems } = props;
@@ -39,11 +39,11 @@ const ProblemTable = (props) => {
             ) : (
               <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
                 {problem.categories.map((category) => (
-                  <Chip
+                  <BasicChip
                     size="small"
                     color="primary"
                     label={`${category}`}
-                    onClick={() => {
+                    handleClick={() => {
                       urlSearchParams.set('query', category);
                       urlSearchParams.set('page', 1);
                       props.history.push(`?${urlSearchParams.toString()}`);
