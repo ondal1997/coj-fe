@@ -26,9 +26,9 @@ const Categories = ({ categories, handleDeleteCategory }) => (
     <ul>
       {categories.map((category, index) => (
         <li key={index}>
-          {handleDeleteCategory ? (<BasicChip label={category}
+          {handleDeleteCategory ? (<BasicChip label={category} color='primary'
             handleDelete={() => { handleDeleteCategory(index); }} />)
-            : (<BasicChip label={category} />)
+            : (<BasicChip color='primary' label={category} />)
           }
         </li>
       ))

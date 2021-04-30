@@ -9,18 +9,9 @@ import JudgeProgress from '../organisms/JudgeProgress';
 import { fetchAndJson } from '../../OurLink';
 import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
+import PageTemplate from '../templates/PageTemplate';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.down('sm')]: {
-      margin: '0 0',
-      padding: '0 1%',
-    },
-    [theme.breakpoints.up('md')]: {
-      margin: '0 0',
-      padding: '0 15%',
-    },
-  },
   children: {
     [theme.breakpoints.down('sm')]: {
       margin: '1% 0',
@@ -87,7 +78,7 @@ const SolutionForm = (props) => {
     if (result.solution.state > 1) {
       setTimeout(() => {
         updateOpen(false);
-        history.push(`/solutions?problemNo=${problem.key}&page=1`);
+        history.push(`/solutions?problemKey=${problem.key}&page=1`);
       }, 2000);
     } else {
       setTimeout(() => { fetchJudgeResult(solutionKey, updateOpen, updateProgress); }, 16);
@@ -159,7 +150,8 @@ const SolutionForm = (props) => {
     return <Error error={error} />;
   }
 
-  return (<Grid className={classes.root} container>
+  return (
+  <PageTemplate content={(<Grid className={classes.root} container>
     {isLoaded ? (<>
     <Grid className={classes.children} item xs={12}>
       <h3 style={{ margin: '0 0' }}>{isLoaded ? (`${problem.key}. ${problem.title}`) : null }</h3>
@@ -188,7 +180,7 @@ const SolutionForm = (props) => {
         </Grid>
       </div>
     </Grid>
-  </>) : (<CircularProgress size={30} />)
+  </>) : (<CircularProgress />)
       }
     <Grid className={classes.children} item xs={12}
       style={{ border: '1px solid #E0E0E0' }}>
@@ -208,7 +200,8 @@ const SolutionForm = (props) => {
         <JudgeProgress progress={progress} />
       </Backdrop>
     </Grid>
-  </Grid>);
+  </Grid>)}/>
+  );
 };
 
 export default SolutionForm;

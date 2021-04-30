@@ -6,6 +6,7 @@ import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import { fetchAndJson } from '../../OurLink';
 import ProblemTable from '../organisms/ProblemTable';
+import PageTemplate from '../templates/PageTemplate';
 
 const ProblemList = (props) => {
   const urlSearchParams = new URLSearchParams(props.location.search);
@@ -55,68 +56,64 @@ const ProblemList = (props) => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-      <TextField
-        type='search'
-        placeholder="검색"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
-        }}
-        value={query}
-        onChange={(event) => {
-          urlSearchParams.set('query', event.target.value);
-          urlSearchParams.set('page', 1);
-          props.history.replace(`?${urlSearchParams.toString()}`);
-        }}
-      ></TextField>
-
-      {(() => {
-        if (!isLoaded) {
+    <PageTemplate content={
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+        <TextField
+          type='search'
+          placeholder="검색"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+          value={query}
+          onChange={(event) => {
+            urlSearchParams.set('query', event.target.value);
+            urlSearchParams.set('page', 1);
+            props.history.replace(`?${urlSearchParams.toString()}`);
+          }}
+        />
+        {(() => {
+          if (!isLoaded) {
+            return (
+              <p>
+                <CircularProgress />
+              </p>
+            );
+          }
+          if (totalCount === 0) {
+            return <p>대응하는 문제가 존재하지 않습니다.</p>;
+          }
           return (
-            <p>
-              <CircularProgress />
-            </p>
+            <>
+              <p>
+                총 <strong>{totalCount}</strong>개의 문제를 발견했습니다.
+              </p>
+              <ProblemTable
+                problems={problems}
+                urlSearchParams={urlSearchParams}
+                history={props.history}
+              />
+              <Pagination
+                shape="rounded"
+                variant="outlined"
+                color="primary"
+                size="large"
+                siblingCount={2}
+                boundaryCount={2}
+                count={Math.ceil(totalCount / limit)}
+                page={page}
+                onChange={(event, p) => {
+                  urlSearchParams.set('page', p);
+                  props.history.push(`?${urlSearchParams.toString()}`);
+                }}
+              />
+            </>
           );
-        }
-
-        if (totalCount === 0) {
-          return <p>대응하는 문제가 존재하지 않습니다.</p>;
-        }
-
-        return (
-          <>
-            <p>
-              총 <strong>{totalCount}</strong>개의 문제를 발견했습니다.
-            </p>
-
-            <ProblemTable
-              problems={problems}
-              urlSearchParams={urlSearchParams}
-              history={props.history}
-            />
-
-            <Pagination
-              shape="rounded"
-              variant="outlined"
-              color="primary"
-              size="large"
-              siblingCount={2}
-              boundaryCount={2}
-              count={Math.ceil(totalCount / limit)}
-              page={page}
-              onChange={(event, p) => {
-                urlSearchParams.set('page', p);
-                props.history.push(`?${urlSearchParams.toString()}`);
-              }}
-            />
-          </>
-        );
-      })()}
-    </div>
+        })()}
+      </div>}/>
   );
 };
 

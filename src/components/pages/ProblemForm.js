@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
-import { Divider, Grid } from '@material-ui/core';
+import { Divider, Grid, CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { fetchAndJson } from '../../OurLink';
 import Error from '../atoms/Error';
@@ -12,6 +12,7 @@ import Categories from '../organisms/Categories';
 import MyEditor from '../atoms/MyEditor';
 import BasicButton from '../atoms/BasicButton';
 import TextField from '../atoms/TextField';
+import PageTemplate from '../templates/PageTemplate';
 
 const StyledDivider = withStyles({
   root: {
@@ -162,73 +163,74 @@ const ProblemForm = (props) => {
     return <Error error={error} />;
   }
 
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <Grid container>
-      <Grid container item direction='column' spacing={3}>
+  return (<PageTemplate content={ !isLoaded
+    ? (<Grid style={{ height: '100vh' }} container direction='row' justify='center' alignItems='center'>
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      </Grid>)
+    : (<Grid container>
+    <Grid container item direction='column' spacing={3}>
+      <Grid item>
+        <TextField
+          name='title'
+          label='문제명'
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={title}
+          handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[0]} />
+      </Grid>
+      <Grid container item direction='row' spacing={2}>
         <Grid item>
           <TextField
-            name='title'
-            label='문제명'
-            fullWidth
+            name='timeLimit'
+            label='시간 제한 (ms)'
             margin="normal"
             variant="outlined"
-            value={title}
-            handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[0]} />
-        </Grid>
-        <Grid container item direction='row' spacing={2}>
-          <Grid item>
-            <TextField
-              name='timeLimit'
-              label='시간 제한 (ms)'
-              margin="normal"
-              variant="outlined"
-              value={timeLimit}
-              handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[1]} />
-          </Grid>
-          <Grid item>
-            <TextField
-              name='memoryLimit'
-              label='메모리 제한 (MB)'
-              margin="normal"
-              variant="outlined"
-              value={memoryLimit}
-              handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[2]} />
-          </Grid>
+            value={timeLimit}
+            handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[1]} />
         </Grid>
         <Grid item>
-          <p>문제 설명</p>
-          <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
-        </Grid>
-        <Grid item>
-          <p>입력 형식 설명(선택)</p>
-          <MyEditor value={inputDescription} onChange={(res) => { setInputDescription(res); }} />
-        </Grid>
-        <Grid item>
-          <p>출력 형식 설명(선택)</p>
-          <MyEditor value={outputDescription} onChange={(res) => { setOutputDescription(res); }} />
-        </Grid>
-        <Grid item>
-          <Categories categories={categories} updateCategories={setCategories} />
-        </Grid>
-        <Grid item>
-          <Examples examples={examples} updateExamples={setExamples} />
-        </Grid>
-        <Grid item>
-          <Testcases testcases={testcases} updateTestcases={setTestcases} />
-        </Grid>
-        <Grid item>
-          <StyledDivider variant="fullWidth" />
-        </Grid>
-        <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
-          <BasicButton label='확인' variant='contained'
-            disabled={disabled} handleClick={handleSubmit} />
+          <TextField
+            name='memoryLimit'
+            label='메모리 제한 (MB)'
+            margin="normal"
+            variant="outlined"
+            value={memoryLimit}
+            handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[2]} />
         </Grid>
       </Grid>
+      <Grid item>
+        <p>문제 설명</p>
+        <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
+      </Grid>
+      <Grid item>
+        <p>입력 형식 설명(선택)</p>
+        <MyEditor value={inputDescription} onChange={(res) => { setInputDescription(res); }} />
+      </Grid>
+      <Grid item>
+        <p>출력 형식 설명(선택)</p>
+        <MyEditor value={outputDescription} onChange={(res) => { setOutputDescription(res); }} />
+      </Grid>
+      <Grid item>
+        <Categories categories={categories} updateCategories={setCategories} />
+      </Grid>
+      <Grid item>
+        <Examples examples={examples} updateExamples={setExamples} />
+      </Grid>
+      <Grid item>
+        <Testcases testcases={testcases} updateTestcases={setTestcases} />
+      </Grid>
+      <Grid item>
+        <StyledDivider variant="fullWidth" />
+      </Grid>
+      <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
+        <BasicButton label='확인' variant='contained'
+          disabled={disabled} handleClick={handleSubmit} />
+      </Grid>
     </Grid>
+  </Grid>)} />
   );
 };
 

@@ -10,11 +10,17 @@ const StyledChip = withStyles({
   },
 })(Chip);
 
-const BasicChip = ({ label, handleDelete }) => (
-  handleDelete ? (<StyledChip label={label} color="primary"
+const BasicChip = ({ label, size, color, handleClick, handleDelete }) => (
+  handleDelete ? (<StyledChip
+    label={label}
+    color={color}
+    size={size}
     onDelete={handleDelete} />)
-    : (<StyledChip label={label} color="primary"
-    onDelete={handleDelete} />)
+    : (<StyledChip
+        label={label}
+        color={color}
+        size={size}
+        onClick={handleClick} />)
 );
 
 export default BasicChip;
