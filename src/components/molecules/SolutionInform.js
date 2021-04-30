@@ -30,9 +30,9 @@ const SolutionInform = (props) => {
             <TableCell align="center">제출 번호</TableCell>
             <TableCell align="center">제출자</TableCell>
             <TableCell align="center">문제 번호</TableCell>
+            <TableCell align="center">채점 결과</TableCell>
             <TableCell align="center">시간</TableCell>
             <TableCell align="center">메모리</TableCell>
-            <TableCell align="center">채점 결과</TableCell>
             <TableCell align="center">업로드 시간</TableCell>
           </TableRow>
         </TableHead>
@@ -45,13 +45,13 @@ const SolutionInform = (props) => {
                 {`${solution.problemKey}`}
               </Link>
             </TableCell>
-            <TableCell align="center">{solution.state === '2' ? `${solution.maxTime}ms` : '-'}</TableCell>
-            <TableCell align="center">{solution.state === '2' ? `${solution.maxMemory}MB` : '-'}</TableCell>
             <TableCell align="center">
               <StyledState bgColor={judgeState[parseInt(solution.state, 10)].color}>
                 {judgeState[parseInt(solution.state, 10)].name}
               </StyledState>
             </TableCell>
+            <TableCell align="center">{solution.state === '2' ? `${solution.maxTime}ms` : '-'}</TableCell>
+            <TableCell align="center">{solution.state === '2' ? `${solution.maxMemory}MB` : '-'}</TableCell>
             <TableCell align="center">
             {new Date(solution.uploadTime).toLocaleDateString(undefined, {
               year: 'numeric',
