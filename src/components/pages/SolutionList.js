@@ -1,13 +1,15 @@
 import { Grid, CircularProgress } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import { useEffect, useState } from 'react';
-import Error from '../atoms/Error';
+import { useContext, useEffect, useState } from 'react';
 import { _handleFetchRes } from '../../utils';
-import { fetchAndJson } from '../../OurLink';
+import { pureFetchAndJson } from '../../OurLink';
 import SolutionTable from '../organisms/SolutionTable';
+import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
 
 const SolutionList = (props) => {
+  const [error, setError] = useContext(ErrorContext);
+
   const urlSearchParams = new URLSearchParams(props.location.search);
 
   const problemKey = urlSearchParams.get('problemKey');
@@ -17,7 +19,6 @@ const SolutionList = (props) => {
   const unparsedPage = urlSearchParams.get('page');
   const page = /^[1-9]\d*$/.test(unparsedPage) ? Number.parseInt(unparsedPage, 10) : 1;
 
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [solutions, setSolutions] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -26,29 +27,19 @@ const SolutionList = (props) => {
     lastFetch: null,
   });
 
-  // userId
-  const [userId, setUserId] = useState(null);
-  urlSearchParams.set('highlight', userId);
-  //
-
   useEffect(async () => {
     setIsLoaded(false);
 
-    // userId
-    const res = await fetchAndJson('/api/auth');
-    setUserId(res.id);
-    //
-
     let promise;
     if (problemKey) {
-      promise = fetchAndJson(
+      promise = pureFetchAndJson(
         `/api/problems/${problemKey}/solutions?${new URLSearchParams({
           pos: (page - 1) * limit,
           count: limit,
         }).toString()}`,
       );
     } else {
-      promise = fetchAndJson(
+      promise = pureFetchAndJson(
         `/api/solutions?${new URLSearchParams({
           pos: (page - 1) * limit,
           count: limit,
@@ -61,18 +52,19 @@ const SolutionList = (props) => {
         return;
       }
 
-      _handleFetchRes(result.status, setError, () => {
-        setSolutions(result.solutions);
-        setTotalCount(result.totalCount);
-        setIsLoaded(true);
-        // window.scrollTo(0, 0);
-      });
+      if (result.status !== 200) {
+        setError({ status: result.status });
+        return;
+      }
+
+      setSolutions(result.solutions);
+      setTotalCount(result.totalCount);
+      setIsLoaded(true);
+      // window.scrollTo(0, 0);
+    }, () => {
+      setError({ message: 'Failed to connect with server' });
     });
   }, [problemKey, page]);
-
-  if (error) {
-    return <Error error={error} />;
-  }
 
   return (
     <PageTemplate content={<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>

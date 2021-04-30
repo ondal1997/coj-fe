@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { Divider, Grid, CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { fetchAndJson } from '../../OurLink';
-import Error from '../atoms/Error';
+import { pureFetchAndJson } from '../../OurLink';
 import { isProblemInputValid, _handleFetchRes } from '../../utils';
 import '../../css/reset.css';
 import Testcases from '../organisms/Testcases';
@@ -12,6 +11,8 @@ import Categories from '../organisms/Categories';
 import MyEditor from '../atoms/MyEditor';
 import BasicButton from '../atoms/BasicButton';
 import TextField from '../atoms/TextField';
+import AuthenticationContext from '../../contexts/authentication';
+import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
 
 const StyledDivider = withStyles({
@@ -21,9 +22,11 @@ const StyledDivider = withStyles({
 })(Divider);
 
 const ProblemForm = (props) => {
+  const [error, setError] = useContext(ErrorContext);
+  const [userId, setUserId] = useContext(AuthenticationContext);
+
   const { problemKey } = props.match.params;
   const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
 
   const [title, setTitle] = useState('');
   const [timeLimit, setTimeLimit] = useState(2000);
@@ -47,7 +50,8 @@ const ProblemForm = (props) => {
     return inputsRef.current[index];
   });
 
-  const fetchProblem = async (data) => { // 등록 수정 분기
+  const fetchProblem = async (data) => {
+    // 등록 수정 분기
     let url = '/api/problems';
     let method = '';
     if (problemKey !== undefined) {
@@ -55,15 +59,23 @@ const ProblemForm = (props) => {
       url += `/${problemKey}`;
     } else method = 'POST';
 
-    const result = await fetchAndJson(`${url}`, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    let result;
+    try {
+      result = await pureFetchAndJson(`${url}`, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return;
+    }
 
-    _handleFetchRes(result.status, setError, () => {
-      props.history.push('/problems');
-    });
+    props.history.push('/problems');
   };
 
   const handleChange = (event) => {
@@ -75,7 +87,8 @@ const ProblemForm = (props) => {
 
   const handleSubmit = async () => {
     let valid = true;
-    inputsRef.current.every(({ current }) => { // 유효 X가 하나라도 있으면 종료
+    inputsRef.current.every(({ current }) => {
+      // 유효 X가 하나라도 있으면 종료
       const { name, value } = current;
       const res = isProblemInputValid(name, value);
       if (!res) {
@@ -132,9 +145,10 @@ const ProblemForm = (props) => {
   };
 
   useEffect(async () => {
-    const loginData = await fetchAndJson('/api/auth');
-    if (!loginData.isAuthenticated) {
-      window.location.replace('https://codersit.co.kr/bbs/login.php?url=%2Foj/new');
+    if (!userId) {
+      window.location.replace(
+        'https://codersit.co.kr/bbs/login.php?url=%2Foj/new',
+      );
       return;
     }
 
@@ -142,26 +156,32 @@ const ProblemForm = (props) => {
       setIsLoaded(true);
       return;
     }
-    const result = await fetchAndJson(`/api/problems/${problemKey}/all`);
-    const { status, problem } = result;
-    _handleFetchRes(status, setError, () => {
-      setTitle(problem.title);
-      setTimeLimit(problem.timeLimit);
-      setMemoryLimit(problem.memoryLimit);
-      setDescription(problem.description);
-      setInputDescription(problem.inputDescription);
-      setOutputDescription(problem.outputDescription);
-      setCategories(problem.categories);
-      setExamples(problem.examples);
-      setTestcases(problem.testcases);
 
-      setIsLoaded(true);
-    });
+    let result;
+    try {
+      result = await pureFetchAndJson(`/api/problems/${problemKey}/all`);
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return;
+    }
+
+    const { problem } = result;
+    setTitle(problem.title);
+    setTimeLimit(problem.timeLimit);
+    setMemoryLimit(problem.memoryLimit);
+    setDescription(problem.description);
+    setInputDescription(problem.inputDescription);
+    setOutputDescription(problem.outputDescription);
+    setCategories(problem.categories);
+    setExamples(problem.examples);
+    setTestcases(problem.testcases);
+
+    setIsLoaded(true);
   }, []);
-
-  if (error) {
-    return <Error error={error} />;
-  }
 
   return (<PageTemplate content={ !isLoaded
     ? (<Grid style={{ height: '100vh' }} container direction='row' justify='center' alignItems='center'>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   Paper,
@@ -23,11 +23,13 @@ import styled from 'styled-components';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
 import TextField from '../atoms/TextField';
-import { OurLink, fetchAndJson } from '../../OurLink';
+import BasicChip from '../atoms/BasicChip';
+import { OurLink, pureFetchAndJson } from '../../OurLink';
 import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import '../../css/reset_problemdetail.css';
-import BasicChip from '../atoms/BasicChip';
+import AuthenticationContext from '../../contexts/authentication';
+import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
 
 const pColor = '#F8F8F8';
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
+    wordBreak: 'keep-all',
     [theme.breakpoints.down('md')]: {
       fontSize: '30px',
     },
@@ -82,11 +85,13 @@ const Problem = (props) => {
   const classes = useStyles();
   const { problemKey } = props.match.params;
 
+  const [userId, setUserId] = useContext(AuthenticationContext);
+  const [error, setError] = useContext(ErrorContext);
+
   const [problem, setProblem] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [isOwners, setIsOwners] = useState(false);
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -98,26 +103,29 @@ const Problem = (props) => {
     setOpen(false);
   };
 
-  const fetchProblem = async () => { // 본인인지 확인하는 구문
-    const result = await fetchAndJson(`/api/problems/${problemKey}`);
+  const fetchProblem = async () => {
+    let result;
+    try {
+      result = await pureFetchAndJson(`/api/problems/${problemKey}`);
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return;
+    }
 
-    _handleFetchRes(result.status, setError, async () => {
-      const loginData = await fetchAndJson('/api/auth');
-      if (loginData.id === result.problem.ownerId) {
-        setIsOwners(true);
-      }
-      setProblem(result.problem);
-      setIsLoaded(true);
-    });
+    if (userId === result.problem.ownerId) {
+      setIsOwners(true);
+    }
+    setProblem(result.problem);
+    setIsLoaded(true);
   };
 
   useEffect(() => {
     fetchProblem();
   }, []);
-
-  if (error) {
-    return <Error error={error}/>;
-  }
 
   return <PageTemplate content={isLoaded ? (
     <Grid className={classes.root} container direction="column">
@@ -146,12 +154,20 @@ const Problem = (props) => {
                   <Button onClick={() => {
                     handleClose();
                     (async () => {
-                      const result = await fetchAndJson(`/api/problems/${problemKey}`, {
-                        method: 'DELETE',
-                      });
-                      _handleFetchRes(result.status, setError, () => {
-                        props.history.push('/problems');
-                      });
+                      let result;
+                      try {
+                        result = await pureFetchAndJson(`/api/problems/${problemKey}`, {
+                          method: 'DELETE',
+                        });
+                      } catch {
+                        setError({ message: 'Failed to connect with server' });
+                        return;
+                      }
+                      if (result.status !== 200) {
+                        setError({ status: result.status });
+                        return;
+                      }
+                      props.history.push('/problems');
                     })();
                   }} color="primary">
                     삭제
@@ -248,7 +264,7 @@ const Problem = (props) => {
       <Grid container item direction="column">
         <Divider />
           <TableContainer>
-            <Table>
+            <Table style={{ whiteSpace: 'nowrap' }}>
               <TableHead>
                 <TableRow>
                   <TableCell align="center">시간 제한</TableCell>

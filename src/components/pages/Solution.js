@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -7,11 +7,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CodeViewer from '../atoms/CodeViewer';
 import SolutionInform from '../molecules/SolutionInform';
 import 'codemirror/keymap/sublime';
-import { fetchAndJson } from '../../OurLink';
+import { pureFetchAndJson } from '../../OurLink';
 import judgeState from '../../judgeState';
 import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import '../../css/codeViewer.css';
+import ErrorContext from '../../contexts/error';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,25 +38,32 @@ const useStyles = makeStyles((theme) => ({
 const Solution = (props) => {
   const classes = useStyles();
 
+  const [error, setError] = useContext(ErrorContext);
+
   const { solutionKey } = props.match.params;
   const [solution, setSolution] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
 
   const fetchSolutions = async () => {
-    const result = await fetchAndJson(`/api/solutions/${solutionKey}`);
+    let result;
+    try {
+      result = await pureFetchAndJson(`/api/solutions/${solutionKey}`);
+    } catch {
+      setError({ message: 'Failed to connect with server' });
+      return;
+    }
+    if (result.status !== 200) {
+      setError({ status: result.status });
+      return;
+    }
 
-    _handleFetchRes(result.status, setError, () => {
-      setSolution(result.solution);
-      setIsLoaded(true);
-    });
+    setSolution(result.solution);
+    setIsLoaded(true);
   };
 
   useEffect(() => {
     fetchSolutions();
   }, []);
-
-  if (error) return <Error error={error}/>;
 
   return isLoaded
     ? (<Grid className={classes.root} container direction='column'>

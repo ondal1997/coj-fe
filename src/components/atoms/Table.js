@@ -24,7 +24,7 @@ const Td = styled.td`
 `;
 
 const Table = (props) => (
-  <div style={{ overflow: 'auto', color: '#444444', width: '90%' }}>
+  <div style={{ overflow: 'auto', color: '#444444', width: '100%' }}>
     <table style={{ borderCollapse: 'collapse', width: '100%' }}>{props.children}</table>
   </div>
 );

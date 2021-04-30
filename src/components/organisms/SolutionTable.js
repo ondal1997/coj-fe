@@ -1,9 +1,10 @@
 import { Tooltip } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table, TableData, TableHeader, TableRow } from '../atoms/Table';
-import { fetchAndJson } from '../../OurLink';
+import { pureFetchAndJson } from '../../OurLink';
 import judgeState from '../../judgeState';
+import AuthenticationContext from '../../contexts/authentication';
 
 function ProblemRepo() {
   this.subscribers = {};
@@ -35,7 +36,12 @@ ProblemRepo.prototype = { // prototype시 여러 객체를 만들 때 함수가 
       return;
     }
     this.isLoading[problemKey] = true;
-    const result = await fetchAndJson(`/api/problems/${problemKey}`);
+    let result;
+    try {
+      result = await pureFetchAndJson(`/api/problems/${problemKey}`);
+    } catch {
+      return;
+    }
     this.problems[problemKey] = result.problem || {};
     this.isLoading[problemKey] = false;
     this.notify(problemKey);
@@ -74,9 +80,9 @@ const ProblemLabel = ({ problemKey }) => {
 };
 
 const SolutionTable = (props) => {
+  const [userId] = useContext(AuthenticationContext);
+
   const { solutions } = props;
-  const { urlSearchParams } = props;
-  const highlight = urlSearchParams.get('highlight');
 
   return (
     <Table>
@@ -94,7 +100,7 @@ const SolutionTable = (props) => {
       {solutions.map((solution) => (
         <TableRow key={solution.key}
           style={
-            highlight === solution.ownerId ? (
+            userId === solution.ownerId ? (
               { backgroundColor: '#DDEEFF' }) : {}
           }
         >

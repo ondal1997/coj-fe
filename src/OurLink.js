@@ -54,4 +54,30 @@ const fetchAndJson = async (url, meta) => {
   }
 };
 
-export { OurLink, fetchAndJson };
+const pureFetchAndJson = async (url, meta) => {
+  if (isProductionMode) {
+    meta = meta || { method: 'GET' };
+
+    const data = {
+      to: url,
+      method: meta.method,
+    };
+    if (meta.body) {
+      Object.assign(data, { data: meta.body });
+    }
+
+    const json = await $.ajax({
+      url: '/coders/post.php',
+      type: 'POST',
+      data,
+      dataType: 'json',
+    });
+    return json;
+  }
+
+  const res = await fetch(`http://192.168.0.100:3000${url}${(url.includes('?') ? '&' : '?')}userId=migu554`, meta);
+  const json = await res.json();
+  return json;
+};
+
+export { OurLink, fetchAndJson, pureFetchAndJson };
