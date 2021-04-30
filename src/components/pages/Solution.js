@@ -13,6 +13,7 @@ import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import '../../css/codeViewer.css';
 import ErrorContext from '../../contexts/error';
+import PageTemplate from '../templates/PageTemplate';
 
 const useStyles = makeStyles((theme) => ({
   children: {
@@ -55,52 +56,68 @@ const Solution = (props) => {
     fetchSolutions();
   }, []);
 
-  return isLoaded
-    ? (<Grid container direction='column'>
-        <Grid className={classes.children} item xs={12}>
-          <Typography variant='h3'>
-            제출 정보
-          </Typography>
-          <SolutionInform solution={solution}/>
-        </Grid>
-        {
-          solution.sourceCode && (
+  return (
+    <PageTemplate
+      content={
+        isLoaded ? (
+          <Grid container direction="column">
             <Grid className={classes.children} item xs={12}>
-          <Typography variant='h3'>
-            제출 코드
-          </Typography>
-          <Grid className='CodeViewer' item
-            style={{ border: '1px solid #E0E0E0' }}>
-            <CodeViewer
-            code={solution.sourceCode} />
+              <Typography variant="h3">제출 정보</Typography>
+              <SolutionInform solution={solution} />
+            </Grid>
+            {solution.sourceCode && (
+              <Grid className={classes.children} item xs={12}>
+                <Typography variant="h3">제출 코드</Typography>
+                <Grid
+                  className="CodeViewer"
+                  item
+                  style={{ border: '1px solid #E0E0E0' }}
+                >
+                  <CodeViewer code={solution.sourceCode} />
+                </Grid>
+              </Grid>
+            )}
+            {(() => {
+              if (solution.state === '6' || solution.state === '7') {
+                if (solution.judgeError) {
+                  return (
+                    <Grid className={classes.children} item xs={12}>
+                      <Typography variant="h6" style={{ color: '#858585' }}>
+                        {judgeState[parseInt(solution.state, 10)].name}
+                      </Typography>
+                      <Paper
+                        elevation={0}
+                        xs={12}
+                        style={{
+                          backgroundColor: '#F8F8F8',
+                          padding: '10px',
+                          fontSize: 'large',
+                        }}
+                      >
+                        <pre style={{ whiteSpace: 'pre-wrap' }}>
+                          {solution.judgeError}
+                        </pre>
+                      </Paper>
+                    </Grid>
+                  );
+                }
+              }
+              return null;
+            })()}
+          </Grid> // 높이가 지정되어야지 alignItems 먹힘. -> template 이용하기
+        ) : (
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            style={{ height: 500 }}
+          >
+            <CircularProgress />
           </Grid>
-        </Grid>
-          )
-        }
-        {(() => {
-          if (solution.state === '6' || solution.state === '7') {
-            if (solution.judgeError) {
-              return (<Grid className={classes.children} item xs={12}>
-                  <Typography variant='h6' style={{ color: '#858585' }}>
-                    {judgeState[parseInt(solution.state, 10)].name}
-                  </Typography>
-                  <Paper elevation={0} xs={12}
-                    style={{ backgroundColor: '#F8F8F8', padding: '10px', fontSize: 'large' }}>
-                    <pre style={{ whiteSpace: 'pre-wrap' }}>
-                      {solution.judgeError}
-                    </pre>
-                  </Paper>
-                  </Grid>);
-            }
-          }
-          return null;
-        })()
-        }
-      </Grid>) : ( // 높이가 지정되어야지 alignItems 먹힘. -> template 이용하기
-        <Grid container justify='center' alignItems='center' style={{ height: 500 }}>
-          <CircularProgress />
-        </Grid>
-    );
+        )
+      }
+    />
+  );
 };
 
 export default Solution;
