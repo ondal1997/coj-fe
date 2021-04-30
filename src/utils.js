@@ -49,7 +49,7 @@ const _handleFetchRes = (status, updateError, callback) => {
     case 403: // 로그아웃
     case 404: // not found
     case 500:
-      updateError({ status: status });
+      updateError({ status });
       return;
     default: // 알 수 없는 에러
       updateError({ status: -1 });
