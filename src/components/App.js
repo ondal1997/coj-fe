@@ -25,11 +25,11 @@ const theme = createMuiTheme({
 });
 
 const App = () => (
-  <ThemeProvider theme={theme}>
-    <SnackbarProvider content={(key, message) => (<Button id={key} variant='contained' color='primary' size='large'>{message}</Button>)}>
-      <ErrorProvider>
-        <AuthenticationProvider>
-          <Router basename="/oj">
+  <Router basename="/oj">
+    <ThemeProvider theme={theme}>
+      <SnackbarProvider content={(key, message) => (<Button id={key} variant='contained' color='primary' size='large'>{message}</Button>)}>
+        <ErrorProvider>
+          <AuthenticationProvider>
             <Switch>
               <Route path={['/', '/problems']} exact component={ProblemList} />
               <Route path="/new" exact component={ProblemForm} />
@@ -41,11 +41,11 @@ const App = () => (
               <Route path="/solutions/:solutionKey" exact component={Solution} />
               <Route render={() => <Error error={{ status: 404 }} />} />
             </Switch>
-          </Router>
-        </AuthenticationProvider>
-      </ErrorProvider>
-    </SnackbarProvider>
-  </ThemeProvider>
+          </AuthenticationProvider>
+        </ErrorProvider>
+      </SnackbarProvider>
+    </ThemeProvider>
+  </Router>
 );
 
 export default App;
