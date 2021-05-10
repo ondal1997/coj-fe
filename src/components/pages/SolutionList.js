@@ -1,4 +1,4 @@
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress, makeStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { useContext, useEffect, useState } from 'react';
 import { _handleFetchRes } from '../../utils';
@@ -7,7 +7,23 @@ import SolutionTable from '../organisms/SolutionTable';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
 
+const useStyles = makeStyles((theme) => ({
+  children: {
+    [theme.breakpoints.down('md')]: {
+      margin: '4% 0',
+    },
+    [theme.breakpoints.up('lg')]: {
+      margin: '2% 0',
+    },
+    [theme.breakpoints.up('xl')]: {
+      margin: '2% 0',
+    },
+  },
+}));
+
 const SolutionList = (props) => {
+  const classes = useStyles();
+
   const [error, setError] = useContext(ErrorContext);
 
   const urlSearchParams = new URLSearchParams(props.location.search);
@@ -87,11 +103,13 @@ const SolutionList = (props) => {
             총 <strong>{totalCount}</strong>개의 솔루션을 발견했습니다.
           </p>
           <SolutionTable
+            className={classes.children}
             solutions={solutions}
             urlSearchParams={urlSearchParams}
             history={props.history}
           />
           <Pagination
+            className={classes.children}
             shape="rounded"
             variant="outlined"
             color="primary"
