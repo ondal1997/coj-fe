@@ -13,7 +13,6 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import CodeEditor from '../atoms/CodeEditor';
 import JudgeProgress from '../organisms/JudgeProgress';
 import { pureFetchAndJson } from '../../OurLink';
-import Error from '../atoms/Error';
 import { _handleFetchRes } from '../../utils';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
