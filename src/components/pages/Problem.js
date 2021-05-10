@@ -55,6 +55,19 @@ const useStyles = makeStyles((theme) => ({
       margin: '1% 0',
     },
   },
+  chip: {
+    [theme.breakpoints.down('md')]: {
+      marginRight: '1%',
+      marginTop: '0.3%',
+    },
+    [theme.breakpoints.up('md')]: {
+      marginRight: '0.5%',
+    },
+    [theme.breakpoints.up('xl')]: {
+      marginRight: '0.5%',
+      marginTop: '0.5%',
+    },
+  },
   title: {
     wordBreak: 'keep-all',
     [theme.breakpoints.down('md')]: {
@@ -183,7 +196,7 @@ const Problem = (props) => {
         </Grid>
       </Grid>
       <Grid className={classes.children} container item justify='space-between' alignItems='center'>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container direction="column" spacing={0}>
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
@@ -225,7 +238,7 @@ const Problem = (props) => {
             <Grid className={classes.children} item container direction="row">
               {
                 problem.categories.map((category, index) => (
-                  <Grid item style={{ marginRight: '1%' }}>
+                  <Grid className={classes.chip} item>
                     <BasicChip
                       key={index}
                       label={category}
