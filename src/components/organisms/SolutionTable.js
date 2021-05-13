@@ -107,7 +107,7 @@ const SolutionTable = (props) => {
         >
           <TableData>{solution.key}</TableData>
           <TableData>
-            <Link to={`/users/${solution.ownerId}`}>
+            <Link to={`/users/${solution.ownerId}`} style={{ color: '#5DADE2' }}>
               {solution.ownerId}
             </Link>
           </TableData>
@@ -141,7 +141,7 @@ const SolutionTable = (props) => {
           <TableData>
             {
               solution.accessable ? (
-                <Link style={{ color: '#0057FF' }} to={`/solutions/${solution.key}`}>
+                <Link style={{ color: '#5DADE2' }} to={`/solutions/${solution.key}`}>
                   {solution.byteLength}B
                 </Link>
               ) : (
