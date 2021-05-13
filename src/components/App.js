@@ -40,7 +40,7 @@ const App = () => (
               <Route path="/submit/:problemKey" exact component={SolutionForm} />
               <Route path="/solutions" exact component={SolutionList} />
               <Route path="/solutions/:solutionKey" exact component={Solution} />
-              <Route path="/user/:id" exact component={User}/>
+              <Route path="/users/:id" exact component={User}/>
               <Route render={() => <Error error={{ status: 404 }} />} />
             </Switch>
           </AuthenticationProvider>

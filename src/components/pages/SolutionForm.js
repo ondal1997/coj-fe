@@ -112,7 +112,7 @@ const SolutionForm = (props) => {
     if (state > 1) {
       setTimeout(() => {
         updateOpen(false);
-        history.push(`/solutions?problemKey=${problem.key}&page=1`);
+        history.push(`/solutions?problemKey=${problem.key}&page=1&highlight=${userId}`);
       }, 3000);
     } else {
       setTimeout(async () => {

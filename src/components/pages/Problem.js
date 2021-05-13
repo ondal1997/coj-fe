@@ -256,7 +256,7 @@ const Problem = (props) => {
       <Grid className={classes.children} item>
           <Grid container direction="row" justify="flex-end" spacing={1}>
             <Grid item>
-              <OurLink to={`/solutions?problemKey=${problemKey}`}>
+              <OurLink to={`/solutions?problemKey=${problemKey}&highlight=${userId}`}>
                 <Button color='primary' variant='outlined' size='large'>
                   제출 현황
                 </Button>
@@ -265,6 +265,12 @@ const Problem = (props) => {
             <Grid item>
               <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
+                  if (!userId) {
+                    window.location.replace(
+                      `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`,
+                    );
+                    return;
+                  }
                   props.history.push(`/submit/${problemKey}`);
                 }
                 }>

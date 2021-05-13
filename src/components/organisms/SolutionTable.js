@@ -1,6 +1,6 @@
 import { Tooltip } from '@material-ui/core';
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Table, TableData, TableHeader, TableRow } from '../atoms/Table';
 import { pureFetchAndJson } from '../../OurLink';
 import judgeState from '../../judgeState';
@@ -80,7 +80,8 @@ const ProblemLabel = ({ problemKey }) => {
 };
 
 const SolutionTable = (props) => {
-  const [userId] = useContext(AuthenticationContext);
+  // const [userId] = useContext(AuthenticationContext);
+  const highlight = new URLSearchParams(useLocation().search).get('highlight');
 
   const { solutions } = props;
 
@@ -100,13 +101,13 @@ const SolutionTable = (props) => {
       {solutions.map((solution) => (
         <TableRow key={solution.key}
           style={
-            userId === solution.ownerId ? (
+            highlight === solution.ownerId ? (
               { backgroundColor: '#DDEEFF' }) : {}
           }
         >
           <TableData>{solution.key}</TableData>
           <TableData>
-            <Link to={`/user/${solution.ownerId}`}>
+            <Link to={`/users/${solution.ownerId}`}>
               {solution.ownerId}
             </Link>
           </TableData>

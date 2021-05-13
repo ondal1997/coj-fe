@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Grade from '@material-ui/icons/Grade';
 import styled from 'styled-components';
 import { Divider, Paper, Tooltip } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import PageTemplate from '../templates/PageTemplate';
 import Solutions from '../organisms/SolutionTable';
 import AuthenticationContext from '../../contexts/authentication';
@@ -99,7 +99,7 @@ const ProblemLabel = ({ problemKey, isAc }) => {
 
 function SelectedListItem() {
   const classes = useStyles();
-  const [userId] = useContext(AuthenticationContext);
+  const { id: userId } = useParams();
 
   return (
     <div className={classes.menu}>

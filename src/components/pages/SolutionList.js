@@ -28,7 +28,9 @@ const SolutionList = (props) => {
 
   const urlSearchParams = new URLSearchParams(props.location.search);
 
-  const problemKey = urlSearchParams.get('problemKey');
+  const problemKey = urlSearchParams.get('problemKey') || '';
+  const ownerId = urlSearchParams.get('userId') || '';
+  const state = urlSearchParams.get('state') || '';
 
   const limit = 20;
 
@@ -46,22 +48,15 @@ const SolutionList = (props) => {
   useEffect(async () => {
     setIsLoaded(false);
 
-    let promise;
-    if (problemKey) {
-      promise = pureFetchAndJson(
-        `/api/problems/${problemKey}/solutions?${new URLSearchParams({
-          pos: (page - 1) * limit,
-          count: limit,
-        }).toString()}`,
-      );
-    } else {
-      promise = pureFetchAndJson(
-        `/api/solutions?${new URLSearchParams({
-          pos: (page - 1) * limit,
-          count: limit,
-        }).toString()}`,
-      );
-    }
+    const promise = pureFetchAndJson(
+      `/api/solutions?${new URLSearchParams({
+        pos: (page - 1) * limit,
+        count: limit,
+        problemKey,
+        ownerId,
+        state,
+      }).toString()}`,
+    );
     mutable.lastFetch = promise;
     promise.then((result) => {
       if (mutable.lastFetch !== promise) {
