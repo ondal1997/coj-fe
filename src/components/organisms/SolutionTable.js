@@ -105,7 +105,11 @@ const SolutionTable = (props) => {
           }
         >
           <TableData>{solution.key}</TableData>
-          <TableData>{solution.ownerId}</TableData>
+          <TableData>
+            <Link to={`/user/${solution.ownerId}`}>
+              {solution.ownerId}
+            </Link>
+          </TableData>
           <TableData>
             <ProblemLabel problemKey={solution.problemKey} />
           </TableData>

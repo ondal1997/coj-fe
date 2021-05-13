@@ -9,6 +9,7 @@ import Problem from './pages/Problem';
 import Solution from './pages/Solution';
 import ProblemList from './pages/ProblemList';
 import SolutionList from './pages/SolutionList';
+import User from './pages/User';
 import { ErrorProvider } from '../contexts/error';
 import { AuthenticationProvider } from '../contexts/authentication';
 import Error from './pages/Error';
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/submit/:problemKey" exact component={SolutionForm} />
               <Route path="/solutions" exact component={SolutionList} />
               <Route path="/solutions/:solutionKey" exact component={Solution} />
+              <Route path="/user/:id" exact component={User}/>
               <Route render={() => <Error error={{ status: 404 }} />} />
             </Switch>
           </AuthenticationProvider>

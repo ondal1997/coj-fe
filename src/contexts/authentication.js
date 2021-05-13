@@ -14,7 +14,12 @@ const AuthenticationProvider = ({ children }) => {
       // result json 무결성 검사를 위한 방어적 코드는 생략
       let result;
       try {
-        result = await pureFetchAndJson('/api/auth');
+        result = {
+          isAuthenticated: true,
+          status: 200,
+          id: 'migu554',
+        };
+        // result = await pureFetchAndJson('/api/auth');
       } catch {
         setError({ message: 'Failed to connect with server' });
         return;

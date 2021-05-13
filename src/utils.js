@@ -57,4 +57,17 @@ const _handleFetchRes = (status, updateError, callback) => {
   }
 };
 
-module.exports = { isProblemInputValid, getMode, _handleFetchRes };
+const getGrade = (ac) => {
+  let index = 0;
+  let start; let target;
+
+  do {
+    start = (5 * index * (index + 1)) / 2;
+    target = (index + 1) * 5;
+    index += 1;
+  } while (start + target <= ac);
+
+  return { level: index, start, target };
+};
+
+module.exports = { isProblemInputValid, getMode, _handleFetchRes, getGrade };
