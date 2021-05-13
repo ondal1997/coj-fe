@@ -57,7 +57,7 @@ const Testcases = ({ testcases, updateTestcases }) => {
         loadedCount += 1;
         if (loadedCount === files.length) {
           updateTestcases(newTestcases);
-          textRef.current.innerHTML = '';
+          textRef.current.innerHTML = '업로드 완료';
         }
       };
       reader.readAsText(file);
