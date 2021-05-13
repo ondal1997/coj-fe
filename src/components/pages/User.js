@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grade from '@material-ui/icons/Grade';
 import styled from 'styled-components';
-import { Divider, Paper, Tooltip } from '@material-ui/core';
+import { CircularProgress, Divider, Paper, Tooltip } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import PageTemplate from '../templates/PageTemplate';
 import Solutions from '../organisms/SolutionTable';
@@ -90,14 +90,19 @@ const ProblemLabel = ({ problemKey, isAc }) => {
     }
   }, []);
 
-  return (<Tooltip title={title}>
-    <Link to={`/problems/${problemKey}`} style={{ color: color, textDecoration: 'none', whiteSpace: 'nowrap' }} >
-      {problemKey}
-    </Link>
-  </Tooltip>);
+  return (
+    <Tooltip title={title}>
+      <Link
+        to={`/problems/${problemKey}`}
+        style={{ color: color, textDecoration: 'none', whiteSpace: 'nowrap' }}
+      >
+        {problemKey}
+      </Link>
+    </Tooltip>
+  );
 };
 
-function SelectedListItem() {
+function SelectedListItem({ countsOfState }) {
   const classes = useStyles();
   const { id: userId } = useParams();
 
@@ -107,13 +112,20 @@ function SelectedListItem() {
         {judgeState
           .filter((state, index) => index > 1 && index < 8)
           .map(({ name }, index) => (
-          <Link
-            to={`/solutions?userId=${userId}&state=${index + 2}`}
-            style={{ color: 'black', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-            <ListItem button >
-              <ListItemText primary={name} />
-            </ListItem>
-          </Link>
+            <Link
+              to={`/solutions?userId=${userId}&state=${index + 2}`}
+              style={{
+                color: 'black',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <ListItem button>
+                <ListItemText
+                  primary={`${name} (${countsOfState[index + 2] || 0})`}
+                />
+              </ListItem>
+            </Link>
           ))}
       </List>
     </div>
@@ -154,6 +166,7 @@ const User = ({ match }) => {
   const [solvedResult, setSolvedResult] = useState({
     accepted: [],
     notAccepted: [],
+    countsOfState: [],
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -166,7 +179,9 @@ const User = ({ match }) => {
         }).toString()}`,
       );
 
-      const { status, accepted, notAccepted } = result;
+      const { status, accepted, notAccepted, countsOfState } = result;
+
+      console.log(result);
 
       if (status === 200) {
         const acRes = accepted.length;
@@ -175,6 +190,7 @@ const User = ({ match }) => {
         setSolvedResult({
           accepted,
           notAccepted,
+          countsOfState,
         });
         setIsLoaded(true);
       } else {
@@ -189,109 +205,125 @@ const User = ({ match }) => {
     <PageTemplate
       content={
         !isLoaded ? (
-          <div>loading...</div>
-        )
-          : (
-        <Grid container direction="row" justify="space-between">
           <Grid
-            className={classes.children}
-            item
+            style={{ height: '100vh' }}
             container
-            xs={12}
             direction="row"
+            justify="center"
             alignItems="center"
           >
+            <Grid item>
+              <CircularProgress />
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container direction="row" justify="space-between">
             <Grid
+              className={classes.children}
+              item
               container
-              style={{ position: 'relative', width: 50 }}
-              justify="center"
+              xs={12}
+              direction="row"
               alignItems="center"
             >
-              <Grade color="primary" style={{ fontSize: 50 }} />
-              <Typography
-                style={{
-                  position: 'absolute',
-                  zIndex: 999,
-                  fontWeight: 700,
-                  color: 'white',
-                }}
-                variant="strong"
+              <Grid
+                container
+                style={{ position: 'relative', width: 50 }}
+                justify="center"
+                alignItems="center"
               >
-                {level}
-              </Typography>
+                <Grade color="primary" style={{ fontSize: 50 }} />
+                <Typography
+                  style={{
+                    position: 'absolute',
+                    zIndex: 999,
+                    fontWeight: 700,
+                    color: 'white',
+                  }}
+                  variant="strong"
+                >
+                  {level}
+                </Typography>
+              </Grid>
+              <Typography variant="h4">{match.params.id}</Typography>
             </Grid>
-            <Typography variant="h4">{match.params.id}</Typography>
-          </Grid>
-          <Grid container justify="center" xs={12}>
-            <StyledSpan>다음 레벨까지 {start + target - ac}문제</StyledSpan>
-          </Grid>
-          <Grid
-            className={classes.children}
-            item
-            xs={12}
-            style={{ position: 'relative' }}
-          >
-            <StyledHuman
-              src="/5Q0v.gif"
-              percentage={((ac - start) / target) * 100}
-            />
-            <CustomizedProgressBars value={((ac - start) / target) * 100} />
-            <Grid container justify="space-between">
-              <span>{start}</span>
-              <span>{start + target}</span>
+            <Grid container justify="center" xs={12}>
+              <StyledSpan>다음 레벨까지 {start + target - ac}문제</StyledSpan>
+            </Grid>
+            <Grid
+              className={classes.children}
+              item
+              xs={12}
+              style={{ position: 'relative' }}
+            >
+              <StyledHuman
+                src="/5Q0v.gif"
+                percentage={((ac - start) / target) * 100}
+              />
+              <CustomizedProgressBars value={((ac - start) / target) * 100} />
+              <Grid container justify="space-between">
+                <span>{start}</span>
+                <span>{start + target}</span>
+              </Grid>
+            </Grid>
+            <Grid className={classes.children} item xs={2}>
+              <SelectedListItem countsOfState={solvedResult.countsOfState} />
+            </Grid>
+            <Grid
+              className={classes.children}
+              item
+              container
+              xs={8}
+              sm={9}
+              direction="column"
+            >
+              <Grid item className={classes.children}>
+                <Typography className={classes.title}>
+                  맞은 문제 ({solvedResult.accepted.length})
+                </Typography>
+                <Divider />
+                <Paper
+                  className={classes.children}
+                  elevation={0}
+                  style={{
+                    backgroundColor: '#F8F8F8',
+                    padding: '10px',
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {solvedResult.accepted.map((key) => (
+                    <>
+                      <ProblemLabel problemKey={key} isAc />
+                      &nbsp;
+                    </>
+                  ))}
+                </Paper>
+              </Grid>
+              <Grid item className={classes.children}>
+                <Typography className={classes.title}>
+                  시도했지만 틀린 문제 ({solvedResult.notAccepted.length})
+                </Typography>
+                <Divider />
+                <Paper
+                  className={classes.children}
+                  elevation={0}
+                  style={{
+                    backgroundColor: '#F8F8F8',
+                    padding: '10px',
+                    wordBreak: 'break-word', // Link요소 하나가 word
+                  }}
+                >
+                  {solvedResult.notAccepted.map((key) => (
+                    <>
+                      <ProblemLabel problemKey={key} />
+                      &nbsp;
+                    </>
+                  ))}
+                </Paper>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid className={classes.children} item xs={2}>
-            <SelectedListItem />
-          </Grid>
-          <Grid className={classes.children} item container xs={8} sm={9} direction="column">
-            <Grid item className={classes.children}>
-              <Typography className={classes.title}>
-                맞은 문제({solvedResult.accepted.length})
-              </Typography>
-              <Divider />
-              <Paper
-                className={classes.children}
-                elevation={0}
-                style={{
-                  backgroundColor: '#F8F8F8',
-                  padding: '10px',
-                  wordWrap: 'break-word',
-                }}
-              >
-                {solvedResult.accepted.map((key) => (
-                <>
-                  <ProblemLabel problemKey={key} isAc/>
-                  &nbsp;
-                </>
-                ))}
-              </Paper>
-            </Grid>
-            <Grid item className={classes.children}>
-              <Typography className={classes.title}>
-                시도했지만 틀린 문제({solvedResult.notAccepted.length})
-              </Typography>
-              <Divider />
-              <Paper
-                className={classes.children}
-                elevation={0}
-                style={{
-                  backgroundColor: '#F8F8F8',
-                  padding: '10px',
-                  wordBreak: 'break-word', // Link요소 하나가 word
-                }}
-              >
-                {solvedResult.notAccepted.map((key) => (
-                <>
-                  <ProblemLabel problemKey={key}/>
-                  &nbsp;
-                </>
-                ))}
-              </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-          )
+        )
       }
     />
   );
