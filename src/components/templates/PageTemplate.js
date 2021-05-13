@@ -18,10 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PageTemplate = ({ content }) => {
+const PageTemplate = ({ content, children }) => {
   const classes = useStyles();
 
-  return (<Grid className={classes.root}>{content}</Grid>);
+  return (<Grid className={classes.root}>{content}{children}</Grid>);
 };
 
 export default PageTemplate;
