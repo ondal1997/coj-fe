@@ -65,7 +65,8 @@ const Testcases = ({ testcases, updateTestcases }) => {
   };
 
   return <Grid container direction='column' spacing={2}>
-    {testcases.map((testcase, number) => <Grid container item key={number + 1} direction='row' justify='space-between'>
+    {/* {testcases.map((testcase, number) => <Grid container item key={number + 1}
+    direction='row' justify='space-between'>
       <Grid item sm={5}>
         <div>
           테스트케이스 입력 {number + 1}
@@ -90,7 +91,7 @@ const Testcases = ({ testcases, updateTestcases }) => {
           }}
         />
       </Grid>
-    </Grid>)}
+    </Grid>)} */}
     <Grid item style={{ textAlign: 'right' }}>
       <span style={{ padding: '1%', color: '#828282' }} ref={textRef}>
         테스트케이스를 업로드 해주세요.
