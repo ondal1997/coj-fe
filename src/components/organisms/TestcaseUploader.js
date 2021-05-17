@@ -1,8 +1,11 @@
+import { Grid } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
+import BasicButton from '../atoms/BasicButton';
 
 // 이 컴포넌트가 결합된 동안에, handleTestcases가 변경되지 않으며 handleTestcases 호출이 안전하다는 가정 하에 안전합니다.
-export default function TestcaseUploader({ handleTestcases }) {
+export default function TestcaseUploader({ testcases, handleTestcases }) {
   const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const isMounted = useRef(true);
   useEffect(
@@ -68,12 +71,21 @@ export default function TestcaseUploader({ handleTestcases }) {
   };
 
   return (
-    <input
-      type="file"
-      accept="text/plain"
-      multiple
-      onChange={onUploadFile}
-      disabled={isLoading}
-    />
+    <Grid container direction='column' spacing={2}>
+      <Grid item style={{ textAlign: 'right' }}>
+        { testcases && testcases.length ? `테스트케이스 ${testcases.length}개 있음` : '테스트케이스를 업로드해주세요.' }
+        &nbsp;
+        <BasicButton label='테스트케이스 업로드'
+          handleClick={() => { fileInputRef.current.click(); }} disabled={isLoading}/>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="text/plain"
+          multiple
+          onChange={onUploadFile}
+          style={{ display: 'none' }}
+        />
+      </Grid>
+  </Grid>
   );
 }

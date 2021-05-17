@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { pureFetchAndJson } from '../../OurLink';
 import { isProblemInputValid } from '../../utils';
 import '../../css/reset.css';
-// import Testcases from '../organisms/Testcases';
+import TestcaseUploader from '../organisms/TestcaseUploader';
 import Examples from '../organisms/Examples';
 import Categories from '../organisms/Categories';
 import MyEditor from '../atoms/MyEditor';
@@ -14,7 +14,6 @@ import TextField from '../atoms/TextField';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
-import TestcaseUploader from '../organisms/TestcaseUploader';
 
 const StyledDivider = withStyles({
   root: {
@@ -241,8 +240,7 @@ const ProblemForm = (props) => {
         <Examples examples={examples} updateExamples={setExamples} />
       </Grid>
       <Grid item>
-        <TestcaseUploader handleTestcases={setTestcases} />
-        {/* <Testcases testcases={testcases} updateTestcases={setTestcases} /> */}
+        <TestcaseUploader testcases={testcases} handleTestcases={setTestcases} />
       </Grid>
       <Grid item>
         <StyledDivider variant="fullWidth" />

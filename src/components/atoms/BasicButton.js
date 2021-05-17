@@ -8,6 +8,10 @@ const StyledButton = styled(Button)`
   &:hover {
     background-color: ${(props) => (props.hoverBgColor ? props.hoverBgColor : '#CE2727')};
   };
+  :disabled {
+    color: ${(props) => (props.color ? props.color : 'white')};
+    opacity: 0.5;
+  }
   font-size: 17px;
 `;
 
