@@ -55,6 +55,22 @@ const useStyles = makeStyles((theme) => ({
       margin: '1% 0',
     },
   },
+  fieldroot: {
+    [theme.breakpoints.down('md')]: {
+      margin: '2% 0',
+    },
+    [theme.breakpoints.up('lg')]: {
+      margin: '2% 0',
+    },
+    [theme.breakpoints.up('xl')]: {
+      margin: '1% 0',
+    },
+  },
+  field: {
+    [theme.breakpoints.up('lg')]: {
+      width: 500,
+    },
+  },
   chip: {
     [theme.breakpoints.down('md')]: {
       marginRight: '1%',
@@ -358,8 +374,8 @@ const Problem = (props) => {
       <Divider className={classes.children}/>
       <Grid container item direction="column">
         {problem.examples.map((example, index) => (
-          <Grid key={index + 1} container item direction="row" justify="space-between">
-            <Grid className={classes.children} item container lg={5} direction="column">
+          <Grid key={index + 1} className={classes.fieldroot} container item direction="row" justify="space-between">
+            <Grid className={classes.field} item container direction="column">
               <Grid item container alignItems='center'>
                 <Grid item>
                   <StyledItemTitle>예제 입력 {index + 1}</StyledItemTitle>
@@ -380,7 +396,7 @@ const Problem = (props) => {
                 />
                </Grid>
             </Grid>
-            <Grid className={classes.children} item container lg={5} direction='column'>
+            <Grid className={classes.field} item container direction='column'>
               <Grid item container alignItems='center'>
                   <Grid item>
                     <StyledItemTitle>예제 출력 {index + 1}</StyledItemTitle>
