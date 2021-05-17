@@ -172,6 +172,7 @@ const User = ({ match }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(async () => {
+    setIsLoaded(false);
     try {
       const result = await pureFetchAndJson(
         `/api/problemNumbers?${new URLSearchParams({
@@ -199,7 +200,7 @@ const User = ({ match }) => {
     } catch (err) {
       setError(err);
     }
-  }, []);
+  }, [match]);
 
   return (
     <PageTemplate

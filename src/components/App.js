@@ -51,9 +51,12 @@ const Header = () => {
           <Tooltip title="마이페이지">
             <IconButton
               onClick={() => {
-                history.push(`/users/${userId}`);
+                if (userId) {
+                  history.push(`/users/${userId}`);
+                } else {
+                  window.location.href = 'https://codersit.co.kr/bbs/login.php?url=%2Foj';
+                }
               }}
-              disabled={!userId}
             >
               <AccountBoxRounded />
             </IconButton>

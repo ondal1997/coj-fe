@@ -1,6 +1,6 @@
 import { Tooltip } from '@material-ui/core';
 import { useContext, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Table, TableData, TableHeader, TableRow } from '../atoms/Table';
 import { pureFetchAndJson } from '../../OurLink';
 import judgeState from '../../judgeState';
@@ -75,13 +75,14 @@ const ProblemLabel = ({ problemKey }) => {
   }, []);
 
   return (<Tooltip title={title}>
-    <Link style={{ color: '#444444' }} to={`/problems/${problemKey}`}>{problemKey}</Link>
+    <div style={{ color: '#444444' }}>{problemKey}</div>
   </Tooltip>);
 };
 
 const SolutionTable = (props) => {
   // const [userId] = useContext(AuthenticationContext);
   const highlight = new URLSearchParams(useLocation().search).get('highlight');
+  const history = useHistory();
 
   const { solutions } = props;
 
@@ -106,12 +107,12 @@ const SolutionTable = (props) => {
           }
         >
           <TableData>{solution.key}</TableData>
-          <TableData>
-            <Link to={`/users/${solution.ownerId}`} style={{ color: '#5DADE2' }}>
+          <TableData hover onClick={() => { history.push(`/users/${solution.ownerId}`); }}>
+            <div style={{ color: '#5DADE2' }}>
               {solution.ownerId}
-            </Link>
+            </div>
           </TableData>
-          <TableData>
+          <TableData hover onClick={() => { history.push(`/problems/${solution.problemKey}`); }}>
             <ProblemLabel problemKey={solution.problemKey} />
           </TableData>
           <TableData>
@@ -138,17 +139,19 @@ const SolutionTable = (props) => {
               )
             }
           </TableData>
-          <TableData>
-            {
-              solution.accessable ? (
-                <Link style={{ color: '#5DADE2' }} to={`/solutions/${solution.key}`}>
+          {
+            solution.accessable ? (
+              <TableData hover onClick={() => { history.push(`/solutions/${solution.key}`); }}>
+                <div style={{ color: '#5DADE2' }}>
                   {solution.byteLength}B
-                </Link>
-              ) : (
-                `${solution.byteLength}B`
-              )
-            }
-          </TableData>
+                </div>
+              </TableData>
+            ) : (
+              <TableData>
+                  {solution.byteLength}B
+              </TableData>
+            )
+          }
           <TableData>
             {new Date(solution.uploadTime).toLocaleTimeString('ko-KR', {
               year: 'numeric',

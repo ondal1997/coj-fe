@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Grid,
@@ -51,6 +51,8 @@ const SolutionForm = (props) => {
   const { problemKey } = props.match.params;
   const { history } = props;
 
+  const isMounted = useRef(true);
+
   // const [solution, setSolution] = useState({});
   const [problem, setProblem] = useState(null);
   const [languages, setLanguages] = useState(null);
@@ -94,6 +96,9 @@ const SolutionForm = (props) => {
   };
 
   const fetchJudgeResult = async (solutionKey, updateOpen, updateProgress) => {
+    if (!isMounted.current) {
+      return;
+    }
     let result;
     try {
       result = await pureFetchAndJson(`/api/solutions/${solutionKey}`);
@@ -117,7 +122,7 @@ const SolutionForm = (props) => {
     } else {
       setTimeout(async () => {
         await fetchJudgeResult(solutionKey, updateOpen, updateProgress);
-      }, 16);
+      }, 500);
     }
   };
 
@@ -193,6 +198,7 @@ const SolutionForm = (props) => {
       setProblem(await fetchProblem());
       // setSolution 관련은 나중에
     })();
+    return () => { isMounted.current = false; };
   }, []);
 
   return (

@@ -94,9 +94,11 @@ const SolutionList = (props) => {
       }
       return (
         <>
-          <p>
-            총 <strong>{totalCount}</strong>개의 솔루션을 발견했습니다.
-          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+            <p>
+              총 <strong>{totalCount}</strong>개의 솔루션을 발견했습니다.
+            </p>
+          </div>
           <SolutionTable
             className={classes.children}
             solutions={solutions}

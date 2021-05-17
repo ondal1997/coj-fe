@@ -3,9 +3,9 @@ import _ from 'lodash';
 import { Divider, Grid, CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { pureFetchAndJson } from '../../OurLink';
-import { isProblemInputValid, _handleFetchRes } from '../../utils';
+import { isProblemInputValid } from '../../utils';
 import '../../css/reset.css';
-import Testcases from '../organisms/Testcases';
+// import Testcases from '../organisms/Testcases';
 import Examples from '../organisms/Examples';
 import Categories from '../organisms/Categories';
 import MyEditor from '../atoms/MyEditor';
@@ -14,6 +14,7 @@ import TextField from '../atoms/TextField';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
+import TestcaseUploader from '../organisms/TestcaseUploader';
 
 const StyledDivider = withStyles({
   root: {
@@ -240,7 +241,8 @@ const ProblemForm = (props) => {
         <Examples examples={examples} updateExamples={setExamples} />
       </Grid>
       <Grid item>
-        <Testcases testcases={testcases} updateTestcases={setTestcases} />
+        <TestcaseUploader handleTestcases={setTestcases} />
+        {/* <Testcases testcases={testcases} updateTestcases={setTestcases} /> */}
       </Grid>
       <Grid item>
         <StyledDivider variant="fullWidth" />

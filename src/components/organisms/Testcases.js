@@ -9,8 +9,9 @@ const Testcases = ({ testcases, updateTestcases }) => {
 
   const onFileUpload = (event) => {
     const { files } = event.target;
+    console.log(files.length);
     if (files.length % 2 !== 0) {
-      textRef.current.innerHTML = '입력과 출력 파일을 같이 업로드해주세요.';
+      textRef.current.innerHTML = '입력과 출력 파일을 같이 업로드해주세요.1';
       return;
     }
 
@@ -18,15 +19,12 @@ const Testcases = ({ testcases, updateTestcases }) => {
       const inNum = files[i - 1].name.split('.')[0];
       const outNum = files[i].name.split('.')[0];
       if (inNum !== outNum) {
-        textRef.current.innerHTML = '입력과 출력 파일을 같이 업로드해주세요.';
+        textRef.current.innerHTML = '입력과 출력 파일을 같이 업로드해주세요.2';
         return;
       }
     }
 
-    const newTestcases = [{ input: '', output: '' }];
-    const testcaseLen = newTestcases.length - 1;
-
-    let idx = 0;
+    const newTestcases = new Array(files.length / 2).fill({ input: '', output: '' });
     let loadedCount = 0;
 
     textRef.current.innerHTML = '업로드 중...';
@@ -41,18 +39,15 @@ const Testcases = ({ testcases, updateTestcases }) => {
       return 0;
     });
 
-    sortedFiles.forEach((file) => {
+    sortedFiles.forEach((file, index) => {
       const reader = new FileReader();
       reader.onload = function () {
-        if (newTestcases[testcaseLen + idx].input !== ''
-          && newTestcases[testcaseLen + idx].output !== '') {
-          idx += 1;
-          newTestcases[testcaseLen + idx] = { input: '', output: '' };
-        }
-        if (file.name.split('.')[1] === 'in') {
-          newTestcases[testcaseLen + idx].input = reader.result;
+        const number = file.name.split('.')[0];
+        const type = file.name.split('.')[1];
+        if (type === 'in') {
+          newTestcases[number].input = reader.result;
         } else {
-          newTestcases[testcaseLen + idx].output = reader.result;
+          newTestcases[number].output = reader.result;
         }
         loadedCount += 1;
         if (loadedCount === files.length) {
