@@ -282,9 +282,7 @@ const Problem = (props) => {
               <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
                   if (!userId) {
-                    window.location.replace(
-                      `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`,
-                    );
+                    window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`;
                     return;
                   }
                   props.history.push(`/submit/${problemKey}`);

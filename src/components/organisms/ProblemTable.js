@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Table, TableData, TableHeader, TableRow } from '../atoms/Table';
 import BasicChip from '../atoms/BasicChip';
 
 const ProblemTable = (props) => {
   const { problems } = props;
   const { urlSearchParams } = props;
+  const history = useHistory();
 
   return (
     <Table>
@@ -19,18 +20,18 @@ const ProblemTable = (props) => {
       {problems.map((problem) => (
         <TableRow key={problem.key}>
           <TableData>{problem.key}</TableData>
-          <TableData align="left">
+          <TableData hover align="left" onClick={() => { history.push(`/problems/${problem.key}`); }}>
             {
               problem.challengeCode === 0 && (
-              <Link style={{ color: '#444444' }} to={`/problems/${problem.key}`}>{problem.title}</Link>)
+              <div style={{ color: '#444444' }}>{problem.title}</div>)
             }
             {
               problem.challengeCode === 1 && (
-              <Link style={{ color: '#0057FF' }} to={`/problems/${problem.key}`}>{problem.title}</Link>)
+              <div style={{ color: '#0057FF' }}>{problem.title}</div>)
             }
             {
               problem.challengeCode === -1 && (
-              <Link style={{ color: '#E94D00' }} to={`/problems/${problem.key}`}>{problem.title}</Link>)
+              <div style={{ color: '#E94D00' }}>{problem.title}</div>)
             }
           </TableData>
           <TableData>

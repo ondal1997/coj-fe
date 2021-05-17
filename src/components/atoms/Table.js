@@ -15,6 +15,9 @@ const Th = styled.th`
 `;
 
 const Td = styled.td`
+  ${(props) => (
+    props.hover && 'cursor: pointer; :hover { opacity: 0.5; }'
+  )}
   margin: 0px;
   padding: 0px 8px;
   height: 32px;
@@ -25,7 +28,9 @@ const Td = styled.td`
 
 const Table = (props) => (
   <div style={{ overflow: 'auto', color: '#444444', width: '100%' }}>
-    <table style={{ borderCollapse: 'collapse', width: '100%' }}>{props.children}</table>
+    <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+      {props.children}
+    </table>
   </div>
 );
 
@@ -35,7 +40,13 @@ const TableHeader = (props) => (
   <Th style={{ width: props.width }}>{props.children}</Th>
 );
 const TableData = (props) => (
-  <Td style={{ textAlign: props.align }}>{props.children}</Td>
+  <Td
+    hover={props.hover}
+    style={{ textAlign: props.align }}
+    onClick={props.onClick || (() => {})}
+  >
+    {props.children}
+  </Td>
 );
 
 export { Table, TableRow, TableHeader, TableData };
