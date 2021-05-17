@@ -32,6 +32,8 @@ import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleu
 
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
+import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
+import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
 import { useEffect, useRef, useState } from 'react';
 
 // import { Paper } from '@material-ui/core';
@@ -40,16 +42,18 @@ const editorConfiguration = {
   plugins: [Essentials, Paragraph, Heading,
     Bold, Italic, Underline, Strikethrough, Subscript, Superscript,
     ListStyle, Font, BlockQuote, HorizontalLine, Link,
-    Image, ImageResize, LinkImage, ImageInsert, SimpleUploadAdapter,
-    Table, TableToolbar,
+    Image, LinkImage, ImageInsert, SimpleUploadAdapter, // ImageResize,
+    Table, TableToolbar, TableProperties, TableCellProperties,
   ],
   simpleUpload: {
     uploadUrl: 'https://codersit.co.kr/coders/upload.php',
   },
   toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
-    '|', 'bulletedList', 'numberedList', '|', 'fontSize', 'fontColor', 'fontBackgroundColor', '|', 'blockQuote', 'horizontalLine', '|', 'link', 'insertImage', 'insertTable', '|', 'undo', 'redo'],
+    // '|', 'bulletedList', 'numberedList',
+    '|', 'fontSize', 'fontColor', 'fontBackgroundColor', '|', 'blockQuote', 'horizontalLine', '|', 'link', 'insertImage', 'insertTable', '|', 'undo', 'redo'],
   table: {
-    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells',
+      'tableProperties', 'tableCellProperties'],
   },
   placeholder: '여기에 내용을 입력하세요',
 };

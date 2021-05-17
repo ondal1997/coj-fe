@@ -9,3 +9,7 @@ hr {
 ol > li {
   font-size: large !important;
 }
+
+.ck-content figure.image {
+  width: 480px !important;
+}

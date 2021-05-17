@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   field: {
     [theme.breakpoints.up('lg')]: {
-      width: 500,
+      width: 524,
     },
   },
   chip: {
