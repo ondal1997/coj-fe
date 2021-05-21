@@ -13,3 +13,12 @@ legend {
   text-indent: 0 !important;
   overflow: visible !important;
 }
+
+.CodeMirror {
+  font-size: medium !important;
+  height: fit-content !important;
+}
+
+.CodeMirror-scroll {
+  min-height: 300px !important;
+}

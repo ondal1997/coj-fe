@@ -104,7 +104,7 @@ const Solution = (props) => {
               }
               return null;
             })()}
-          </Grid> // 높이가 지정되어야지 alignItems 먹힘. -> template 이용하기
+          </Grid>
         ) : (
           <Grid
             container

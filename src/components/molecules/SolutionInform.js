@@ -9,13 +9,12 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import judgeState from '../../judgeState';
 
-const StyledState = styled.span`
-  font-weight: 600;
-  color: white;
-  background-color: ${({ bgColor }) => bgColor || '#F23434'};
-  border-radius: 500px;
-  padding: 2% 3%;
-  font-size: medium;
+const StyledLink = styled(Link)`
+  color: ${(props) => (props.color ? props.color : '#000000')};
+  text-decoration: none;
+  &:hover {
+    opacity: 0.5;
+  };
 `;
 
 // 재활용하기
@@ -33,27 +32,33 @@ const SolutionInform = (props) => {
             <TableCell align="center">채점 결과</TableCell>
             <TableCell align="center">시간</TableCell>
             <TableCell align="center">메모리</TableCell>
-            <TableCell align="center">업로드 시간</TableCell>
+            <TableCell align="center">제출 시간</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             <TableCell align="center">{`${solution.key}`}</TableCell>
-            <TableCell align="center">{`${solution.ownerId}`}</TableCell>
             <TableCell align="center">
-              <Link style={{ color: '#444444' }} to={`/problems/${solution.problemKey}`}>
-                {`${solution.problemKey}`}
-              </Link>
+              <StyledLink color='#5DADE2' to={`/users/${solution.ownerId}`}>
+                {`${solution.ownerId}`}
+              </StyledLink>
             </TableCell>
             <TableCell align="center">
-              <StyledState bgColor={judgeState[parseInt(solution.state, 10)].color}>
+              <StyledLink color='#444444' to={`/problems/${solution.problemKey}`}>
+                {`${solution.problemKey}`}
+              </StyledLink>
+            </TableCell>
+            <TableCell align="center">
+              <span style={{
+                color: judgeState[parseInt(solution.state, 10)].color,
+                fontWeight: 600 }}>
                 {judgeState[parseInt(solution.state, 10)].name}
-              </StyledState>
+              </span>
             </TableCell>
             <TableCell align="center">{solution.state === '2' ? `${solution.maxTime}ms` : '-'}</TableCell>
             <TableCell align="center">{solution.state === '2' ? `${solution.maxMemory}MB` : '-'}</TableCell>
             <TableCell align="center">
-            {new Date(solution.uploadTime).toLocaleDateString(undefined, {
+            {new Date(solution.uploadTime).toLocaleTimeString(undefined, {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
