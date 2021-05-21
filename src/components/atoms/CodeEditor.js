@@ -3,7 +3,6 @@ import CodeMirror from 'react-codemirror';
 import { getMode } from '../../utils';
 import 'codemirror/keymap/sublime';
 import '../../css/reset_solutionform.css';
-import 'react-codemirror/lib/codemirror.css';
 
 const CodeEditor = ({ defaultValue, language, updateCode }) => {
   const handleChange = (newCode) => {
