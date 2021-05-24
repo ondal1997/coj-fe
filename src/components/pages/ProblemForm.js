@@ -184,13 +184,13 @@ const ProblemForm = (props) => {
   }, []);
 
   return (<PageTemplate content={ !isLoaded
-    ? (<Grid style={{ height: '100vh' }} container direction='row' justify='center' alignItems='center'>
+    ? (<Grid style={{ width: '100%', height: '100vh' }} container direction='row' justify='center' alignItems='center'>
         <Grid item>
           <CircularProgress />
         </Grid>
       </Grid>)
     : (<Grid container>
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" margin="auto" width="100%">
       <Grid item>
         <TextField
           name='title'

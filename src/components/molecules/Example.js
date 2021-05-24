@@ -4,8 +4,8 @@ import DeleteButton from '../atoms/DeleteButton';
 import TextField from '../atoms/TextField';
 
 const Example = ({ example, index, handleChangeInput, handleClickDeleteItem }) => (
-  <Grid key={index + 1} container item direction='row' justify='space-between'>
-    <Grid item sm={5}>
+  <Grid key={index + 1} container item direction='row' justify='space-between' spacing={2}>
+    <Grid item sm={6} xs={12}>
       <div>
         예제 입력 {index + 1}
       </div>
@@ -13,7 +13,7 @@ const Example = ({ example, index, handleChangeInput, handleClickDeleteItem }) =
         variant='outlined' row={5} maxRow={Infinity} multiline
         value={example.input} handleChange={(e) => handleChangeInput(e, index)} />
     </Grid>
-    <Grid item sm={5}>
+    <Grid item sm={6} xs={12}>
       <div>
         예제 출력 {index + 1}
       </div>
