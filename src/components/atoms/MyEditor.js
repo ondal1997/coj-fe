@@ -34,6 +34,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
 import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
+import MathType from '@wiris/mathtype-ckeditor5';
 import { useEffect, useRef, useState } from 'react';
 
 // import { Paper } from '@material-ui/core';
@@ -42,14 +43,16 @@ const editorConfiguration = {
   plugins: [Essentials, Paragraph, Heading,
     Bold, Italic, Underline, Strikethrough, Subscript, Superscript,
     ListStyle, Font, BlockQuote, HorizontalLine, Link,
-    Image, LinkImage, ImageInsert, SimpleUploadAdapter, // ImageResize,
+    Image, LinkImage, ImageInsert, SimpleUploadAdapter, ImageResize,
     Table, TableToolbar, TableProperties, TableCellProperties,
+    MathType,
   ],
   simpleUpload: {
     uploadUrl: 'https://codersit.co.kr/coders/upload.php',
   },
   toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
     // '|', 'bulletedList', 'numberedList',
+    '|', 'MathType',
     '|', 'fontSize', 'fontColor', 'fontBackgroundColor', '|', 'blockQuote', 'horizontalLine', '|', 'link', 'insertImage', 'insertTable', '|', 'undo', 'redo'],
   table: {
     contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells',

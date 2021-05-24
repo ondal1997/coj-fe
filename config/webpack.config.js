@@ -541,6 +541,33 @@ module.exports = function (webpackEnv) {
                 'sass-loader'
               ),
             },
+            {
+              test: /theme[/\\]icons[/\\][^/\\]+\.svg$/,
+              use: [ 'raw-loader' ]
+            },
+            {
+              test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+              use: [
+                {
+                  loader: 'style-loader',
+                  options: {
+                    injectType: 'singletonStyleTag',
+                    attributes: {
+                        'data-cke': true
+                    }
+                  }
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: styles.getPostCssConfig({
+                    themeImporter: {
+                        themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+                    },
+                    minify: true
+                  })
+                }
+              ]
+            },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.
@@ -556,7 +583,7 @@ module.exports = function (webpackEnv) {
                 /\.(js|mjs|jsx|ts|tsx)$/,
                 /\.html$/,
                 /\.json$/,
-                /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                /theme[/\\]icons[/\\][^/\\]+\.svg$/,
                 /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/
               ],
               options: {
@@ -566,33 +593,6 @@ module.exports = function (webpackEnv) {
             // ** STOP ** Are you adding a new loader?
             // Make sure to add the new loader(s) before the "file" loader.
           ],
-        },
-        {
-          test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-          use: [ 'raw-loader' ]
-        },
-        {
-          test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
-          use: [
-            {
-              loader: 'style-loader',
-              options: {
-                injectType: 'singletonStyleTag',
-                attributes: {
-                    'data-cke': true
-                }
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: styles.getPostCssConfig({
-                themeImporter: {
-                    themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
-                },
-                minify: true
-              })
-            }
-          ]
         },
       ],
     },

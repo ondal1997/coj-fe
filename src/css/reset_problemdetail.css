@@ -12,5 +12,5 @@ ol > li {
 
 .ck-content figure.image {
   width: 100%;
-  max-width: 480px !important;
+  /* max-width: 480px !important; */
 }
