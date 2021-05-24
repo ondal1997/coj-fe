@@ -10,7 +10,8 @@ ol > li {
   font-size: large !important;
 }
 
-.ck-content figure.image {
-  width: 100%;
+.ck-content .image_resized {
+
   /* max-width: 480px !important; */
+  /* min-width: 100%; */
 }

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
-import { Divider, Grid, CircularProgress } from '@material-ui/core';
+import { Divider, Grid, CircularProgress, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { pureFetchAndJson } from '../../OurLink';
 import { isProblemInputValid } from '../../utils';
@@ -190,7 +190,7 @@ const ProblemForm = (props) => {
         </Grid>
       </Grid>)
     : (<Grid container>
-    <Grid container item direction='column' spacing={3}>
+    <Box display="flex" flexDirection="column">
       <Grid item>
         <TextField
           name='title'
@@ -249,7 +249,7 @@ const ProblemForm = (props) => {
         <BasicButton label='확인' variant='contained'
           disabled={disabled} handleClick={handleSubmit} />
       </Grid>
-    </Grid>
+    </Box>
   </Grid>)} />
   );
 };

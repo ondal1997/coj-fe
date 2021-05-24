@@ -157,7 +157,7 @@ const Problem = (props) => {
   }, []);
 
   return <PageTemplate content={isLoaded ? (
-    <Grid className={classes.root} container direction="column">
+    <Grid className={classes.root} direction="column">
       <Grid className={classes.children} item>
         <Grid container justify='flex-end'>
           {isOwners
@@ -331,7 +331,7 @@ const Problem = (props) => {
             </Table>
           </TableContainer>
       </Grid>
-      <Grid item container direction="column">{
+      <Grid item direction="column">{
           problem.description && (
             <Grid className={classes.children} item>
              <StyledItemTitle>문제 설명</StyledItemTitle>
