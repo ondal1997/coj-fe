@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import CodeEditor from '../atoms/CodeEditor';
+import CodeEditor from '../atoms/CodeEditorr';
 import JudgeProgress from '../organisms/JudgeProgress';
 import { pureFetchAndJson } from '../../OurLink';
 import { _handleFetchRes } from '../../utils';
@@ -258,10 +258,10 @@ const SolutionForm = (props) => {
           style={{ border: '1px solid #E0E0E0' }}
         >
           <CodeEditor
-            defaultValue={sourceCode}
-            language={selectedLanguage}
-            updateCode={setSourceCode}
-          />
+              defaultValue={sourceCode}
+              language={selectedLanguage}
+              updateCode={setSourceCode}
+            />
         </Grid>
         <Grid
           className={classes.children}
