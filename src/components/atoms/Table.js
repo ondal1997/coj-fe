@@ -18,6 +18,8 @@ const Td = styled.td`
   ${(props) => (
     props.hover && 'cursor: pointer; :hover { opacity: 0.5; }'
   )}
+  font-size: 16px;
+  font-weight: 400;
   margin: 0px;
   padding: 0px 8px;
   height: 32px;

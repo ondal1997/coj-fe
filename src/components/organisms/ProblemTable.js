@@ -44,7 +44,7 @@ const ProblemTable = (props) => {
               history.push(`/problems/${problem.key}`);
             }}
           >
-            <div style={{ color: getLevelColor(problem.level) }}>
+            <div style={{ fontSize: '16px', fontWeight: 430, color: getLevelColor(problem.level) }}>
               {problem.title} <Check challengeCode={problem.challengeCode} />
             </div>
           </TableData>
