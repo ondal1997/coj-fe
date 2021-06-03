@@ -258,7 +258,7 @@ const User = ({ match }) => {
               style={{ position: 'relative' }}
             >
               <StyledHuman
-                src="/5Q0v.gif"
+                src="5Q0v.gif"
                 percentage={((ac - start) / target) * 100}
               />
               <CustomizedProgressBars value={((ac - start) / target) * 100} />
@@ -289,7 +289,7 @@ const User = ({ match }) => {
                   style={{
                     backgroundColor: '#F8F8F8',
                     padding: '10px',
-                    wordWrap: 'break-word',
+                    wordBreak: 'break-word', // Link요소 하나가 word
                   }}
                 >
                   {solvedResult.accepted.map((key) => (

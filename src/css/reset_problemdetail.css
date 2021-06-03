@@ -11,7 +11,6 @@ ol > li {
 }
 
 .ck-content .image_resized {
-
   /* max-width: 480px !important; */
-  /* min-width: 100%; */
+  /* min-width: 480px; */
 }

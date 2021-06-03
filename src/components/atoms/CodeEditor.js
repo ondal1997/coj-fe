@@ -6,14 +6,14 @@ import '../../css/reset_solutionform.css';
 
 const CodeEditor = ({ defaultValue, language, updateCode }) => {
   const handleChange = (newCode) => {
-    document.querySelector('.CodeMirror').CodeMirror.execCommand('goLineEnd');
+    // document.querySelector('.CodeMirror').CodeMirror.execCommand('goLineEnd');
     updateCode(newCode);
   };
 
   return (
       <CodeMirror value={defaultValue}
         options={{
-          mode: language === 'undefined' ? getMode(language) : 'python',
+          mode: language ? getMode(language) : 'python',
           lineNumbers: true,
           extraKeys: { Enter: false },
         }} onChange={handleChange}
