@@ -7,7 +7,7 @@ import { getMode } from '../../utils';
 
 const CodeEditor = ({ defaultValue, language, updateCode }) => {
   const handleChange = (newCode) => {
-    // updateCode(newCode);
+    updateCode(newCode);
   };
 
   return (

@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     [theme.breakpoints.down('md')]: {
       margin: '0 0',
-      padding: '0 0',
+      padding: '0 10px',
     },
     [theme.breakpoints.up('lg')]: {
       width: '1080px',

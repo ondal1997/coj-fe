@@ -258,7 +258,7 @@ const User = ({ match }) => {
               style={{ position: 'relative' }}
             >
               <StyledHuman
-                src="5Q0v.gif"
+                src="/5Q0v.gif"
                 percentage={((ac - start) / target) * 100}
               />
               <CustomizedProgressBars value={((ac - start) / target) * 100} />
