@@ -34,7 +34,7 @@ const Categories = ({ categories, updateCategories }) => {
 
   return <Grid container direction='column'>
     <Grid item style={{ margin: '0.5% 0' }}>
-      <StyledTextField label='카테고리' variant='outlined' placeholder='카테고리 작성 후 엔터를 입력하세요.'
+      <StyledTextField label='카테고리' variant='outlined' placeholder='작성 후 엔터를 입력'
         onKeyPress={(e) => { if (e.charCode === 13) handleEnterInput(e); }} />
     </Grid>
     <Grid item container direction='row' style={{ margin: '0.5% 0' }}>

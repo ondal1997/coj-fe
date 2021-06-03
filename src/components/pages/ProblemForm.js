@@ -14,6 +14,7 @@ import TextField from '../atoms/TextField';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
+import LevelSelector from '../organisms/LevelSelector';
 
 const StyledDivider = withStyles({
   root: {
@@ -39,6 +40,7 @@ const ProblemForm = (props) => {
   const [examples, setExamples] = useState([]);
   const [testcases, setTestcases] = useState([]);
 
+  const [level, setLevel] = useState(0);
   const [categories, setCategories] = useState([]);
 
   const inputsRef = useRef([]);
@@ -139,6 +141,7 @@ const ProblemForm = (props) => {
       testcases,
       inputDescription,
       outputDescription,
+      level,
     };
 
     fetchProblem(data);
@@ -179,78 +182,132 @@ const ProblemForm = (props) => {
     setCategories(problem.categories);
     setExamples(problem.examples);
     setTestcases(problem.testcases);
+    setLevel(problem.level);
 
     setIsLoaded(true);
   }, []);
 
-  return (<PageTemplate content={ !isLoaded
-    ? (<Grid style={{ width: '100%', height: '100vh' }} container direction='row' justify='center' alignItems='center'>
-        <Grid item>
-          <CircularProgress />
-        </Grid>
-      </Grid>)
-    : (<Grid container>
-    <Box display="flex" flexDirection="column" margin="auto" width="100%">
-      <Grid item>
-        <TextField
-          name='title'
-          label='문제명'
-          fullWidth
-          margin="normal"
-          variant="outlined"
-          value={title}
-          handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[0]} />
-      </Grid>
-      <Grid container item direction='row' spacing={2}>
-        <Grid item>
-          <TextField
-            name='timeLimit'
-            label='시간 제한 (ms)'
-            margin="normal"
-            variant="outlined"
-            value={timeLimit}
-            handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[1]} />
-        </Grid>
-        <Grid item>
-          <TextField
-            name='memoryLimit'
-            label='메모리 제한 (MB)'
-            margin="normal"
-            variant="outlined"
-            value={memoryLimit}
-            handleChange={(event) => handleChange(event)} inputRef={inputsRef.current[2]} />
-        </Grid>
-      </Grid>
-      <Grid item>
-        <p>문제 설명</p>
-        <MyEditor value={description} onChange={(res) => { setDescription(res); }} />
-      </Grid>
-      <Grid item>
-        <p>입력 형식 설명(선택)</p>
-        <MyEditor value={inputDescription} onChange={(res) => { setInputDescription(res); }} />
-      </Grid>
-      <Grid item>
-        <p>출력 형식 설명(선택)</p>
-        <MyEditor value={outputDescription} onChange={(res) => { setOutputDescription(res); }} />
-      </Grid>
-      <Grid item>
-        <Categories categories={categories} updateCategories={setCategories} />
-      </Grid>
-      <Grid item>
-        <Examples examples={examples} updateExamples={setExamples} />
-      </Grid>
-      <Grid item>
-        <TestcaseUploader testcases={testcases} handleTestcases={setTestcases} />
-      </Grid>
-      <Grid item>
-        <StyledDivider variant="fullWidth" />
-      </Grid>
-      <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
-        <BasicButton label='확인' variant='contained'
-          disabled={disabled} handleClick={handleSubmit} />
-      </Grid>
-    </Box>
-  </Grid>)} />
+  return (
+    <PageTemplate
+      content={
+        !isLoaded ? (
+          <Grid
+            style={{ width: '100%', height: '100vh' }}
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            <Grid item>
+              <CircularProgress />
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container>
+            <Box
+              display="flex"
+              flexDirection="column"
+              margin="auto"
+              width="100%"
+            >
+              <Grid item>
+                <TextField
+                  name="title"
+                  label="문제명"
+                  fullWidth
+                  margin="normal"
+                  variant="outlined"
+                  value={title}
+                  handleChange={(event) => handleChange(event)}
+                  inputRef={inputsRef.current[0]}
+                />
+              </Grid>
+              <Grid container item direction="row" spacing={2}>
+                <Grid item>
+                  <TextField
+                    name="timeLimit"
+                    label="시간 제한 (ms)"
+                    margin="normal"
+                    variant="outlined"
+                    value={timeLimit}
+                    handleChange={(event) => handleChange(event)}
+                    inputRef={inputsRef.current[1]}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    name="memoryLimit"
+                    label="메모리 제한 (MB)"
+                    margin="normal"
+                    variant="outlined"
+                    value={memoryLimit}
+                    handleChange={(event) => handleChange(event)}
+                    inputRef={inputsRef.current[2]}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item>
+                <p>문제 설명</p>
+                <MyEditor
+                  value={description}
+                  onChange={(res) => {
+                    setDescription(res);
+                  }}
+                />
+              </Grid>
+              <Grid item>
+                <p>입력 형식 설명(선택)</p>
+                <MyEditor
+                  value={inputDescription}
+                  onChange={(res) => {
+                    setInputDescription(res);
+                  }}
+                />
+              </Grid>
+              <Grid item>
+                <p>출력 형식 설명(선택)</p>
+                <MyEditor
+                  value={outputDescription}
+                  onChange={(res) => {
+                    setOutputDescription(res);
+                  }}
+                />
+              </Grid>
+              <Grid item>
+                <p>문제 티어(레벨)</p>
+                <LevelSelector level={level} setLevel={setLevel} />
+              </Grid>
+              <Grid item>
+                <Categories
+                  categories={categories}
+                  updateCategories={setCategories}
+                />
+              </Grid>
+              <Grid item>
+                <Examples examples={examples} updateExamples={setExamples} />
+              </Grid>
+              <Grid item>
+                <TestcaseUploader
+                  testcases={testcases}
+                  handleTestcases={setTestcases}
+                />
+              </Grid>
+              <Grid item>
+                <StyledDivider variant="fullWidth" />
+              </Grid>
+              <Grid item style={{ marginTop: '2%', textAlign: 'right' }}>
+                <BasicButton
+                  label="확인"
+                  variant="contained"
+                  disabled={disabled}
+                  handleClick={handleSubmit}
+                />
+              </Grid>
+            </Box>
+          </Grid>
+        )
+      }
+    />
   );
 };
 

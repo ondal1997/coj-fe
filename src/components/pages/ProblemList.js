@@ -7,7 +7,6 @@ import { pureFetchAndJson } from '../../OurLink';
 import ProblemTable from '../organisms/ProblemTable';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
-import AuthenticationContext from '../../contexts/authentication';
 
 const useStyles = makeStyles((theme) => ({
   children: {
