@@ -180,12 +180,12 @@ const User = ({ match }) => {
         }).toString()}`,
       );
 
-      const { status, accepted, notAccepted, countsOfState } = result;
+      const { status, accepted, notAccepted, countsOfState, score } = result;
 
       console.log(result);
 
       if (status === 200) {
-        const acRes = accepted.length;
+        const acRes = score || accepted.length;
         setAc(acRes);
         setGrade(getGrade(acRes));
         setSolvedResult({

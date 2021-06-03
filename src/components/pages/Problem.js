@@ -31,6 +31,7 @@ import '../../css/reset_problemdetail.css';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
+import { getLevelColor, Level } from '../organisms/LevelSelector';
 
 const pColor = '#F8F8F8';
 
@@ -218,7 +219,10 @@ const Problem = (props) => {
               <Grid container alignItems="center" direction="row" spacing={1}>
                 <Grid item>
                   <Typography className={classes.title}>
-                    {`${problemKey}. ${problem.title}`}
+                    {`${problemKey}. `}
+                    <span style={{ color: getLevelColor(problem.level) }}>
+                      {problem.title}
+                    </span>
                   </Typography>
                 </Grid>
                 {problem.challengeCode !== 0
