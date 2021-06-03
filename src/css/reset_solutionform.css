@@ -14,11 +14,20 @@ legend {
   overflow: visible !important;
 }
 
-.CodeMirror {
-  font-size: medium !important;
-  height: fit-content !important;
+.CodeMirror div {
+  font-size: 16px !important;
 }
 
 .CodeMirror-scroll {
-  min-height: 300px !important;
+  min-height: 500px;
+  max-height: 500px;
 }
+
+/* .CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+.CodeMirror-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+} */

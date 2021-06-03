@@ -28,9 +28,9 @@ const isProblemInputValid = (...param) => {
  */
 const getMode = (language) => {
   if (language.includes('python')) return 'python';
-  if (language.includes('c++')) return 'c++';
-  if (language.includes('c')) return 'c';
-  if (language.includes('c#')) return 'c#';
+  if (language.includes('c++')) return 'text/x-c++src';
+  if (language.includes('c')) return 'text/x-csrc';
+  if (language.includes('java')) return 'text/x-java';
   return 'python';
 };
 
