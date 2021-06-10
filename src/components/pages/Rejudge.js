@@ -3,6 +3,7 @@ import { pureFetchAndJson } from '../../OurLink';
 
 export default function Rejudge() {
   const [problemKey, setProblemKey] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   return (
     <>
@@ -15,9 +16,12 @@ export default function Rejudge() {
       />
       <button
         onClick={async () => {
+          setIsProcessing(true);
           const res = await pureFetchAndJson(`/api/rejudge/${problemKey}`);
-          alert(res);
+          alert(res.status);
+          setIsProcessing(false);
         }}
+        disabled={isProcessing}
       >
         재채점하기
       </button>
