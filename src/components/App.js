@@ -28,6 +28,7 @@ import AuthenticationContext, {
 } from '../contexts/authentication';
 import Error from './pages/Error';
 import PageTemplate from './templates/PageTemplate';
+import Rejudge from './pages/Rejudge';
 
 const theme = createMuiTheme({
   palette: {
@@ -94,6 +95,7 @@ const App = () => (
               <Route path="/new" exact component={ProblemForm} />
               <Route path="/edit/:problemKey" exact component={ProblemForm} />
               <Route path="/problems/:problemKey" exact component={Problem} />
+              <Route path="/rejudge" exact component={Rejudge} />
 
               <Route
                 path="/submit/:problemKey"
