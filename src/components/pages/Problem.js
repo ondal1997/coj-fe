@@ -284,14 +284,21 @@ const Problem = (props) => {
       <Grid className={classes.children} item>
           <Grid container direction="row" justify="flex-end" spacing={1}>
             <Grid item>
-              <OurLink to={`/solutions?problemKey=${problemKey}&highlight=${userId}`}>
+              <OurLink to={`/solutions?problemKey=${problemKey}&userId=${userId}`}>
                 <Button color='primary' variant='outlined' size='large'>
-                  제출 현황
+                  나의 제출
                 </Button>
               </OurLink>
             </Grid>
             <Grid item>
-              <Button color='primary' variant='outlined' size='large'
+              <OurLink to={`/solutions?problemKey=${problemKey}&highlight=${userId}`}>
+                <Button color='primary' variant='outlined' size='large'>
+                  모든 제출
+                </Button>
+              </OurLink>
+            </Grid>
+            <Grid item>
+              <Button color='primary' variant='contained' disableElevation size='large'
                 onClick = {() => {
                   // if (!userId) {
                   //   window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`;
