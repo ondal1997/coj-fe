@@ -218,7 +218,7 @@ const Problem = (props) => {
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
                 {problem.level && (
-                  <Grid container alignItems="flex-end">
+                  <Grid container alignItems="center">
                     <img src={`/level/${getLevelImage(problem.level)}`} style={{ height: '2rem', marginRight: 5 }}/>
                     <strong style={{ color: getLevelColor(problem.level), fontSize: '1.25rem' }}>
                       {getLevelEnglishText(problem.level)}
