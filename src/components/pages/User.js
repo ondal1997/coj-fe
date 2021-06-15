@@ -73,13 +73,14 @@ const useStyles = makeStyles((theme) => ({
 const ProblemLabel = ({ problemKey, isAc }) => {
   const [title, setTitle] = useState('');
   const [error, setError] = useContext(ErrorContext);
-  const color = isAc ? '#0057FF' : '#E94D00';
+  const [color, setColor] = useState('#000000');
 
   useEffect(async () => {
     try {
       const result = await pureFetchAndJson(`/api/problems/${problemKey}`);
       if (result.status === 200) {
         setTitle(result.problem.title);
+        setColor(getLevelColor(result.problem.level));
       } else if (result.status === 404) {
         setTitle('삭제된 문제');
       } else {

@@ -75,7 +75,7 @@ const SolutionList = (props) => {
     }, () => {
       setError({ message: 'Failed to connect with server' });
     });
-  }, [problemKey, page]);
+  }, [problemKey, page, limit, ownerId, state]);
 
   return (
     <PageTemplate content={<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>

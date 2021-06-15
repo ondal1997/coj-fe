@@ -403,7 +403,7 @@ const Problem = (props) => {
                   fullWidth
                   value={example.input}
                   InputProps={{
-                    style: { fontFamily: 'monospace' },
+                    style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' },
                     readOnly: true,
                   }}
                 />
@@ -425,7 +425,7 @@ const Problem = (props) => {
                   fullWidth
                   value={example.output}
                   InputProps={{
-                    style: { fontFamily: 'monospace' },
+                    style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' },
                     readOnly: true,
                   }}
                 />
