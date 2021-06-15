@@ -395,6 +395,7 @@ const Problem = (props) => {
                   fullWidth
                   value={example.input}
                   InputProps={{
+                    style: { fontFamily: 'monospace' },
                     readOnly: true,
                   }}
                 />
@@ -416,6 +417,7 @@ const Problem = (props) => {
                   fullWidth
                   value={example.output}
                   InputProps={{
+                    style: { fontFamily: 'monospace' },
                     readOnly: true,
                   }}
                 />
