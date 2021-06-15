@@ -31,7 +31,7 @@ import '../../css/reset_problemdetail.css';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
-import { getLevelColor, Level } from '../organisms/LevelSelector';
+import { getLevelColor, getLevelImage, getLevelEnglishText, Level } from '../organisms/LevelSelector';
 
 const pColor = '#F8F8F8';
 
@@ -217,10 +217,18 @@ const Problem = (props) => {
           <Grid container direction="column" spacing={0}>
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
+                {problem.level && (
+                  <Grid container alignItems="flex-end">
+                    <img src={`/level/${getLevelImage(problem.level)}`} style={{ height: '2rem', marginRight: 5 }}/>
+                    <strong style={{ color: getLevelColor(problem.level), fontSize: '1.25rem' }}>
+                      {getLevelEnglishText(problem.level)}
+                    </strong>
+                  </Grid>
+                )}
                 <Grid item>
                   <Typography className={classes.title}>
                     {`${problemKey}. `}
-                    <span style={{ color: getLevelColor(problem.level) }}>
+                    <span>
                       {problem.title}
                     </span>
                   </Typography>
@@ -285,10 +293,10 @@ const Problem = (props) => {
             <Grid item>
               <Button color='primary' variant='outlined' size='large'
                 onClick = {() => {
-                  if (!userId) {
-                    window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`;
-                    return;
-                  }
+                  // if (!userId) {
+                  //   window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`;
+                  //   return;
+                  // }
                   props.history.push(`/submit/${problemKey}`);
                 }
                 }>

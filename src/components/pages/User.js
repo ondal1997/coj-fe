@@ -17,6 +17,7 @@ import ErrorContext from '../../contexts/error';
 import { OurLink, pureFetchAndJson } from '../../OurLink';
 import { getGrade } from '../../utils';
 import judgeState from '../../judgeState';
+import { getLevelColor, getLevelEnglishText, getLevelImage, getUserLevel } from '../organisms/LevelSelector';
 
 const StyledHuman = styled.img`
   width: 100px;
@@ -136,6 +137,7 @@ const BorderLinearProgress = withStyles((theme) => ({
   root: {
     height: 40,
     borderRadius: 5,
+    backgroundColor: '#eee',
   },
   colorPrimary: {
     backgroundColor:
@@ -143,12 +145,18 @@ const BorderLinearProgress = withStyles((theme) => ({
   },
 }))(LinearProgress);
 
-function CustomizedProgressBars({ value }) {
+const StyledBorderLinearProgress = styled(BorderLinearProgress)`
+  & .MuiLinearProgress-bar {
+    background-color: ${(props) => props?.color ?? 'black'};
+  }
+`;
+
+function CustomizedProgressBars({ color, value }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <BorderLinearProgress variant="determinate" value={value} />
+      <StyledBorderLinearProgress variant="determinate" value={value} color={color}/>
     </div>
   );
 }
@@ -162,7 +170,9 @@ const User = ({ match }) => {
   const [error, setError] = useContext(ErrorContext);
 
   const [ac, setAc] = useState(0);
-  const { level, start, target } = grade;
+  const { level, exp, start, target } = grade;
+  console.log(grade);
+
   const [solvedResult, setSolvedResult] = useState({
     accepted: [],
     notAccepted: [],
@@ -180,14 +190,13 @@ const User = ({ match }) => {
         }).toString()}`,
       );
 
-      const { status, accepted, notAccepted, countsOfState, score } = result;
-
-      console.log(result);
+      const { status, acLevels, accepted, notAccepted, countsOfState, score } = result;
 
       if (status === 200) {
         const acRes = score || accepted.length;
         setAc(acRes);
-        setGrade(getGrade(acRes));
+        console.log(getUserLevel(acLevels));
+        setGrade(getUserLevel(acLevels));
         setSolvedResult({
           accepted,
           notAccepted,
@@ -233,23 +242,17 @@ const User = ({ match }) => {
                 justify="center"
                 alignItems="center"
               >
-                <Grade color="primary" style={{ fontSize: 50 }} />
-                <Typography
-                  style={{
-                    position: 'absolute',
-                    zIndex: 999,
-                    fontWeight: 700,
-                    color: 'white',
-                  }}
-                  variant="strong"
-                >
-                  {level}
-                </Typography>
+                <img src={`/level/${getLevelImage(level)}`} style={{ height: '3rem', marginRight: '1rem' }}/>
+                {/* <strong style={{ color: getLevelColor(level), fontSize: '0.5rem' }}>
+                  {getLevelEnglishText(level)}
+                </strong> */}
               </Grid>
-              <Typography variant="h4">{match.params.id}</Typography>
+              <Typography variant="h4" style={{ color: getLevelColor(level) }}>
+                {match.params.id}
+              </Typography>
             </Grid>
             <Grid container justify="center" xs={12}>
-              <StyledSpan>다음 레벨까지 {start + target - ac}문제</StyledSpan>
+              <StyledSpan>다음 레벨까지 {target - exp}EXP</StyledSpan>
             </Grid>
             <Grid
               className={classes.children}
@@ -259,12 +262,15 @@ const User = ({ match }) => {
             >
               <StyledHuman
                 src="/5Q0v.gif"
-                percentage={((ac - start) / target) * 100}
+                percentage={((exp - start) / (target - start)) * 100}
               />
-              <CustomizedProgressBars value={((ac - start) / target) * 100} />
+              <CustomizedProgressBars
+                value={((exp - start) / (target - start)) * 100}
+                color={getLevelColor(level)}
+              />
               <Grid container justify="space-between">
                 <span>{start}</span>
-                <span>{start + target}</span>
+                <span>{target}</span>
               </Grid>
             </Grid>
             <Grid className={classes.children} item xs={2}>

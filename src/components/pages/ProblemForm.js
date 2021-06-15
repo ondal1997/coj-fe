@@ -144,6 +144,8 @@ const ProblemForm = (props) => {
       level,
     };
 
+    console.log(data);
+
     fetchProblem(data);
   };
 

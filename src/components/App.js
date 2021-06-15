@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useHistory,
 } from 'react-router-dom';
 import { Button, ButtonGroup, IconButton, Tooltip } from '@material-ui/core';
@@ -11,9 +10,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 import {
   AccountBoxRounded,
-  AccountCircleOutlined,
   ListAltOutlined,
-  PermIdentity,
 } from '@material-ui/icons';
 import ProblemForm from './pages/ProblemForm';
 import SolutionForm from './pages/SolutionForm';
