@@ -283,13 +283,13 @@ const Problem = (props) => {
       </Grid>
       <Grid className={classes.children} item>
           <Grid container direction="row" justify="flex-end" spacing={1}>
-            <Grid item>
+            { userId && <Grid item>
               <OurLink to={`/solutions?problemKey=${problemKey}&userId=${userId}`}>
                 <Button color='primary' variant='outlined' size='large'>
                   나의 제출
                 </Button>
               </OurLink>
-            </Grid>
+            </Grid> }
             <Grid item>
               <OurLink to={`/solutions?problemKey=${problemKey}&highlight=${userId}`}>
                 <Button color='primary' variant='outlined' size='large'>

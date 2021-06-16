@@ -22,7 +22,7 @@ const Example = ({
       <TextField
         name="input"
         fullWidth
-        inputProps={{ style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' } }}
+        InputProps={{ style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' } }}
         variant="outlined"
         row={5}
         maxRow={Infinity}
@@ -36,7 +36,7 @@ const Example = ({
       <TextField
         name="output"
         fullWidth
-        inputProps={{ style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' } }}
+        InputProps={{ style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' } }}
         variant="outlined"
         row={5}
         maxRow={Infinity}

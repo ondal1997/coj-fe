@@ -244,9 +244,10 @@ const User = ({ match }) => {
                 alignItems="center"
               >
                 <img src={`/level/${getLevelImage(level)}`} style={{ height: '3rem', marginRight: '1rem' }}/>
-                {/* <strong style={{ color: getLevelColor(level), fontSize: '0.5rem' }}>
+                <strong style={{ color: getLevelColor(level), fontSize: '0.25rem' }}>
                   {getLevelEnglishText(level)}
-                </strong> */}
+                  {/* GRANDMASTER */}
+                </strong>
               </Grid>
               <Typography variant="h4" style={{ color: getLevelColor(level) }}>
                 {match.params.id}

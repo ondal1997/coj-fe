@@ -39,6 +39,7 @@ const StyledButton = withStyles({
     '&:hover': {
       backgroundColor: '#CE2727',
     },
+    whiteSpace: 'nowrap',
   },
 })(Button);
 
@@ -277,7 +278,7 @@ const SolutionForm = (props) => {
               size="medium"
               onClick={handleSubmit}
             >
-              {!isSubmitting ? '풀이 제출하기' : '제출 중'}
+              {!isSubmitting ? '제출하기' : '제출 중'}
             </StyledButton>
           </Grid>
           <Backdrop open={open} style={{ zIndex: 1 }}>

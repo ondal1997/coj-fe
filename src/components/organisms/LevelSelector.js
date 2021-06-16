@@ -113,7 +113,7 @@ export function getLevelScore(level) {
   }
 
   for (let i = 1; i < level; i += 1) {
-    score *= 1.5;
+    score *= 1.75;
   }
 
   return Math.ceil(score);
@@ -121,12 +121,12 @@ export function getLevelScore(level) {
 
 export function getUserLevel(levels) {
   const exp = levels.reduce(
-    (accumulator, level) => accumulator + getLevelScore(level),
+    (accumulator, level) => accumulator + getLevelScore(level), 0,
   );
 
   let start = 0;
   let target = 0;
-  let s = 9;
+  let s = 60;
   let level = 1;
 
   while (true) {
@@ -134,7 +134,7 @@ export function getUserLevel(levels) {
 
     start += s;
     level += 1;
-    s *= 2;
+    s *= 1.75;
     if (level === 9) return { level, exp, start, target: Infinity }; // 최대 레벨
   }
   target = start + s;
