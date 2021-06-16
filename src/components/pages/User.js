@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grade from '@material-ui/icons/Grade';
 import styled from 'styled-components';
-import { CircularProgress, Divider, Paper, Tooltip } from '@material-ui/core';
+import { Box, CircularProgress, Divider, Paper, Tooltip } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import PageTemplate from '../templates/PageTemplate';
 import Solutions from '../organisms/SolutionTable';
@@ -237,18 +237,19 @@ const User = ({ match }) => {
               direction="row"
               alignItems="center"
             >
-              <Grid
-                container
-                style={{ position: 'relative', width: 50 }}
-                justify="center"
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
                 alignItems="center"
+                marginRight="1rem"
               >
-                <img src={`/level/${getLevelImage(level)}`} style={{ height: '3rem', marginRight: '1rem' }}/>
+                <img src={`/level/${getLevelImage(level)}`} style={{ height: '3rem' }} />
                 <strong style={{ color: getLevelColor(level), fontSize: '0.25rem' }}>
                   {getLevelEnglishText(level)}
                   {/* GRANDMASTER */}
                 </strong>
-              </Grid>
+              </Box>
               <Typography variant="h4" style={{ color: getLevelColor(level) }}>
                 {match.params.id}
               </Typography>

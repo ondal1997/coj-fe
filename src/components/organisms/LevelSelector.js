@@ -135,6 +135,7 @@ export function getUserLevel(levels) {
     start += s;
     level += 1;
     s *= 1.75;
+    s = Math.ceil(s);
     if (level === 9) return { level, exp, start, target: Infinity }; // 최대 레벨
   }
   target = start + s;
