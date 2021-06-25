@@ -77,7 +77,7 @@ const ProblemLabel = ({ problemKey, isAc }) => {
 
   useEffect(async () => {
     try {
-      const result = await pureFetchAndJson(`/api/problems/${problemKey}`);
+      const result = await pureFetchAndJson(`/api/problems/${problemKey}/brief`);
       if (result.status === 200) {
         setTitle(result.problem.title);
         setColor(getLevelColor(result.problem.level));

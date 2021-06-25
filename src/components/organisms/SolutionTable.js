@@ -38,7 +38,7 @@ ProblemRepo.prototype = { // prototype시 여러 객체를 만들 때 함수가 
     this.isLoading[problemKey] = true;
     let result;
     try {
-      result = await pureFetchAndJson(`/api/problems/${problemKey}`);
+      result = await pureFetchAndJson(`/api/problems/${problemKey}/brief`);
     } catch {
       return;
     }
