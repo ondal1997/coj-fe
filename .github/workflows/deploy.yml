@@ -1,0 +1,20 @@
+name: Deploy
+on: [push]
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_SSH_ID }}
+          password: ${{ secrets.REMOTE_SSH_PASSWORD }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: |
+            cd coj-fe
+            echo ${{ secrets.REMOTE_SSH_PASSWORD }} | sudo -S git pull
+            echo ${{ secrets.REMOTE_SSH_PASSWORD }} | sudo -S npm install
+            echo ${{ secrets.REMOTE_SSH_PASSWORD }} | sudo -S npm run build
+            cd build
+            echo ${{ secrets.REMOTE_SSH_PASSWORD }} | sudo -S /bin/mv -f index.html ~/codersHome/coders/oj
+            echo ${{ secrets.REMOTE_SSH_PASSWORD }} | sudo -S /bin/cp -arpf * ~/codersHome
