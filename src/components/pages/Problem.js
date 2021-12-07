@@ -31,7 +31,7 @@ import '../../css/reset_problemdetail.css';
 import AuthenticationContext from '../../contexts/authentication';
 import ErrorContext from '../../contexts/error';
 import PageTemplate from '../templates/PageTemplate';
-import { getLevelColor, Level } from '../organisms/LevelSelector';
+import { getLevelColor, getLevelImage, getLevelEnglishText, Level } from '../organisms/LevelSelector';
 
 const pColor = '#F8F8F8';
 
@@ -217,10 +217,18 @@ const Problem = (props) => {
           <Grid container direction="column" spacing={0}>
             <Grid item>
               <Grid container alignItems="center" direction="row" spacing={1}>
+                {problem.level && (
+                  <Grid container alignItems="center">
+                    <img src={`/level/${getLevelImage(problem.level)}`} style={{ height: '2rem', marginRight: 5 }}/>
+                    <strong style={{ color: getLevelColor(problem.level), fontSize: '1.25rem' }}>
+                      {getLevelEnglishText(problem.level)}
+                    </strong>
+                  </Grid>
+                )}
                 <Grid item>
                   <Typography className={classes.title}>
                     {`${problemKey}. `}
-                    <span style={{ color: getLevelColor(problem.level) }}>
+                    <span>
                       {problem.title}
                     </span>
                   </Typography>
@@ -275,20 +283,27 @@ const Problem = (props) => {
       </Grid>
       <Grid className={classes.children} item>
           <Grid container direction="row" justify="flex-end" spacing={1}>
+            { userId && <Grid item>
+              <OurLink to={`/solutions?problemKey=${problemKey}&userId=${userId}`}>
+                <Button color='primary' variant='outlined' size='large'>
+                  나의 제출
+                </Button>
+              </OurLink>
+            </Grid> }
             <Grid item>
               <OurLink to={`/solutions?problemKey=${problemKey}&highlight=${userId}`}>
                 <Button color='primary' variant='outlined' size='large'>
-                  제출 현황
+                  모든 제출
                 </Button>
               </OurLink>
             </Grid>
             <Grid item>
-              <Button color='primary' variant='outlined' size='large'
+              <Button color='primary' variant='contained' disableElevation size='large'
                 onClick = {() => {
-                  if (!userId) {
-                    window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`;
-                    return;
-                  }
+                  // if (!userId) {
+                  //   window.location.href = `https://codersit.co.kr/bbs/login.php?url=%2Foj/submit/${problemKey}`;
+                  //   return;
+                  // }
                   props.history.push(`/submit/${problemKey}`);
                 }
                 }>
@@ -395,6 +410,7 @@ const Problem = (props) => {
                   fullWidth
                   value={example.input}
                   InputProps={{
+                    style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' },
                     readOnly: true,
                   }}
                 />
@@ -416,6 +432,7 @@ const Problem = (props) => {
                   fullWidth
                   value={example.output}
                   InputProps={{
+                    style: { fontFamily: 'Menlo, Monaco, \'Source Code Pro\', consolas, monospace' },
                     readOnly: true,
                   }}
                 />

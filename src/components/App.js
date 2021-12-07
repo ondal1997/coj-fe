@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useHistory,
 } from 'react-router-dom';
 import { Button, ButtonGroup, IconButton, Tooltip } from '@material-ui/core';
@@ -11,9 +10,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 import {
   AccountBoxRounded,
-  AccountCircleOutlined,
   ListAltOutlined,
-  PermIdentity,
 } from '@material-ui/icons';
 import ProblemForm from './pages/ProblemForm';
 import SolutionForm from './pages/SolutionForm';
@@ -28,6 +25,7 @@ import AuthenticationContext, {
 } from '../contexts/authentication';
 import Error from './pages/Error';
 import PageTemplate from './templates/PageTemplate';
+import Rejudge from './pages/Rejudge';
 
 const theme = createMuiTheme({
   palette: {
@@ -94,6 +92,7 @@ const App = () => (
               <Route path="/new" exact component={ProblemForm} />
               <Route path="/edit/:problemKey" exact component={ProblemForm} />
               <Route path="/problems/:problemKey" exact component={Problem} />
+              <Route path="/rejudge" exact component={Rejudge} />
 
               <Route
                 path="/submit/:problemKey"

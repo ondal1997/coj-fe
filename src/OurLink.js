@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-const isProductionMode = false;
+const isProductionMode = true;
 
 // 링크 기본 스타일 제거
 const StyledLink = styled(Link)`
@@ -37,7 +37,7 @@ const fetchAndJson = async (url, meta) => {
     }
 
     const json = await $.ajax({
-      url: '/coders/post.php',
+      url: 'https://codersit.co.kr/coders/post.php',
       type: 'POST',
       data,
       dataType: 'json',
@@ -67,7 +67,7 @@ const pureFetchAndJson = async (url, meta) => {
     }
 
     const json = await $.ajax({
-      url: '/coders/post.php',
+      url: 'https://codersit.co.kr/coders/post.php',
       type: 'POST',
       data,
       dataType: 'json',

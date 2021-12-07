@@ -13,13 +13,13 @@ export function getLevelColor(level) {
     case 5:
       return 'rgb(80, 239, 151)';
     case 6:
-      return 'rgb(68, 214, 253)';
+      return '#0700A2';
     case 7:
-      return 'rgb(120, 100, 255)';
+      return '#9200B0';
     case 8:
-      return 'rgb(231, 44, 244)';
-    case 9:
       return 'rgb(199, 43, 48)';
+    case 9:
+      return '#1F67E6';
     case 0:
     default:
       return '#444444';
@@ -52,30 +52,95 @@ export function getLevelText(level) {
   }
 }
 
-export function getLevelScore(level) {
+export function getLevelImage(level) {
   switch (level) {
     case 1:
-      return 3;
+      return 'iron.png';
     case 2:
-      return 5;
+      return 'bronze.png';
     case 3:
-      return 10;
+      return 'silver.png';
     case 4:
-      return 25;
+      return 'gold.png';
     case 5:
-      return 75;
+      return 'platinum.png';
     case 6:
-      return 300;
+      return 'diamond.png';
     case 7:
-      return 1500;
+      return 'master.png';
     case 8:
-      return 9000;
+      return 'grandmaster.png';
     case 9:
-      return 48000;
+      return 'challenger.png';
     case 0:
     default:
-      return 3;
+      return null;
   }
+}
+
+export function getLevelEnglishText(level) {
+  switch (level) {
+    case 1:
+      return 'IRON';
+    case 2:
+      return 'BRONZE';
+    case 3:
+      return 'SILVER';
+    case 4:
+      return 'GOLD';
+    case 5:
+      return 'PLATINUM';
+    case 6:
+      return 'DIAMOND';
+    case 7:
+      return 'MASTER';
+    case 8:
+      return 'GRANDMASTER';
+    case 9:
+      return 'CHALLENGER';
+    case 0:
+    default:
+      return null;
+  }
+}
+
+// 유저 경험치 계산할 때 사용할 함수
+export function getLevelScore(level) {
+  let score = 3;
+
+  if (!level) {
+    return score;
+  }
+
+  for (let i = 1; i < level; i += 1) {
+    score *= 1.75;
+  }
+
+  return Math.ceil(score);
+}
+
+export function getUserLevel(levels) {
+  const exp = levels.reduce(
+    (accumulator, level) => accumulator + getLevelScore(level), 0,
+  );
+
+  let start = 0;
+  let target = 0;
+  let s = 60;
+  let level = 1;
+
+  while (true) {
+    if (start + s > exp) break;
+
+    start += s;
+    level += 1;
+    s *= 1.75;
+    s = Math.ceil(s);
+    if (level === 9) return { level, exp, start, target: Infinity }; // 최대 레벨
+  }
+  target = start + s;
+
+  return { level, exp, start, target };
 }
 
 export function Level({ level, fontSize }) {

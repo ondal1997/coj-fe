@@ -1,4 +1,4 @@
-@media (min-width: 1280px) { /* 600px ~ infinite */
+@media (min-width: 1280px) { /* 1280px ~ infinite */
   .CodeViewer .CodeMirror {
     font-size: 18px !important;
     line-height: 2em !important;
@@ -8,7 +8,7 @@
   }
 }
 
-@media (max-width: 1280px) { /* 600px ~ infinite */
+@media (max-width: 1280px) { /* ~ infinite */
   .CodeViewer .CodeMirror {
     font-size: 15px !important;
     line-height: 2em !important;

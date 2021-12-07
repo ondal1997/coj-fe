@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grade from '@material-ui/icons/Grade';
 import styled from 'styled-components';
-import { CircularProgress, Divider, Paper, Tooltip } from '@material-ui/core';
+import { Box, CircularProgress, Divider, Paper, Tooltip } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import PageTemplate from '../templates/PageTemplate';
 import Solutions from '../organisms/SolutionTable';
@@ -17,6 +17,7 @@ import ErrorContext from '../../contexts/error';
 import { OurLink, pureFetchAndJson } from '../../OurLink';
 import { getGrade } from '../../utils';
 import judgeState from '../../judgeState';
+import { getLevelColor, getLevelEnglishText, getLevelImage, getUserLevel } from '../organisms/LevelSelector';
 
 const StyledHuman = styled.img`
   width: 100px;
@@ -72,13 +73,14 @@ const useStyles = makeStyles((theme) => ({
 const ProblemLabel = ({ problemKey, isAc }) => {
   const [title, setTitle] = useState('');
   const [error, setError] = useContext(ErrorContext);
-  const color = isAc ? '#0057FF' : '#E94D00';
+  const [color, setColor] = useState('#000000');
 
   useEffect(async () => {
     try {
-      const result = await pureFetchAndJson(`/api/problems/${problemKey}`);
+      const result = await pureFetchAndJson(`/api/problems/${problemKey}/brief`);
       if (result.status === 200) {
         setTitle(result.problem.title);
+        setColor(getLevelColor(result.problem.level));
       } else if (result.status === 404) {
         setTitle('삭제된 문제');
       } else {
@@ -136,6 +138,7 @@ const BorderLinearProgress = withStyles((theme) => ({
   root: {
     height: 40,
     borderRadius: 5,
+    backgroundColor: '#eee',
   },
   colorPrimary: {
     backgroundColor:
@@ -143,12 +146,18 @@ const BorderLinearProgress = withStyles((theme) => ({
   },
 }))(LinearProgress);
 
-function CustomizedProgressBars({ value }) {
+const StyledBorderLinearProgress = styled(BorderLinearProgress)`
+  & .MuiLinearProgress-bar {
+    background-color: ${(props) => props?.color ?? 'black'};
+  }
+`;
+
+function CustomizedProgressBars({ color, value }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <BorderLinearProgress variant="determinate" value={value} />
+      <StyledBorderLinearProgress variant="determinate" value={value} color={color}/>
     </div>
   );
 }
@@ -162,7 +171,9 @@ const User = ({ match }) => {
   const [error, setError] = useContext(ErrorContext);
 
   const [ac, setAc] = useState(0);
-  const { level, start, target } = grade;
+  const { level, exp, start, target } = grade;
+  console.log(grade);
+
   const [solvedResult, setSolvedResult] = useState({
     accepted: [],
     notAccepted: [],
@@ -180,14 +191,13 @@ const User = ({ match }) => {
         }).toString()}`,
       );
 
-      const { status, accepted, notAccepted, countsOfState, score } = result;
-
-      console.log(result);
+      const { status, acLevels, accepted, notAccepted, countsOfState, score } = result;
 
       if (status === 200) {
         const acRes = score || accepted.length;
         setAc(acRes);
-        setGrade(getGrade(acRes));
+        console.log(getUserLevel(acLevels));
+        setGrade(getUserLevel(acLevels));
         setSolvedResult({
           accepted,
           notAccepted,
@@ -227,29 +237,25 @@ const User = ({ match }) => {
               direction="row"
               alignItems="center"
             >
-              <Grid
-                container
-                style={{ position: 'relative', width: 50 }}
-                justify="center"
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
                 alignItems="center"
+                marginRight="1rem"
               >
-                <Grade color="primary" style={{ fontSize: 50 }} />
-                <Typography
-                  style={{
-                    position: 'absolute',
-                    zIndex: 999,
-                    fontWeight: 700,
-                    color: 'white',
-                  }}
-                  variant="strong"
-                >
-                  {level}
-                </Typography>
-              </Grid>
-              <Typography variant="h4">{match.params.id}</Typography>
+                <img src={`/level/${getLevelImage(level)}`} style={{ height: '3rem' }} />
+                <strong style={{ color: getLevelColor(level), fontSize: '0.25rem' }}>
+                  {getLevelEnglishText(level)}
+                  {/* GRANDMASTER */}
+                </strong>
+              </Box>
+              <Typography variant="h4" style={{ color: getLevelColor(level) }}>
+                {match.params.id}
+              </Typography>
             </Grid>
             <Grid container justify="center" xs={12}>
-              <StyledSpan>다음 레벨까지 {start + target - ac}문제</StyledSpan>
+              <StyledSpan>다음 레벨까지 {target - exp}EXP</StyledSpan>
             </Grid>
             <Grid
               className={classes.children}
@@ -259,12 +265,15 @@ const User = ({ match }) => {
             >
               <StyledHuman
                 src="/5Q0v.gif"
-                percentage={((ac - start) / target) * 100}
+                percentage={((exp - start) / (target - start)) * 100}
               />
-              <CustomizedProgressBars value={((ac - start) / target) * 100} />
+              <CustomizedProgressBars
+                value={((exp - start) / (target - start)) * 100}
+                color={getLevelColor(level)}
+              />
               <Grid container justify="space-between">
                 <span>{start}</span>
-                <span>{start + target}</span>
+                <span>{target}</span>
               </Grid>
             </Grid>
             <Grid className={classes.children} item xs={2}>
